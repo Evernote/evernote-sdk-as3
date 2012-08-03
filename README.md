@@ -20,9 +20,9 @@ You can either include the SDK wrapper source code in your apps or include the e
 A project is included in the evernote-sdk-as3 directory that builds the evernote.swc library and points to the SDK wrapper source files.
 
 Note:  The project files are: 
-			.actionScriptProperties
-			.flexLibProperties
-			.project
+   * .actionScriptProperties
+   * .flexLibProperties
+   * .project
 
 To open this project in Flash Builder and build the evernote.swc file:
 
