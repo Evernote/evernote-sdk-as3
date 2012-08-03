@@ -1,5 +1,6 @@
-Evernote SDK for ActionScript version 1.21
+Evernote SDK for ActionScript 
 ==================================================
+Evernote API version 1.21
 
 Overview
 --------
