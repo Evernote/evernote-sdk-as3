@@ -25,8 +25,8 @@ Note:  The project files are:
 
 To open this project in Flash Builder and build the evernote.swc file:
 
-1) Under File, select "import Flash Builder project" 
-2) Select "Project Folder" and Browse to the "evernote-sdk-as3" folder
-3) Under Project, select "Build Project"
+  1. Under File, select "import Flash Builder project" 
+  2. Select "Project Folder" and Browse to the "evernote-sdk-as3" folder
+  3. Under Project, select "Build All"
 
 After building the project, the evernote-sdk-as3/bin directly will contain evernote.swc.  You can include this library in your projects to use the Evernote SDK.
