@@ -244,5 +244,17 @@ import flash.utils.Dictionary;
 
     public static const EDAM_CONTENT_CLASS_FOOD_MEAL:String = "evernote.food.meal";
 
+    public static const EDAM_CONTENT_CLASS_SKITCH:String = "evernote.skitch";
+
+    public static const EDAM_RELATED_PLAINTEXT_LEN_MIN:int = 1;
+
+    public static const EDAM_RELATED_PLAINTEXT_LEN_MAX:int = 131072;
+
+    public static const EDAM_RELATED_MAX_NOTES:int = 25;
+
+    public static const EDAM_RELATED_MAX_NOTEBOOKS:int = 1;
+
+    public static const EDAM_RELATED_MAX_TAGS:int = 25;
+
   }
 }

@@ -437,7 +437,7 @@ class checkVersion_args implements TBase {
   public function checkVersion_args() {
     this.edamVersionMajor = 1;
 
-    this.edamVersionMinor = 21;
+    this.edamVersionMinor = 22;
 
   }
 

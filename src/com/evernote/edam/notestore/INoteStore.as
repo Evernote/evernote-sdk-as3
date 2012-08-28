@@ -34,6 +34,8 @@ import com.evernote.edam.type.Ad;
 import com.evernote.edam.type.SharedNotebook;
 import com.evernote.edam.userstore.AuthenticationResult;
 import com.evernote.edam.notestore.NoteEmailParameters;
+import com.evernote.edam.notestore.RelatedQuery;
+import com.evernote.edam.notestore.RelatedResultSpec;
 
   /**
    * Service:  NoteStore
@@ -407,6 +409,10 @@ import com.evernote.edam.notestore.NoteEmailParameters;
      * After this action, the notebook is no longer available for undeletion, etc.
      * If the notebook contains any Notes, they will be moved to the current
      * default notebook and moved into the trash (i.e. Note.active=false).
+     * <p/>
+     * NOTE: This function is not available to third party applications.
+     * Calls will result in an EDAMUserException with the error code
+     * PERMISSION_DENIED.
      * 
      * @param guid
      *   The GUID of the notebook to delete.
@@ -593,6 +599,10 @@ import com.evernote.edam.notestore.NoteEmailParameters;
 
     /**
      * Permanently deletes the tag with the provided GUID, if present.
+     * <p/>
+     * NOTE: This function is not available to third party applications.
+     * Calls will result in an EDAMUserException with the error code
+     * PERMISSION_DENIED.
      * 
      * @param guid
      *   The GUID of the tag to delete.
@@ -718,7 +728,11 @@ import com.evernote.edam.notestore.NoteEmailParameters;
     function updateSearch(authenticationToken:String, search:SavedSearch, onError:Function, onSuccess:Function):void;
 
     /**
-     * Permanently deletes the search with the provided GUID, if present.
+     * Permanently deletes the saved search with the provided GUID, if present.
+     * <p/>
+     * NOTE: This function is not available to third party applications.
+     * Calls will result in an EDAMUserException with the error code
+     * PERMISSION_DENIED.
      * 
      * @param guid
      *   The GUID of the search to delete.
@@ -1363,8 +1377,12 @@ import com.evernote.edam.notestore.NoteEmailParameters;
     function deleteNote(authenticationToken:String, guid:String, onError:Function, onSuccess:Function):void;
 
     /**
-     * Permanently removes the Note, and all of its Resources,
+     * Permanently removes a Note, and all of its Resources,
      * from the service.
+     * <p/>
+     * NOTE: This function is not available to third party applications.
+     * Calls will result in an EDAMUserException with the error code
+     * PERMISSION_DENIED.
      * 
      * @param guid
      *   The GUID of the note to delete.
@@ -1399,6 +1417,10 @@ import com.evernote.edam.notestore.NoteEmailParameters;
      * be prohibitively slow if there are more than a few hundred notes.
      * If an exception is thrown for any of the GUIDs, then none of the notes
      * will be deleted.  I.e. this call can be treated as an atomic transaction.
+     * <p/>
+     * NOTE: This function is not available to third party applications.
+     * Calls will result in an EDAMUserException with the error code
+     * PERMISSION_DENIED.
      * 
      * @param noteGuids
      *   The list of GUIDs for the Notes to remove.
@@ -1430,6 +1452,10 @@ import com.evernote.edam.notestore.NoteEmailParameters;
      * <p/>
      * This operation may be relatively slow if the account contains a large
      * number of inactive Notes.
+     * <p/>
+     * NOTE: This function is not available to third party applications.
+     * Calls will result in an EDAMUserException with the error code
+     * PERMISSION_DENIED.
      * 
      * @return
      *    The number of notes that were expunged.
@@ -1914,6 +1940,8 @@ import com.evernote.edam.notestore.NoteEmailParameters;
     /**
      * Clients should make this call once per day to receive a bundle of ads that
      * will be displayed for the subsequent 24 hour period.
+     * <p/>
+     * NOTE: This function is not available to third party applications.
      * 
      * @param adParameters
      *   A set of parameters that help the service determine which ads to return.
@@ -1928,6 +1956,8 @@ import com.evernote.edam.notestore.NoteEmailParameters;
     /**
      * A thin client should make this call to retrieve a single random ad for
      * immediate display.
+     * <p/>
+     * NOTE: This function is not available to third party applications.
      * 
      * @param adParameters
      *   A set of parameters to help the service determine which ad to return.
@@ -1984,7 +2014,7 @@ import com.evernote.edam.notestore.NoteEmailParameters;
      *   attributes of the shared object are ignored.
      * @return
      *   The fully populated SharedNotebook object including the server assigned
-     *   share id and shareKey which can both the used to uniquely identify the
+     *   share id and shareKey which can both be used to uniquely identify the
      *   SharedNotebook.
      * 
      * @throws EDAMUserException <ul>
@@ -2058,6 +2088,10 @@ import com.evernote.edam.notestore.NoteEmailParameters;
     /**
      * Expunges the SharedNotebooks in the user's account using the
      * SharedNotebook.id as the identifier.
+     * <p/>
+     * NOTE: This function is not available to third party applications.
+     * Calls will result in an EDAMUserException with the error code
+     * PERMISSION_DENIED.
      * 
      * @param
      *   sharedNotebookIds - a list of ShardNotebook.id longs identifying the
@@ -2141,6 +2175,10 @@ import com.evernote.edam.notestore.NoteEmailParameters;
 
     /**
      * Permanently expunges the linked notebook from the account.
+     * <p/>
+     * NOTE: This function is not available to third party applications.
+     * Calls will result in an EDAMUserException with the error code
+     * PERMISSION_DENIED.
      * 
      * @param guid
      *   The LinkedNotebook.guid field of the LinkedNotebook to permanently remove
@@ -2376,6 +2414,53 @@ import com.evernote.edam.notestore.NoteEmailParameters;
     //function onError(Error):void;
     //function onSuccess(AuthenticationResult):void;
     function authenticateToSharedNote(guid:String, noteKey:String, onError:Function, onSuccess:Function):void;
+
+    /**
+     * Identify related entities on the service, such as notes,
+     * notebooks, and tags related to notes or content.
+     * 
+     * @param query
+     *   The information about which we are finding related entities.
+     * 
+     * @param resultSpec
+     *   Allows the client to indicate the type and quantity of
+     *   information to be returned, allowing a saving of time and
+     *   bandwidth.
+     * 
+     * @return
+     *   The result of the query, with information considered
+     *   to likely be relevantly related to the information
+     *   described by the query.
+     * 
+     * @throws EDAMUserException <ul>
+     *   <li>BAD_DATA_FORMAT "RelatedQuery.plainText" - If you provided a
+     *     a zero-length plain text value.
+     *   </li>
+     *   <li>BAD_DATA_FORMAT "RelatedQuery.noteGuid" - If you provided an
+     *     invalid Note GUID, that is, one that does not match the constraints
+     *     defined by EDAM_GUID_LEN_MIN, EDAM_GUID_LEN_MAX, EDAM_GUID_REGEX.
+     *   </li>
+     *   <li>PERMISSION_DENIED "Note" - If the caller does not have access to
+     *     the note identified by RelatedQuery.noteGuid.
+     *   </li>
+     *   <li>DATA_REQUIRED "RelatedResultSpec" - If you did not not set any values
+     *     in the result spec.
+     *   </li>
+     * </ul>
+     * 
+     * @throws EDAMNotFoundException <ul>
+     *   <li>"RelatedQuery.noteGuid" - the note with that GUID is not
+     *     found, if that field has been set in the query.
+     *   </li>
+     * </ul>
+     * 
+     * @param authenticationToken
+     * @param query
+     * @param resultSpec
+     */
+    //function onError(Error):void;
+    //function onSuccess(RelatedResult):void;
+    function findRelated(authenticationToken:String, query:RelatedQuery, resultSpec:RelatedResultSpec, onError:Function, onSuccess:Function):void;
 
   }
 

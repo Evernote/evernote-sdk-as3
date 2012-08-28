@@ -112,14 +112,14 @@ import com.evernote.edam.userstore.BootstrapProfile;
           case PROFILES:
             if (field.type == TType.LIST) {
               {
-                var _list38:TList = iprot.readListBegin();
+                var _list39:TList = iprot.readListBegin();
                 this.profiles = new Array();
-                for (var _i39:int = 0; _i39 < _list38.size; ++_i39)
+                for (var _i40:int = 0; _i40 < _list39.size; ++_i40)
                 {
-                  var _elem40:BootstrapProfile;
-                  _elem40 = new BootstrapProfile();
-                  _elem40.read(iprot);
-                  this.profiles.push(_elem40);
+                  var _elem41:BootstrapProfile;
+                  _elem41 = new BootstrapProfile();
+                  _elem41.read(iprot);
+                  this.profiles.push(_elem41);
                 }
                 iprot.readListEnd();
               }
@@ -148,8 +148,8 @@ import com.evernote.edam.userstore.BootstrapProfile;
         oprot.writeFieldBegin(PROFILES_FIELD_DESC);
         {
           oprot.writeListBegin(new TList(TType.STRUCT, this.profiles.length));
-          for each (var elem41:* in this.profiles)          {
-            elem41.write(oprot);
+          for each (var elem42:* in this.profiles)          {
+            elem42.write(oprot);
           }
           oprot.writeListEnd();
         }

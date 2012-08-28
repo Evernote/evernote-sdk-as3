@@ -34,6 +34,8 @@ import com.evernote.edam.type.Ad;
 import com.evernote.edam.type.SharedNotebook;
 import com.evernote.edam.userstore.AuthenticationResult;
 import com.evernote.edam.notestore.NoteEmailParameters;
+import com.evernote.edam.notestore.RelatedQuery;
+import com.evernote.edam.notestore.RelatedResultSpec;
 
   public class NoteStoreProcessor implements TProcessor {
     public function NoteStoreProcessor(iface:NoteStore)
@@ -114,6 +116,7 @@ import com.evernote.edam.notestore.NoteEmailParameters;
       PROCESS_MAP["shareNote"] = shareNote();
       PROCESS_MAP["stopSharingNote"] = stopSharingNote();
       PROCESS_MAP["authenticateToSharedNote"] = authenticateToSharedNote();
+      PROCESS_MAP["findRelated"] = findRelated();
     }
 
     private var iface_:NoteStore;
@@ -2603,6 +2606,39 @@ import com.evernote.edam.notestore.NoteEmailParameters;
 
     }
 
+    private function findRelated():Function {
+      return function(seqid:int, iprot:TProtocol, oprot:TProtocol):void
+      {
+        var args:findRelated_args = new findRelated_args();
+        args.read(iprot);
+        iprot.readMessageEnd();
+        var result:findRelated_result = new findRelated_result();
+        try {
+          // sorry this operation is not supported yet
+          throw new Error("This is not yet supported");
+        } catch (userException:EDAMUserException) {
+          result.userException = userException;
+        } catch (systemException:EDAMSystemException) {
+          result.systemException = systemException;
+        } catch (notFoundException:EDAMNotFoundException) {
+          result.notFoundException = notFoundException;
+        } catch (th:Error) {
+          trace("Internal error processing findRelated", th);
+          var x:TApplicationError = new TApplicationError(TApplicationError.INTERNAL_ERROR, "Internal error processing findRelated");
+          oprot.writeMessageBegin(new TMessage("findRelated", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
+        oprot.writeMessageBegin(new TMessage("findRelated", TMessageType.REPLY, seqid));
+        result.write(oprot);
+        oprot.writeMessageEnd();
+        oprot.getTransport().flush();
+      }
+
+    }
+
   }
 
 }
@@ -2635,6 +2671,8 @@ import com.evernote.edam.type.Ad;
 import com.evernote.edam.type.SharedNotebook;
 import com.evernote.edam.userstore.AuthenticationResult;
 import com.evernote.edam.notestore.NoteEmailParameters;
+import com.evernote.edam.notestore.RelatedQuery;
+import com.evernote.edam.notestore.RelatedResultSpec;
 
 import com.evernote.edam.notestore.*;
 class getSyncState_args implements TBase {
@@ -5956,14 +5994,14 @@ class listNotebooks_result implements TBase {
         case SUCCESS:
           if (field.type == TType.LIST) {
             {
-              var _list756:TList = iprot.readListBegin();
+              var _list783:TList = iprot.readListBegin();
               this.success = new Array();
-              for (var _i757:int = 0; _i757 < _list756.size; ++_i757)
+              for (var _i784:int = 0; _i784 < _list783.size; ++_i784)
               {
-                var _elem758:Notebook;
-                _elem758 = new Notebook();
-                _elem758.read(iprot);
-                this.success.push(_elem758);
+                var _elem785:Notebook;
+                _elem785 = new Notebook();
+                _elem785.read(iprot);
+                this.success.push(_elem785);
               }
               iprot.readListEnd();
             }
@@ -6007,8 +6045,8 @@ class listNotebooks_result implements TBase {
       oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.success.length));
-        for each (var elem759:* in this.success)        {
-          elem759.write(oprot);
+        for each (var elem786:* in this.success)        {
+          elem786.write(oprot);
         }
         oprot.writeListEnd();
       }
@@ -8641,14 +8679,14 @@ class listTags_result implements TBase {
         case SUCCESS:
           if (field.type == TType.LIST) {
             {
-              var _list791:TList = iprot.readListBegin();
+              var _list818:TList = iprot.readListBegin();
               this.success = new Array();
-              for (var _i792:int = 0; _i792 < _list791.size; ++_i792)
+              for (var _i819:int = 0; _i819 < _list818.size; ++_i819)
               {
-                var _elem793:Tag;
-                _elem793 = new Tag();
-                _elem793.read(iprot);
-                this.success.push(_elem793);
+                var _elem820:Tag;
+                _elem820 = new Tag();
+                _elem820.read(iprot);
+                this.success.push(_elem820);
               }
               iprot.readListEnd();
             }
@@ -8692,8 +8730,8 @@ class listTags_result implements TBase {
       oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.success.length));
-        for each (var elem794:* in this.success)        {
-          elem794.write(oprot);
+        for each (var elem821:* in this.success)        {
+          elem821.write(oprot);
         }
         oprot.writeListEnd();
       }
@@ -9128,14 +9166,14 @@ class listTagsByNotebook_result implements TBase {
         case SUCCESS:
           if (field.type == TType.LIST) {
             {
-              var _list801:TList = iprot.readListBegin();
+              var _list828:TList = iprot.readListBegin();
               this.success = new Array();
-              for (var _i802:int = 0; _i802 < _list801.size; ++_i802)
+              for (var _i829:int = 0; _i829 < _list828.size; ++_i829)
               {
-                var _elem803:Tag;
-                _elem803 = new Tag();
-                _elem803.read(iprot);
-                this.success.push(_elem803);
+                var _elem830:Tag;
+                _elem830 = new Tag();
+                _elem830.read(iprot);
+                this.success.push(_elem830);
               }
               iprot.readListEnd();
             }
@@ -9187,8 +9225,8 @@ class listTagsByNotebook_result implements TBase {
       oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.success.length));
-        for each (var elem804:* in this.success)        {
-          elem804.write(oprot);
+        for each (var elem831:* in this.success)        {
+          elem831.write(oprot);
         }
         oprot.writeListEnd();
       }
@@ -11941,14 +11979,14 @@ class listSearches_result implements TBase {
         case SUCCESS:
           if (field.type == TType.LIST) {
             {
-              var _list838:TList = iprot.readListBegin();
+              var _list865:TList = iprot.readListBegin();
               this.success = new Array();
-              for (var _i839:int = 0; _i839 < _list838.size; ++_i839)
+              for (var _i866:int = 0; _i866 < _list865.size; ++_i866)
               {
-                var _elem840:SavedSearch;
-                _elem840 = new SavedSearch();
-                _elem840.read(iprot);
-                this.success.push(_elem840);
+                var _elem867:SavedSearch;
+                _elem867 = new SavedSearch();
+                _elem867.read(iprot);
+                this.success.push(_elem867);
               }
               iprot.readListEnd();
             }
@@ -11992,8 +12030,8 @@ class listSearches_result implements TBase {
       oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.success.length));
-        for each (var elem841:* in this.success)        {
-          elem841.write(oprot);
+        for each (var elem868:* in this.success)        {
+          elem868.write(oprot);
         }
         oprot.writeListEnd();
       }
@@ -21092,13 +21130,13 @@ class getNoteTagNames_result implements TBase {
         case SUCCESS:
           if (field.type == TType.LIST) {
             {
-              var _list960:TList = iprot.readListBegin();
+              var _list987:TList = iprot.readListBegin();
               this.success = new Array();
-              for (var _i961:int = 0; _i961 < _list960.size; ++_i961)
+              for (var _i988:int = 0; _i988 < _list987.size; ++_i988)
               {
-                var _elem962:String;
-                _elem962 = iprot.readString();
-                this.success.push(_elem962);
+                var _elem989:String;
+                _elem989 = iprot.readString();
+                this.success.push(_elem989);
               }
               iprot.readListEnd();
             }
@@ -21150,8 +21188,8 @@ class getNoteTagNames_result implements TBase {
       oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRING, this.success.length));
-        for each (var elem963:* in this.success)        {
-          oprot.writeString(elem963);
+        for each (var elem990:* in this.success)        {
+          oprot.writeString(elem990);
         }
         oprot.writeListEnd();
       }
@@ -23304,13 +23342,13 @@ class expungeNotes_args implements TBase {
         case NOTEGUIDS:
           if (field.type == TType.LIST) {
             {
-              var _list990:TList = iprot.readListBegin();
+              var _list1017:TList = iprot.readListBegin();
               this.noteGuids = new Array();
-              for (var _i991:int = 0; _i991 < _list990.size; ++_i991)
+              for (var _i1018:int = 0; _i1018 < _list1017.size; ++_i1018)
               {
-                var _elem992:String;
-                _elem992 = iprot.readString();
-                this.noteGuids.push(_elem992);
+                var _elem1019:String;
+                _elem1019 = iprot.readString();
+                this.noteGuids.push(_elem1019);
               }
               iprot.readListEnd();
             }
@@ -23344,8 +23382,8 @@ class expungeNotes_args implements TBase {
       oprot.writeFieldBegin(NOTE_GUIDS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRING, this.noteGuids.length));
-        for each (var elem993:* in this.noteGuids)        {
-          oprot.writeString(elem993);
+        for each (var elem1020:* in this.noteGuids)        {
+          oprot.writeString(elem1020);
         }
         oprot.writeListEnd();
       }
@@ -24985,14 +25023,14 @@ class listNoteVersions_result implements TBase {
         case SUCCESS:
           if (field.type == TType.LIST) {
             {
-              var _list1015:TList = iprot.readListBegin();
+              var _list1042:TList = iprot.readListBegin();
               this.success = new Array();
-              for (var _i1016:int = 0; _i1016 < _list1015.size; ++_i1016)
+              for (var _i1043:int = 0; _i1043 < _list1042.size; ++_i1043)
               {
-                var _elem1017:NoteVersionId;
-                _elem1017 = new NoteVersionId();
-                _elem1017.read(iprot);
-                this.success.push(_elem1017);
+                var _elem1044:NoteVersionId;
+                _elem1044 = new NoteVersionId();
+                _elem1044.read(iprot);
+                this.success.push(_elem1044);
               }
               iprot.readListEnd();
             }
@@ -25044,8 +25082,8 @@ class listNoteVersions_result implements TBase {
       oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.success.length));
-        for each (var elem1018:* in this.success)        {
-          elem1018.write(oprot);
+        for each (var elem1045:* in this.success)        {
+          elem1045.write(oprot);
         }
         oprot.writeListEnd();
       }
@@ -32541,14 +32579,14 @@ class getAds_result implements TBase {
         case SUCCESS:
           if (field.type == TType.LIST) {
             {
-              var _list1116:TList = iprot.readListBegin();
+              var _list1143:TList = iprot.readListBegin();
               this.success = new Array();
-              for (var _i1117:int = 0; _i1117 < _list1116.size; ++_i1117)
+              for (var _i1144:int = 0; _i1144 < _list1143.size; ++_i1144)
               {
-                var _elem1118:Ad;
-                _elem1118 = new Ad();
-                _elem1118.read(iprot);
-                this.success.push(_elem1118);
+                var _elem1145:Ad;
+                _elem1145 = new Ad();
+                _elem1145.read(iprot);
+                this.success.push(_elem1145);
               }
               iprot.readListEnd();
             }
@@ -32592,8 +32630,8 @@ class getAds_result implements TBase {
       oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.success.length));
-        for each (var elem1119:* in this.success)        {
-          elem1119.write(oprot);
+        for each (var elem1146:* in this.success)        {
+          elem1146.write(oprot);
         }
         oprot.writeListEnd();
       }
@@ -34219,13 +34257,13 @@ class sendMessageToSharedNotebookMembers_args implements TBase {
         case RECIPIENTS:
           if (field.type == TType.LIST) {
             {
-              var _list1140:TList = iprot.readListBegin();
+              var _list1167:TList = iprot.readListBegin();
               this.recipients = new Array();
-              for (var _i1141:int = 0; _i1141 < _list1140.size; ++_i1141)
+              for (var _i1168:int = 0; _i1168 < _list1167.size; ++_i1168)
               {
-                var _elem1142:String;
-                _elem1142 = iprot.readString();
-                this.recipients.push(_elem1142);
+                var _elem1169:String;
+                _elem1169 = iprot.readString();
+                this.recipients.push(_elem1169);
               }
               iprot.readListEnd();
             }
@@ -34269,8 +34307,8 @@ class sendMessageToSharedNotebookMembers_args implements TBase {
       oprot.writeFieldBegin(RECIPIENTS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRING, this.recipients.length));
-        for each (var elem1143:* in this.recipients)        {
-          oprot.writeString(elem1143);
+        for each (var elem1170:* in this.recipients)        {
+          oprot.writeString(elem1170);
         }
         oprot.writeListEnd();
       }
@@ -34948,14 +34986,14 @@ class listSharedNotebooks_result implements TBase {
         case SUCCESS:
           if (field.type == TType.LIST) {
             {
-              var _list1153:TList = iprot.readListBegin();
+              var _list1180:TList = iprot.readListBegin();
               this.success = new Array();
-              for (var _i1154:int = 0; _i1154 < _list1153.size; ++_i1154)
+              for (var _i1181:int = 0; _i1181 < _list1180.size; ++_i1181)
               {
-                var _elem1155:SharedNotebook;
-                _elem1155 = new SharedNotebook();
-                _elem1155.read(iprot);
-                this.success.push(_elem1155);
+                var _elem1182:SharedNotebook;
+                _elem1182 = new SharedNotebook();
+                _elem1182.read(iprot);
+                this.success.push(_elem1182);
               }
               iprot.readListEnd();
             }
@@ -35007,8 +35045,8 @@ class listSharedNotebooks_result implements TBase {
       oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.success.length));
-        for each (var elem1156:* in this.success)        {
-          elem1156.write(oprot);
+        for each (var elem1183:* in this.success)        {
+          elem1183.write(oprot);
         }
         oprot.writeListEnd();
       }
@@ -35203,13 +35241,13 @@ class expungeSharedNotebooks_args implements TBase {
         case SHAREDNOTEBOOKIDS:
           if (field.type == TType.LIST) {
             {
-              var _list1159:TList = iprot.readListBegin();
+              var _list1186:TList = iprot.readListBegin();
               this.sharedNotebookIds = new Array();
-              for (var _i1160:int = 0; _i1160 < _list1159.size; ++_i1160)
+              for (var _i1187:int = 0; _i1187 < _list1186.size; ++_i1187)
               {
-                var _elem1161:BigInteger;
-                _elem1161 = iprot.readI64();
-                this.sharedNotebookIds.push(_elem1161);
+                var _elem1188:BigInteger;
+                _elem1188 = iprot.readI64();
+                this.sharedNotebookIds.push(_elem1188);
               }
               iprot.readListEnd();
             }
@@ -35243,8 +35281,8 @@ class expungeSharedNotebooks_args implements TBase {
       oprot.writeFieldBegin(SHARED_NOTEBOOK_IDS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.I64, this.sharedNotebookIds.length));
-        for each (var elem1162:* in this.sharedNotebookIds)        {
-          oprot.writeI64(elem1162);
+        for each (var elem1189:* in this.sharedNotebookIds)        {
+          oprot.writeI64(elem1189);
         }
         oprot.writeListEnd();
       }
@@ -36886,14 +36924,14 @@ class listLinkedNotebooks_result implements TBase {
         case SUCCESS:
           if (field.type == TType.LIST) {
             {
-              var _list1184:TList = iprot.readListBegin();
+              var _list1211:TList = iprot.readListBegin();
               this.success = new Array();
-              for (var _i1185:int = 0; _i1185 < _list1184.size; ++_i1185)
+              for (var _i1212:int = 0; _i1212 < _list1211.size; ++_i1212)
               {
-                var _elem1186:LinkedNotebook;
-                _elem1186 = new LinkedNotebook();
-                _elem1186.read(iprot);
-                this.success.push(_elem1186);
+                var _elem1213:LinkedNotebook;
+                _elem1213 = new LinkedNotebook();
+                _elem1213.read(iprot);
+                this.success.push(_elem1213);
               }
               iprot.readListEnd();
             }
@@ -36945,8 +36983,8 @@ class listLinkedNotebooks_result implements TBase {
       oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.success.length));
-        for each (var elem1187:* in this.success)        {
-          elem1187.write(oprot);
+        for each (var elem1214:* in this.success)        {
+          elem1214.write(oprot);
         }
         oprot.writeListEnd();
       }
@@ -40267,6 +40305,552 @@ class authenticateToSharedNote_result implements TBase {
       ret += "null";
     } else {
       ret += this.systemException;
+    }
+    first = false;
+    ret += ")";
+    return ret;
+  }
+
+  public function validate():void {
+    // check for required fields
+    // check that fields of type enum have valid values
+  }
+
+}
+
+class findRelated_args implements TBase {
+  private static const STRUCT_DESC:TStruct = new TStruct("findRelated_args");
+  private static const AUTHENTICATION_TOKEN_FIELD_DESC:TField = new TField("authenticationToken", TType.STRING, 1);
+  private static const QUERY_FIELD_DESC:TField = new TField("query", TType.STRUCT, 2);
+  private static const RESULT_SPEC_FIELD_DESC:TField = new TField("resultSpec", TType.STRUCT, 3);
+
+  private var _authenticationToken:String;
+  public static const AUTHENTICATIONTOKEN:int = 1;
+  private var _query:RelatedQuery;
+  public static const QUERY:int = 2;
+  private var _resultSpec:RelatedResultSpec;
+  public static const RESULTSPEC:int = 3;
+
+
+  public static const metaDataMap:Dictionary = new Dictionary();
+  {
+    metaDataMap[AUTHENTICATIONTOKEN] = new FieldMetaData("authenticationToken", TFieldRequirementType.DEFAULT, 
+        new FieldValueMetaData(TType.STRING));
+    metaDataMap[QUERY] = new FieldMetaData("query", TFieldRequirementType.DEFAULT, 
+        new StructMetaData(TType.STRUCT, RelatedQuery));
+    metaDataMap[RESULTSPEC] = new FieldMetaData("resultSpec", TFieldRequirementType.DEFAULT, 
+        new StructMetaData(TType.STRUCT, RelatedResultSpec));
+  }
+  {
+    FieldMetaData.addStructMetaDataMap(findRelated_args, metaDataMap);
+  }
+
+  public function findRelated_args() {
+  }
+
+  public function get authenticationToken():String {
+    return this._authenticationToken;
+  }
+
+  public function set authenticationToken(authenticationToken:String):void {
+    this._authenticationToken = authenticationToken;
+  }
+
+  public function unsetAuthenticationToken():void {
+    this.authenticationToken = null;
+  }
+
+  // Returns true if field authenticationToken is set (has been assigned a value) and false otherwise
+  public function isSetAuthenticationToken():Boolean {
+    return this.authenticationToken != null;
+  }
+
+  public function get query():RelatedQuery {
+    return this._query;
+  }
+
+  public function set query(query:RelatedQuery):void {
+    this._query = query;
+  }
+
+  public function unsetQuery():void {
+    this.query = null;
+  }
+
+  // Returns true if field query is set (has been assigned a value) and false otherwise
+  public function isSetQuery():Boolean {
+    return this.query != null;
+  }
+
+  public function get resultSpec():RelatedResultSpec {
+    return this._resultSpec;
+  }
+
+  public function set resultSpec(resultSpec:RelatedResultSpec):void {
+    this._resultSpec = resultSpec;
+  }
+
+  public function unsetResultSpec():void {
+    this.resultSpec = null;
+  }
+
+  // Returns true if field resultSpec is set (has been assigned a value) and false otherwise
+  public function isSetResultSpec():Boolean {
+    return this.resultSpec != null;
+  }
+
+  public function setFieldValue(fieldID:int, value:*):void {
+    switch (fieldID) {
+    case AUTHENTICATIONTOKEN:
+      if (value == null) {
+        unsetAuthenticationToken();
+      } else {
+        this.authenticationToken = value;
+      }
+      break;
+
+    case QUERY:
+      if (value == null) {
+        unsetQuery();
+      } else {
+        this.query = value;
+      }
+      break;
+
+    case RESULTSPEC:
+      if (value == null) {
+        unsetResultSpec();
+      } else {
+        this.resultSpec = value;
+      }
+      break;
+
+    default:
+      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
+    }
+  }
+
+  public function getFieldValue(fieldID:int):* {
+    switch (fieldID) {
+    case AUTHENTICATIONTOKEN:
+      return this.authenticationToken;
+    case QUERY:
+      return this.query;
+    case RESULTSPEC:
+      return this.resultSpec;
+    default:
+      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
+    }
+  }
+
+  // Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
+  public function isSet(fieldID:int):Boolean {
+    switch (fieldID) {
+    case AUTHENTICATIONTOKEN:
+      return isSetAuthenticationToken();
+    case QUERY:
+      return isSetQuery();
+    case RESULTSPEC:
+      return isSetResultSpec();
+    default:
+      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
+    }
+  }
+
+  public function read(iprot:TProtocol):void {
+    var field:TField;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) { 
+        break;
+      }
+      switch (field.id)
+      {
+        case AUTHENTICATIONTOKEN:
+          if (field.type == TType.STRING) {
+            this.authenticationToken = iprot.readString();
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case QUERY:
+          if (field.type == TType.STRUCT) {
+            this.query = new RelatedQuery();
+            this.query.read(iprot);
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case RESULTSPEC:
+          if (field.type == TType.STRUCT) {
+            this.resultSpec = new RelatedResultSpec();
+            this.resultSpec.read(iprot);
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+          break;
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public function write(oprot:TProtocol):void {
+    validate();
+
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.authenticationToken != null) {
+      oprot.writeFieldBegin(AUTHENTICATION_TOKEN_FIELD_DESC);
+      oprot.writeString(this.authenticationToken);
+      oprot.writeFieldEnd();
+    }
+    if (this.query != null) {
+      oprot.writeFieldBegin(QUERY_FIELD_DESC);
+      this.query.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    if (this.resultSpec != null) {
+      oprot.writeFieldBegin(RESULT_SPEC_FIELD_DESC);
+      this.resultSpec.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  public function toString():String {
+    var ret:String = new String("findRelated_args(");
+    var first:Boolean = true;
+
+    ret += "authenticationToken:";
+    if (this.authenticationToken == null) {
+      ret += "null";
+    } else {
+      ret += this.authenticationToken;
+    }
+    first = false;
+    if (!first) ret +=  ", ";
+    ret += "query:";
+    if (this.query == null) {
+      ret += "null";
+    } else {
+      ret += this.query;
+    }
+    first = false;
+    if (!first) ret +=  ", ";
+    ret += "resultSpec:";
+    if (this.resultSpec == null) {
+      ret += "null";
+    } else {
+      ret += this.resultSpec;
+    }
+    first = false;
+    ret += ")";
+    return ret;
+  }
+
+  public function validate():void {
+    // check for required fields
+    // check that fields of type enum have valid values
+  }
+
+}
+
+class findRelated_result implements TBase {
+  private static const STRUCT_DESC:TStruct = new TStruct("findRelated_result");
+  private static const SUCCESS_FIELD_DESC:TField = new TField("success", TType.STRUCT, 0);
+  private static const USER_EXCEPTION_FIELD_DESC:TField = new TField("userException", TType.STRUCT, 1);
+  private static const SYSTEM_EXCEPTION_FIELD_DESC:TField = new TField("systemException", TType.STRUCT, 2);
+  private static const NOT_FOUND_EXCEPTION_FIELD_DESC:TField = new TField("notFoundException", TType.STRUCT, 3);
+
+  private var _success:RelatedResult;
+  public static const SUCCESS:int = 0;
+  private var _userException:EDAMUserException;
+  public static const USEREXCEPTION:int = 1;
+  private var _systemException:EDAMSystemException;
+  public static const SYSTEMEXCEPTION:int = 2;
+  private var _notFoundException:EDAMNotFoundException;
+  public static const NOTFOUNDEXCEPTION:int = 3;
+
+
+  public static const metaDataMap:Dictionary = new Dictionary();
+  {
+    metaDataMap[SUCCESS] = new FieldMetaData("success", TFieldRequirementType.DEFAULT, 
+        new StructMetaData(TType.STRUCT, RelatedResult));
+    metaDataMap[USEREXCEPTION] = new FieldMetaData("userException", TFieldRequirementType.DEFAULT, 
+        new FieldValueMetaData(TType.STRUCT));
+    metaDataMap[SYSTEMEXCEPTION] = new FieldMetaData("systemException", TFieldRequirementType.DEFAULT, 
+        new FieldValueMetaData(TType.STRUCT));
+    metaDataMap[NOTFOUNDEXCEPTION] = new FieldMetaData("notFoundException", TFieldRequirementType.DEFAULT, 
+        new FieldValueMetaData(TType.STRUCT));
+  }
+  {
+    FieldMetaData.addStructMetaDataMap(findRelated_result, metaDataMap);
+  }
+
+  public function findRelated_result() {
+  }
+
+  public function get success():RelatedResult {
+    return this._success;
+  }
+
+  public function set success(success:RelatedResult):void {
+    this._success = success;
+  }
+
+  public function unsetSuccess():void {
+    this.success = null;
+  }
+
+  // Returns true if field success is set (has been assigned a value) and false otherwise
+  public function isSetSuccess():Boolean {
+    return this.success != null;
+  }
+
+  public function get userException():EDAMUserException {
+    return this._userException;
+  }
+
+  public function set userException(userException:EDAMUserException):void {
+    this._userException = userException;
+  }
+
+  public function unsetUserException():void {
+    this.userException = null;
+  }
+
+  // Returns true if field userException is set (has been assigned a value) and false otherwise
+  public function isSetUserException():Boolean {
+    return this.userException != null;
+  }
+
+  public function get systemException():EDAMSystemException {
+    return this._systemException;
+  }
+
+  public function set systemException(systemException:EDAMSystemException):void {
+    this._systemException = systemException;
+  }
+
+  public function unsetSystemException():void {
+    this.systemException = null;
+  }
+
+  // Returns true if field systemException is set (has been assigned a value) and false otherwise
+  public function isSetSystemException():Boolean {
+    return this.systemException != null;
+  }
+
+  public function get notFoundException():EDAMNotFoundException {
+    return this._notFoundException;
+  }
+
+  public function set notFoundException(notFoundException:EDAMNotFoundException):void {
+    this._notFoundException = notFoundException;
+  }
+
+  public function unsetNotFoundException():void {
+    this.notFoundException = null;
+  }
+
+  // Returns true if field notFoundException is set (has been assigned a value) and false otherwise
+  public function isSetNotFoundException():Boolean {
+    return this.notFoundException != null;
+  }
+
+  public function setFieldValue(fieldID:int, value:*):void {
+    switch (fieldID) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        this.success = value;
+      }
+      break;
+
+    case USEREXCEPTION:
+      if (value == null) {
+        unsetUserException();
+      } else {
+        this.userException = value;
+      }
+      break;
+
+    case SYSTEMEXCEPTION:
+      if (value == null) {
+        unsetSystemException();
+      } else {
+        this.systemException = value;
+      }
+      break;
+
+    case NOTFOUNDEXCEPTION:
+      if (value == null) {
+        unsetNotFoundException();
+      } else {
+        this.notFoundException = value;
+      }
+      break;
+
+    default:
+      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
+    }
+  }
+
+  public function getFieldValue(fieldID:int):* {
+    switch (fieldID) {
+    case SUCCESS:
+      return this.success;
+    case USEREXCEPTION:
+      return this.userException;
+    case SYSTEMEXCEPTION:
+      return this.systemException;
+    case NOTFOUNDEXCEPTION:
+      return this.notFoundException;
+    default:
+      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
+    }
+  }
+
+  // Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
+  public function isSet(fieldID:int):Boolean {
+    switch (fieldID) {
+    case SUCCESS:
+      return isSetSuccess();
+    case USEREXCEPTION:
+      return isSetUserException();
+    case SYSTEMEXCEPTION:
+      return isSetSystemException();
+    case NOTFOUNDEXCEPTION:
+      return isSetNotFoundException();
+    default:
+      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
+    }
+  }
+
+  public function read(iprot:TProtocol):void {
+    var field:TField;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) { 
+        break;
+      }
+      switch (field.id)
+      {
+        case SUCCESS:
+          if (field.type == TType.STRUCT) {
+            this.success = new RelatedResult();
+            this.success.read(iprot);
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case USEREXCEPTION:
+          if (field.type == TType.STRUCT) {
+            this.userException = new EDAMUserException();
+            this.userException.read(iprot);
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case SYSTEMEXCEPTION:
+          if (field.type == TType.STRUCT) {
+            this.systemException = new EDAMSystemException();
+            this.systemException.read(iprot);
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case NOTFOUNDEXCEPTION:
+          if (field.type == TType.STRUCT) {
+            this.notFoundException = new EDAMNotFoundException();
+            this.notFoundException.read(iprot);
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+          break;
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public function write(oprot:TProtocol):void {
+    oprot.writeStructBegin(STRUCT_DESC);
+
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    } else if (this.isSetUserException()) {
+      oprot.writeFieldBegin(USER_EXCEPTION_FIELD_DESC);
+      this.userException.write(oprot);
+      oprot.writeFieldEnd();
+    } else if (this.isSetSystemException()) {
+      oprot.writeFieldBegin(SYSTEM_EXCEPTION_FIELD_DESC);
+      this.systemException.write(oprot);
+      oprot.writeFieldEnd();
+    } else if (this.isSetNotFoundException()) {
+      oprot.writeFieldBegin(NOT_FOUND_EXCEPTION_FIELD_DESC);
+      this.notFoundException.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  public function toString():String {
+    var ret:String = new String("findRelated_result(");
+    var first:Boolean = true;
+
+    ret += "success:";
+    if (this.success == null) {
+      ret += "null";
+    } else {
+      ret += this.success;
+    }
+    first = false;
+    if (!first) ret +=  ", ";
+    ret += "userException:";
+    if (this.userException == null) {
+      ret += "null";
+    } else {
+      ret += this.userException;
+    }
+    first = false;
+    if (!first) ret +=  ", ";
+    ret += "systemException:";
+    if (this.systemException == null) {
+      ret += "null";
+    } else {
+      ret += this.systemException;
+    }
+    first = false;
+    if (!first) ret +=  ", ";
+    ret += "notFoundException:";
+    if (this.notFoundException == null) {
+      ret += "null";
+    } else {
+      ret += this.notFoundException;
     }
     first = false;
     ret += ")";
