@@ -805,13 +805,13 @@ import com.evernote.edam.type.NoteAttributes;
           case TAGGUIDS:
             if (field.type == TType.LIST) {
               {
-                var _list140:TList = iprot.readListBegin();
+                var _list163:TList = iprot.readListBegin();
                 this.tagGuids = new Array();
-                for (var _i141:int = 0; _i141 < _list140.size; ++_i141)
+                for (var _i164:int = 0; _i164 < _list163.size; ++_i164)
                 {
-                  var _elem142:String;
-                  _elem142 = iprot.readString();
-                  this.tagGuids.push(_elem142);
+                  var _elem165:String;
+                  _elem165 = iprot.readString();
+                  this.tagGuids.push(_elem165);
                 }
                 iprot.readListEnd();
               }
@@ -822,14 +822,14 @@ import com.evernote.edam.type.NoteAttributes;
           case RESOURCES:
             if (field.type == TType.LIST) {
               {
-                var _list143:TList = iprot.readListBegin();
+                var _list166:TList = iprot.readListBegin();
                 this.resources = new Array();
-                for (var _i144:int = 0; _i144 < _list143.size; ++_i144)
+                for (var _i167:int = 0; _i167 < _list166.size; ++_i167)
                 {
-                  var _elem145:Resource;
-                  _elem145 = new Resource();
-                  _elem145.read(iprot);
-                  this.resources.push(_elem145);
+                  var _elem168:Resource;
+                  _elem168 = new Resource();
+                  _elem168.read(iprot);
+                  this.resources.push(_elem168);
                 }
                 iprot.readListEnd();
               }
@@ -848,13 +848,13 @@ import com.evernote.edam.type.NoteAttributes;
           case TAGNAMES:
             if (field.type == TType.LIST) {
               {
-                var _list146:TList = iprot.readListBegin();
+                var _list169:TList = iprot.readListBegin();
                 this.tagNames = new Array();
-                for (var _i147:int = 0; _i147 < _list146.size; ++_i147)
+                for (var _i170:int = 0; _i170 < _list169.size; ++_i170)
                 {
-                  var _elem148:String;
-                  _elem148 = iprot.readString();
-                  this.tagNames.push(_elem148);
+                  var _elem171:String;
+                  _elem171 = iprot.readString();
+                  this.tagNames.push(_elem171);
                 }
                 iprot.readListEnd();
               }
@@ -949,8 +949,8 @@ import com.evernote.edam.type.NoteAttributes;
           oprot.writeFieldBegin(TAG_GUIDS_FIELD_DESC);
           {
             oprot.writeListBegin(new TList(TType.STRING, this.tagGuids.length));
-            for each (var elem149:* in this.tagGuids)            {
-              oprot.writeString(elem149);
+            for each (var elem172:* in this.tagGuids)            {
+              oprot.writeString(elem172);
             }
             oprot.writeListEnd();
           }
@@ -962,8 +962,8 @@ import com.evernote.edam.type.NoteAttributes;
           oprot.writeFieldBegin(RESOURCES_FIELD_DESC);
           {
             oprot.writeListBegin(new TList(TType.STRUCT, this.resources.length));
-            for each (var elem150:* in this.resources)            {
-              elem150.write(oprot);
+            for each (var elem173:* in this.resources)            {
+              elem173.write(oprot);
             }
             oprot.writeListEnd();
           }
@@ -982,8 +982,8 @@ import com.evernote.edam.type.NoteAttributes;
           oprot.writeFieldBegin(TAG_NAMES_FIELD_DESC);
           {
             oprot.writeListBegin(new TList(TType.STRING, this.tagNames.length));
-            for each (var elem151:* in this.tagNames)            {
-              oprot.writeString(elem151);
+            for each (var elem174:* in this.tagNames)            {
+              oprot.writeString(elem174);
             }
             oprot.writeListEnd();
           }

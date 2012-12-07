@@ -18,7 +18,7 @@ import com.evernote.edam.error.EDAMErrorCode;
 
   /**
    * This exception is thrown by EDAM procedures when a call fails as a result of
-   * an a problem in the service that could not be changed through user action.
+   * a problem in the service that could not be changed through caller action.
    * 
    * errorCode:  The numeric code indicating the type of error that occurred.
    *   must be one of the values of EDAMErrorCode.

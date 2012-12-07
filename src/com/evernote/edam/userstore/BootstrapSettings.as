@@ -88,6 +88,7 @@ import org.apache.thrift.protocol.*;
     private static const ENABLE_SPONSORED_ACCOUNTS_FIELD_DESC:TField = new TField("enableSponsoredAccounts", TType.BOOL, 10);
     private static const ENABLE_TWITTER_SHARING_FIELD_DESC:TField = new TField("enableTwitterSharing", TType.BOOL, 11);
     private static const ENABLE_LINKED_IN_SHARING_FIELD_DESC:TField = new TField("enableLinkedInSharing", TType.BOOL, 12);
+    private static const ENABLE_PUBLIC_NOTEBOOKS_FIELD_DESC:TField = new TField("enablePublicNotebooks", TType.BOOL, 13);
 
     private var _serviceHost:String;
     public static const SERVICEHOST:int = 1;
@@ -113,6 +114,8 @@ import org.apache.thrift.protocol.*;
     public static const ENABLETWITTERSHARING:int = 11;
     private var _enableLinkedInSharing:Boolean;
     public static const ENABLELINKEDINSHARING:int = 12;
+    private var _enablePublicNotebooks:Boolean;
+    public static const ENABLEPUBLICNOTEBOOKS:int = 13;
 
     private var __isset_enableFacebookSharing:Boolean = false;
     private var __isset_enableGiftSubscriptions:Boolean = false;
@@ -122,6 +125,7 @@ import org.apache.thrift.protocol.*;
     private var __isset_enableSponsoredAccounts:Boolean = false;
     private var __isset_enableTwitterSharing:Boolean = false;
     private var __isset_enableLinkedInSharing:Boolean = false;
+    private var __isset_enablePublicNotebooks:Boolean = false;
 
     public static const metaDataMap:Dictionary = new Dictionary();
     {
@@ -148,6 +152,8 @@ import org.apache.thrift.protocol.*;
       metaDataMap[ENABLETWITTERSHARING] = new FieldMetaData("enableTwitterSharing", TFieldRequirementType.OPTIONAL, 
           new FieldValueMetaData(TType.BOOL));
       metaDataMap[ENABLELINKEDINSHARING] = new FieldMetaData("enableLinkedInSharing", TFieldRequirementType.OPTIONAL, 
+          new FieldValueMetaData(TType.BOOL));
+      metaDataMap[ENABLEPUBLICNOTEBOOKS] = new FieldMetaData("enablePublicNotebooks", TFieldRequirementType.OPTIONAL, 
           new FieldValueMetaData(TType.BOOL));
     }
     {
@@ -369,6 +375,24 @@ import org.apache.thrift.protocol.*;
       return this.__isset_enableLinkedInSharing;
     }
 
+    public function get enablePublicNotebooks():Boolean {
+      return this._enablePublicNotebooks;
+    }
+
+    public function set enablePublicNotebooks(enablePublicNotebooks:Boolean):void {
+      this._enablePublicNotebooks = enablePublicNotebooks;
+      this.__isset_enablePublicNotebooks = true;
+    }
+
+    public function unsetEnablePublicNotebooks():void {
+      this.__isset_enablePublicNotebooks = false;
+    }
+
+    // Returns true if field enablePublicNotebooks is set (has been assigned a value) and false otherwise
+    public function isSetEnablePublicNotebooks():Boolean {
+      return this.__isset_enablePublicNotebooks;
+    }
+
     public function setFieldValue(fieldID:int, value:*):void {
       switch (fieldID) {
       case SERVICEHOST:
@@ -467,6 +491,14 @@ import org.apache.thrift.protocol.*;
         }
         break;
 
+      case ENABLEPUBLICNOTEBOOKS:
+        if (value == null) {
+          unsetEnablePublicNotebooks();
+        } else {
+          this.enablePublicNotebooks = value;
+        }
+        break;
+
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -498,6 +530,8 @@ import org.apache.thrift.protocol.*;
         return this.enableTwitterSharing;
       case ENABLELINKEDINSHARING:
         return this.enableLinkedInSharing;
+      case ENABLEPUBLICNOTEBOOKS:
+        return this.enablePublicNotebooks;
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -530,6 +564,8 @@ import org.apache.thrift.protocol.*;
         return isSetEnableTwitterSharing();
       case ENABLELINKEDINSHARING:
         return isSetEnableLinkedInSharing();
+      case ENABLEPUBLICNOTEBOOKS:
+        return isSetEnablePublicNotebooks();
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -638,6 +674,14 @@ import org.apache.thrift.protocol.*;
               TProtocolUtil.skip(iprot, field.type);
             }
             break;
+          case ENABLEPUBLICNOTEBOOKS:
+            if (field.type == TType.BOOL) {
+              this.enablePublicNotebooks = iprot.readBool();
+              this.__isset_enablePublicNotebooks = true;
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
           default:
             TProtocolUtil.skip(iprot, field.type);
             break;
@@ -713,6 +757,11 @@ import org.apache.thrift.protocol.*;
       if (isSetEnableLinkedInSharing()) {
         oprot.writeFieldBegin(ENABLE_LINKED_IN_SHARING_FIELD_DESC);
         oprot.writeBool(this.enableLinkedInSharing);
+        oprot.writeFieldEnd();
+      }
+      if (isSetEnablePublicNotebooks()) {
+        oprot.writeFieldBegin(ENABLE_PUBLIC_NOTEBOOKS_FIELD_DESC);
+        oprot.writeBool(this.enablePublicNotebooks);
         oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
@@ -800,6 +849,12 @@ import org.apache.thrift.protocol.*;
         if (!first) ret +=  ", ";
         ret += "enableLinkedInSharing:";
         ret += this.enableLinkedInSharing;
+        first = false;
+      }
+      if (isSetEnablePublicNotebooks()) {
+        if (!first) ret +=  ", ";
+        ret += "enablePublicNotebooks:";
+        ret += this.enablePublicNotebooks;
         first = false;
       }
       ret += ")";

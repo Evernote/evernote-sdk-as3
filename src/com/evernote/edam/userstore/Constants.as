@@ -14,7 +14,7 @@ import flash.utils.Dictionary;
 
     public static const EDAM_VERSION_MAJOR:int = 1;
 
-    public static const EDAM_VERSION_MINOR:int = 22;
+    public static const EDAM_VERSION_MINOR:int = 23;
 
   }
 }

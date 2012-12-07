@@ -18,6 +18,7 @@ import com.evernote.edam.error.EDAMUserException;
 import com.evernote.edam.error.EDAMSystemException;
 import com.evernote.edam.type.User;
 import com.evernote.edam.error.EDAMNotFoundException;
+import com.evernote.edam.type.PremiumInfo;
 
   /**
    * Service:  UserStore
@@ -92,10 +93,10 @@ import com.evernote.edam.error.EDAMNotFoundException;
     function getBootstrapInfo(locale:String, onError:Function, onSuccess:Function):void;
 
     /**
-     * This is used to check a username and password in order to create an
-     * authentication session that could be used for further actions.
+     * This is used to check a username and password in order to create a
+     * short-lived authentication session that can be used for further actions.
      * 
-     * This function is only availabe to Evernote's internal applications.
+     * This function is only available to Evernote's internal applications.
      * Third party applications must authenticate using OAuth as
      * described at
      * <a href="http://dev.evernote.com/documentation/cloud/">dev.evernote.com</a>.
@@ -111,13 +112,12 @@ import com.evernote.edam.error.EDAMNotFoundException;
      *   provided over a protected transport (e.g. SSL).
      * 
      * @param consumerKey
-     *   A unique identifier for this client application, provided by Evernote
-     *   to developers who request an API key.  This must be provided to identify
-     *   the client.
+     *   The "consumer key" portion of the API key issued to the client application
+     *   by Evernote.
      * 
      * @param consumerSecret
-     *   If the client was given a "consumer secret" when the API key was issued,
-     *   it must be provided here to authenticate the application itself.
+     *   The "consumer secret" portion of the API key issued to the client application
+     *   by Evernote.
      * 
      * @return
      *   The result of the authentication.  If the authentication was successful,
@@ -147,6 +147,127 @@ import com.evernote.edam.error.EDAMNotFoundException;
     function authenticate(username:String, password:String, consumerKey:String, consumerSecret:String, onError:Function, onSuccess:Function):void;
 
     /**
+     * This is used to check a username and password in order to create a
+     * long-lived authentication token that can be used for further actions.
+     * 
+     * This function is not available to most third party applications,
+     * which typically authenticate using OAuth as
+     * described at
+     * <a href="http://dev.evernote.com/documentation/cloud/">dev.evernote.com</a>.
+     * If you believe that your application requires permission to authenticate
+     * using username and password instead of OAuth, please contact Evernote
+     * developer support by visiting
+     * <a href="http://dev.evernote.com">dev.evernote.com</a>.
+     * 
+     * @param username
+     *   The username or registered email address of the account to
+     *   authenticate against.
+     * 
+     * @param password
+     *   The plaintext password to check against the account.  Since
+     *   this is not protected by the EDAM protocol, this information must be
+     *   provided over a protected transport (i.e. SSL).
+     * 
+     * @param consumerKey
+     *   The "consumer key" portion of the API key issued to the client application
+     *   by Evernote.
+     * 
+     * @param consumerSecret
+     *   The "consumer secret" portion of the API key issued to the client application
+     *   by Evernote.
+     * 
+     * @param deviceIdentifier
+     *   An optional string, no more than 32 characters in length, that uniquely identifies
+     *   the device from which the authentication is being performed. This string allows
+     *   the service to return the same authentication token when a given application
+     *   requests authentication repeatedly from the same device. This may happen when the
+     *   user logs out of an application and then logs back in, or when the application is
+     *   uninstalled and later reinstalled. If no reliable device identifier can be created,
+     *   this value should be omitted. If set, the device identifier must be between
+     *   1 and EDAM_DEVICE_ID_LEN_MAX characters long and must match the regular expression
+     *   EDAM_DEVICE_ID_REGEX.
+     * 
+     * @param deviceDescription
+     *   A description of the device from which the authentication is being performed.
+     *   This field is displayed to the user in a list of authorized applications to
+     *   allow them to distinguish between multiple tokens issued to the same client
+     *   application on different devices. For example, the Evernote iOS client on
+     *   a user's iPhone and iPad might pass the iOS device names "Bob's iPhone" and
+     *   "Bob's iPad". The device description must be between 1 and
+     *   EDAM_DEVICE_DESCRIPTION_LEN_MAX characters long and must match the regular
+     *   expression EDAM_DEVICE_DESCRIPTION_REGEX.
+     * 
+     * @return
+     *   The result of the authentication. The level of detail provided in the returned
+     *   AuthenticationResult.User structure depends on the access level granted by
+     *   calling application's API key.
+     * 
+     * @throws EDAMUserException <ul>
+     *   <li> DATA_REQUIRED "username" - username is empty
+     *   <li> DATA_REQUIRED "password" - password is empty
+     *   <li> DATA_REQUIRED "consumerKey" - consumerKey is empty
+     *   <li> DATA_REQUIRED "consumerSecret" - consumerSecret is empty
+     *   <li> DATA_REQUIRED "deviceDescription" - deviceDescription is empty
+     *   <li> BAD_DATA_FORMAT "deviceDescription" - deviceDescription is not valid.
+     *   <li> BAD_DATA_FORMAT "deviceIdentifier" - deviceIdentifier is not valid.
+     *   <li> INVALID_AUTH "username" - username not found
+     *   <li> INVALID_AUTH "password" - password did not match
+     *   <li> INVALID_AUTH "consumerKey" - consumerKey is not authorized
+     *   <li> INVALID_AUTH "consumerSecret" - consumerSecret is incorrect
+     *   <li> PERMISSION_DENIED "User.active" - user account is closed
+     *   <li> PERMISSION_DENIED "User.tooManyFailuresTryAgainLater" - user has
+     *     failed authentication too often
+     * </ul>
+     * 
+     * @param username
+     * @param password
+     * @param consumerKey
+     * @param consumerSecret
+     * @param deviceIdentifier
+     * @param deviceDescription
+     */
+    //function onError(Error):void;
+    //function onSuccess(AuthenticationResult):void;
+    function authenticateLongSession(username:String, password:String, consumerKey:String, consumerSecret:String, deviceIdentifier:String, deviceDescription:String, onError:Function, onSuccess:Function):void;
+
+    /**
+     * This is used to take an existing authentication token that grants access
+     * to an individual user account (returned from 'authenticate',
+     * 'authenticateLongSession' or an OAuth authorization) and obtain an additional
+     * authentication token that may be used to access business notebooks if the user
+     * is a member of an Evernote Business account.
+     * 
+     * The resulting authentication token may be used to make NoteStore API calls
+     * against the business using the NoteStore URL returned in the result.
+     * 
+     * @param authenticationToken
+     *   The authentication token for the user. This may not be a shared authentication
+     *   token (returned by NoteStore.authenticateToSharedNotebook or
+     *   NoteStore.authenticateToSharedNote) or a business authentication token.
+     * 
+     * @return
+     *   The result of the authentication, with the token granting access to the
+     *   business in the result's 'authenticationToken' field. The URL that must
+     *   be used to access the business account NoteStore will be returned in the
+     *   result's 'noteStoreUrl' field.  The 'User' field will
+     *   not be set in the result.
+     * 
+     * @throws EDAMUserException <ul>
+     *   <li> PERMISSION_DENIED "authenticationToken" - the provided authentication token
+     *        is a shared or business authentication token. </li>
+     *   <li> PERMISSION_DENIED "Business" - the user identified by the provided
+     *        authentication token is not currently a member of a business. </li>
+     *   <li> PERMISSION_DENIED "Business.status" - the business that the user is a
+     *        member of is not currently in an active status. </li>
+     * </ul>
+     * 
+     * @param authenticationToken
+     */
+    //function onError(Error):void;
+    //function onSuccess(AuthenticationResult):void;
+    function authenticateToBusiness(authenticationToken:String, onError:Function, onSuccess:Function):void;
+
+    /**
      * This is used to take an existing authentication token (returned from
      * 'authenticate') and exchange it for a newer token which will not expire
      * as soon.  This must be invoked before the previous token expires.
@@ -158,8 +279,8 @@ import com.evernote.edam.error.EDAMNotFoundException;
      * 
      * @return
      *   The result of the authentication, with the new token in
-     *   the result's "authentication" field.  The User field will
-     *   not be set in the reply.
+     *   the result's 'authenticationToken' field.  The 'User' field will
+     *   not be set in the result.
      * 
      * @param authenticationToken
      */

@@ -107,7 +107,6 @@ import org.apache.thrift.protocol.*;
    *    The value can be a literal match or, if the last character is an
    *    asterisk, a prefix match.
    *    </dd>
-   * 
    *  </dl>
    */
   public class SyncChunkFilter implements TBase   {

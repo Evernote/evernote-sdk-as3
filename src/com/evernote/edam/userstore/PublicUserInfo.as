@@ -26,9 +26,7 @@ import com.evernote.edam.type.PrivilegeLevel;
    *    </dd>
    *  <dt>shardId:</dt>
    *    <dd>
-   *    The name of the virtual server that manages the state of
-   *    this user. This value is used internally to determine which system should
-   *    service requests about this user's data.
+   *    DEPRECATED - Client applications should have no need to use this field.
    *    </dd>
    *  <dt>privilege:</dt>
    *    <dd>
@@ -42,6 +40,16 @@ import com.evernote.edam.type.PrivilegeLevel;
    *    I.e. this is the URL that should be used to create the Thrift HTTP client
    *    transport to send messages to the NoteStore service for the account.
    *    </dd>
+   *  <dt>webApiUrlPrefix:</dt>
+   *    <dd>
+   *    This field will contain the initial part of the URLs that should be used
+   *    to make requests to Evernote's thin client "web API", which provide
+   *    optimized operations for clients that aren't capable of manipulating
+   *    the full contents of accounts via the full Thrift data model. Clients
+   *    should concatenate the relative path for the various servlets onto the
+   *    end of this string to construct the full URL, as documented on our
+   *    developer web site.
+   *    </dd>
    *  </dl>
    */
   public class PublicUserInfo implements TBase   {
@@ -51,6 +59,7 @@ import com.evernote.edam.type.PrivilegeLevel;
     private static const PRIVILEGE_FIELD_DESC:TField = new TField("privilege", TType.I32, 3);
     private static const USERNAME_FIELD_DESC:TField = new TField("username", TType.STRING, 4);
     private static const NOTE_STORE_URL_FIELD_DESC:TField = new TField("noteStoreUrl", TType.STRING, 5);
+    private static const WEB_API_URL_PREFIX_FIELD_DESC:TField = new TField("webApiUrlPrefix", TType.STRING, 6);
 
     private var _userId:int;
     public static const USERID:int = 1;
@@ -62,6 +71,8 @@ import com.evernote.edam.type.PrivilegeLevel;
     public static const USERNAME:int = 4;
     private var _noteStoreUrl:String;
     public static const NOTESTOREURL:int = 5;
+    private var _webApiUrlPrefix:String;
+    public static const WEBAPIURLPREFIX:int = 6;
 
     private var __isset_userId:Boolean = false;
     private var __isset_privilege:Boolean = false;
@@ -77,6 +88,8 @@ import com.evernote.edam.type.PrivilegeLevel;
       metaDataMap[USERNAME] = new FieldMetaData("username", TFieldRequirementType.OPTIONAL, 
           new FieldValueMetaData(TType.STRING));
       metaDataMap[NOTESTOREURL] = new FieldMetaData("noteStoreUrl", TFieldRequirementType.OPTIONAL, 
+          new FieldValueMetaData(TType.STRING));
+      metaDataMap[WEBAPIURLPREFIX] = new FieldMetaData("webApiUrlPrefix", TFieldRequirementType.OPTIONAL, 
           new FieldValueMetaData(TType.STRING));
     }
     {
@@ -173,6 +186,23 @@ import com.evernote.edam.type.PrivilegeLevel;
       return this.noteStoreUrl != null;
     }
 
+    public function get webApiUrlPrefix():String {
+      return this._webApiUrlPrefix;
+    }
+
+    public function set webApiUrlPrefix(webApiUrlPrefix:String):void {
+      this._webApiUrlPrefix = webApiUrlPrefix;
+    }
+
+    public function unsetWebApiUrlPrefix():void {
+      this.webApiUrlPrefix = null;
+    }
+
+    // Returns true if field webApiUrlPrefix is set (has been assigned a value) and false otherwise
+    public function isSetWebApiUrlPrefix():Boolean {
+      return this.webApiUrlPrefix != null;
+    }
+
     public function setFieldValue(fieldID:int, value:*):void {
       switch (fieldID) {
       case USERID:
@@ -215,6 +245,14 @@ import com.evernote.edam.type.PrivilegeLevel;
         }
         break;
 
+      case WEBAPIURLPREFIX:
+        if (value == null) {
+          unsetWebApiUrlPrefix();
+        } else {
+          this.webApiUrlPrefix = value;
+        }
+        break;
+
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -232,6 +270,8 @@ import com.evernote.edam.type.PrivilegeLevel;
         return this.username;
       case NOTESTOREURL:
         return this.noteStoreUrl;
+      case WEBAPIURLPREFIX:
+        return this.webApiUrlPrefix;
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -250,6 +290,8 @@ import com.evernote.edam.type.PrivilegeLevel;
         return isSetUsername();
       case NOTESTOREURL:
         return isSetNoteStoreUrl();
+      case WEBAPIURLPREFIX:
+        return isSetWebApiUrlPrefix();
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -303,6 +345,13 @@ import com.evernote.edam.type.PrivilegeLevel;
               TProtocolUtil.skip(iprot, field.type);
             }
             break;
+          case WEBAPIURLPREFIX:
+            if (field.type == TType.STRING) {
+              this.webApiUrlPrefix = iprot.readString();
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
           default:
             TProtocolUtil.skip(iprot, field.type);
             break;
@@ -347,6 +396,13 @@ import com.evernote.edam.type.PrivilegeLevel;
         if (isSetNoteStoreUrl()) {
           oprot.writeFieldBegin(NOTE_STORE_URL_FIELD_DESC);
           oprot.writeString(this.noteStoreUrl);
+          oprot.writeFieldEnd();
+        }
+      }
+      if (this.webApiUrlPrefix != null) {
+        if (isSetWebApiUrlPrefix()) {
+          oprot.writeFieldBegin(WEB_API_URL_PREFIX_FIELD_DESC);
+          oprot.writeString(this.webApiUrlPrefix);
           oprot.writeFieldEnd();
         }
       }
@@ -400,6 +456,16 @@ import com.evernote.edam.type.PrivilegeLevel;
           ret += "null";
         } else {
           ret += this.noteStoreUrl;
+        }
+        first = false;
+      }
+      if (isSetWebApiUrlPrefix()) {
+        if (!first) ret +=  ", ";
+        ret += "webApiUrlPrefix:";
+        if (this.webApiUrlPrefix == null) {
+          ret += "null";
+        } else {
+          ret += this.webApiUrlPrefix;
         }
         first = false;
       }

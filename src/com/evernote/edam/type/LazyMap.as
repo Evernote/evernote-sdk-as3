@@ -166,13 +166,13 @@ import org.apache.thrift.protocol.*;
           case KEYSONLY:
             if (field.type == TType.SET) {
               {
-                var _set77:TSet = iprot.readSetBegin();
+                var _set92:TSet = iprot.readSetBegin();
                 this.keysOnly = new Set();
-                for (var _i78:int = 0; _i78 < _set77.size; ++_i78)
+                for (var _i93:int = 0; _i93 < _set92.size; ++_i93)
                 {
-                  var _elem79:String;
-                  _elem79 = iprot.readString();
-                  this.keysOnly.add(_elem79);
+                  var _elem94:String;
+                  _elem94 = iprot.readString();
+                  this.keysOnly.add(_elem94);
                 }
                 iprot.readSetEnd();
               }
@@ -183,15 +183,15 @@ import org.apache.thrift.protocol.*;
           case FULLMAP:
             if (field.type == TType.MAP) {
               {
-                var _map80:TMap = iprot.readMapBegin();
+                var _map95:TMap = iprot.readMapBegin();
                 this.fullMap = new Dictionary();
-                for (var _i81:int = 0; _i81 < _map80.size; ++_i81)
+                for (var _i96:int = 0; _i96 < _map95.size; ++_i96)
                 {
-                  var _key82:String;
-                  var _val83:String;
-                  _key82 = iprot.readString();
-                  _val83 = iprot.readString();
-                  this.fullMap[_key82] = _val83;
+                  var _key97:String;
+                  var _val98:String;
+                  _key97 = iprot.readString();
+                  _val98 = iprot.readString();
+                  this.fullMap[_key97] = _val98;
                 }
                 iprot.readMapEnd();
               }
@@ -221,8 +221,8 @@ import org.apache.thrift.protocol.*;
           oprot.writeFieldBegin(KEYS_ONLY_FIELD_DESC);
           {
             oprot.writeSetBegin(new TSet(TType.STRING, this.keysOnly.size));
-            for each (var elem84:* in this.keysOnly.toArray())            {
-              oprot.writeString(elem84);
+            for each (var elem99:* in this.keysOnly.toArray())            {
+              oprot.writeString(elem99);
             }
             oprot.writeSetEnd();
           }
@@ -233,14 +233,14 @@ import org.apache.thrift.protocol.*;
         if (isSetFullMap()) {
           oprot.writeFieldBegin(FULL_MAP_FIELD_DESC);
           {
-            var _sizeCounter86:int = 0;
-            for (var _key85:* in this.fullMap) {
-              _sizeCounter86++;
+            var _sizeCounter101:int = 0;
+            for (var _key100:* in this.fullMap) {
+              _sizeCounter101++;
             }
-            oprot.writeMapBegin(new TMap(TType.STRING, TType.STRING, _sizeCounter86));
-            for (var elem87:* in this.fullMap)            {
-              oprot.writeString(elem87);
-              oprot.writeString(this.fullMap[elem87]);
+            oprot.writeMapBegin(new TMap(TType.STRING, TType.STRING, _sizeCounter101));
+            for (var elem102:* in this.fullMap)            {
+              oprot.writeString(elem102);
+              oprot.writeString(this.fullMap[elem102]);
             }
             oprot.writeMapEnd();
           }

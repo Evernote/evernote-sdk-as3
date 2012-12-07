@@ -18,6 +18,7 @@ import com.evernote.edam.error.EDAMUserException;
 import com.evernote.edam.error.EDAMSystemException;
 import com.evernote.edam.type.User;
 import com.evernote.edam.error.EDAMNotFoundException;
+import com.evernote.edam.type.PremiumInfo;
 
   public class UserStore implements IUserStore {
     public function UserStore(iprot:TProtocol, oprot:TProtocol=null)
@@ -159,6 +160,99 @@ import com.evernote.edam.error.EDAMNotFoundException;
             return;
           }
           if (onError != null) onError(new TApplicationError(TApplicationError.MISSING_RESULT, "authenticate failed: unknown result"));
+        } catch (e:TError) {
+          if (onError != null) onError(e);
+        }
+      });
+    }
+
+    //function onError(Error):void;
+    //function onSuccess(AuthenticationResult):void;
+    public function authenticateLongSession(username:String, password:String, consumerKey:String, consumerSecret:String, deviceIdentifier:String, deviceDescription:String, onError:Function, onSuccess:Function):void
+    {
+      oprot_.writeMessageBegin(new TMessage("authenticateLongSession", TMessageType.CALL, seqid_));
+      var args:authenticateLongSession_args = new authenticateLongSession_args();
+      args.username = username;
+      args.password = password;
+      args.consumerKey = consumerKey;
+      args.consumerSecret = consumerSecret;
+      args.deviceIdentifier = deviceIdentifier;
+      args.deviceDescription = deviceDescription;
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush(function(error:Error):void {
+        try {
+          if (error != null) {
+            if (onError != null) onError(error);
+            return;
+          }
+          var msg:TMessage = iprot_.readMessageBegin();
+          if (msg.type == TMessageType.EXCEPTION) {
+            var x:TApplicationError = TApplicationError.read(iprot_);
+            iprot_.readMessageEnd();
+            if (onError != null) onError(x);
+            return;
+          }
+          var result :authenticateLongSession_result = new authenticateLongSession_result();
+          result.read(iprot_);
+          iprot_.readMessageEnd();
+          if (result.isSetSuccess()) {
+            if (onSuccess != null) onSuccess(result.success);
+            return;
+          }
+          if (result.userException != null) {
+            if (onError != null) onError(result.userException);
+            return;
+          }
+          if (result.systemException != null) {
+            if (onError != null) onError(result.systemException);
+            return;
+          }
+          if (onError != null) onError(new TApplicationError(TApplicationError.MISSING_RESULT, "authenticateLongSession failed: unknown result"));
+        } catch (e:TError) {
+          if (onError != null) onError(e);
+        }
+      });
+    }
+
+    //function onError(Error):void;
+    //function onSuccess(AuthenticationResult):void;
+    public function authenticateToBusiness(authenticationToken:String, onError:Function, onSuccess:Function):void
+    {
+      oprot_.writeMessageBegin(new TMessage("authenticateToBusiness", TMessageType.CALL, seqid_));
+      var args:authenticateToBusiness_args = new authenticateToBusiness_args();
+      args.authenticationToken = authenticationToken;
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush(function(error:Error):void {
+        try {
+          if (error != null) {
+            if (onError != null) onError(error);
+            return;
+          }
+          var msg:TMessage = iprot_.readMessageBegin();
+          if (msg.type == TMessageType.EXCEPTION) {
+            var x:TApplicationError = TApplicationError.read(iprot_);
+            iprot_.readMessageEnd();
+            if (onError != null) onError(x);
+            return;
+          }
+          var result :authenticateToBusiness_result = new authenticateToBusiness_result();
+          result.read(iprot_);
+          iprot_.readMessageEnd();
+          if (result.isSetSuccess()) {
+            if (onSuccess != null) onSuccess(result.success);
+            return;
+          }
+          if (result.userException != null) {
+            if (onError != null) onError(result.userException);
+            return;
+          }
+          if (result.systemException != null) {
+            if (onError != null) onError(result.systemException);
+            return;
+          }
+          if (onError != null) onError(new TApplicationError(TApplicationError.MISSING_RESULT, "authenticateToBusiness failed: unknown result"));
         } catch (e:TError) {
           if (onError != null) onError(e);
         }
@@ -404,6 +498,7 @@ import com.evernote.edam.error.EDAMUserException;
 import com.evernote.edam.error.EDAMSystemException;
 import com.evernote.edam.type.User;
 import com.evernote.edam.error.EDAMNotFoundException;
+import com.evernote.edam.type.PremiumInfo;
 import com.evernote.edam.userstore.*;
 class checkVersion_args implements TBase {
   private static const STRUCT_DESC:TStruct = new TStruct("checkVersion_args");
@@ -437,7 +532,7 @@ class checkVersion_args implements TBase {
   public function checkVersion_args() {
     this.edamVersionMajor = 1;
 
-    this.edamVersionMinor = 22;
+    this.edamVersionMinor = 23;
 
   }
 
@@ -1565,6 +1660,1040 @@ class authenticate_result implements TBase {
 
   public function toString():String {
     var ret:String = new String("authenticate_result(");
+    var first:Boolean = true;
+
+    ret += "success:";
+    if (this.success == null) {
+      ret += "null";
+    } else {
+      ret += this.success;
+    }
+    first = false;
+    if (!first) ret +=  ", ";
+    ret += "userException:";
+    if (this.userException == null) {
+      ret += "null";
+    } else {
+      ret += this.userException;
+    }
+    first = false;
+    if (!first) ret +=  ", ";
+    ret += "systemException:";
+    if (this.systemException == null) {
+      ret += "null";
+    } else {
+      ret += this.systemException;
+    }
+    first = false;
+    ret += ")";
+    return ret;
+  }
+
+  public function validate():void {
+    // check for required fields
+    // check that fields of type enum have valid values
+  }
+
+}
+
+class authenticateLongSession_args implements TBase {
+  private static const STRUCT_DESC:TStruct = new TStruct("authenticateLongSession_args");
+  private static const USERNAME_FIELD_DESC:TField = new TField("username", TType.STRING, 1);
+  private static const PASSWORD_FIELD_DESC:TField = new TField("password", TType.STRING, 2);
+  private static const CONSUMER_KEY_FIELD_DESC:TField = new TField("consumerKey", TType.STRING, 3);
+  private static const CONSUMER_SECRET_FIELD_DESC:TField = new TField("consumerSecret", TType.STRING, 4);
+  private static const DEVICE_IDENTIFIER_FIELD_DESC:TField = new TField("deviceIdentifier", TType.STRING, 5);
+  private static const DEVICE_DESCRIPTION_FIELD_DESC:TField = new TField("deviceDescription", TType.STRING, 6);
+
+  private var _username:String;
+  public static const USERNAME:int = 1;
+  private var _password:String;
+  public static const PASSWORD:int = 2;
+  private var _consumerKey:String;
+  public static const CONSUMERKEY:int = 3;
+  private var _consumerSecret:String;
+  public static const CONSUMERSECRET:int = 4;
+  private var _deviceIdentifier:String;
+  public static const DEVICEIDENTIFIER:int = 5;
+  private var _deviceDescription:String;
+  public static const DEVICEDESCRIPTION:int = 6;
+
+
+  public static const metaDataMap:Dictionary = new Dictionary();
+  {
+    metaDataMap[USERNAME] = new FieldMetaData("username", TFieldRequirementType.DEFAULT, 
+        new FieldValueMetaData(TType.STRING));
+    metaDataMap[PASSWORD] = new FieldMetaData("password", TFieldRequirementType.DEFAULT, 
+        new FieldValueMetaData(TType.STRING));
+    metaDataMap[CONSUMERKEY] = new FieldMetaData("consumerKey", TFieldRequirementType.DEFAULT, 
+        new FieldValueMetaData(TType.STRING));
+    metaDataMap[CONSUMERSECRET] = new FieldMetaData("consumerSecret", TFieldRequirementType.DEFAULT, 
+        new FieldValueMetaData(TType.STRING));
+    metaDataMap[DEVICEIDENTIFIER] = new FieldMetaData("deviceIdentifier", TFieldRequirementType.DEFAULT, 
+        new FieldValueMetaData(TType.STRING));
+    metaDataMap[DEVICEDESCRIPTION] = new FieldMetaData("deviceDescription", TFieldRequirementType.DEFAULT, 
+        new FieldValueMetaData(TType.STRING));
+  }
+  {
+    FieldMetaData.addStructMetaDataMap(authenticateLongSession_args, metaDataMap);
+  }
+
+  public function authenticateLongSession_args() {
+  }
+
+  public function get username():String {
+    return this._username;
+  }
+
+  public function set username(username:String):void {
+    this._username = username;
+  }
+
+  public function unsetUsername():void {
+    this.username = null;
+  }
+
+  // Returns true if field username is set (has been assigned a value) and false otherwise
+  public function isSetUsername():Boolean {
+    return this.username != null;
+  }
+
+  public function get password():String {
+    return this._password;
+  }
+
+  public function set password(password:String):void {
+    this._password = password;
+  }
+
+  public function unsetPassword():void {
+    this.password = null;
+  }
+
+  // Returns true if field password is set (has been assigned a value) and false otherwise
+  public function isSetPassword():Boolean {
+    return this.password != null;
+  }
+
+  public function get consumerKey():String {
+    return this._consumerKey;
+  }
+
+  public function set consumerKey(consumerKey:String):void {
+    this._consumerKey = consumerKey;
+  }
+
+  public function unsetConsumerKey():void {
+    this.consumerKey = null;
+  }
+
+  // Returns true if field consumerKey is set (has been assigned a value) and false otherwise
+  public function isSetConsumerKey():Boolean {
+    return this.consumerKey != null;
+  }
+
+  public function get consumerSecret():String {
+    return this._consumerSecret;
+  }
+
+  public function set consumerSecret(consumerSecret:String):void {
+    this._consumerSecret = consumerSecret;
+  }
+
+  public function unsetConsumerSecret():void {
+    this.consumerSecret = null;
+  }
+
+  // Returns true if field consumerSecret is set (has been assigned a value) and false otherwise
+  public function isSetConsumerSecret():Boolean {
+    return this.consumerSecret != null;
+  }
+
+  public function get deviceIdentifier():String {
+    return this._deviceIdentifier;
+  }
+
+  public function set deviceIdentifier(deviceIdentifier:String):void {
+    this._deviceIdentifier = deviceIdentifier;
+  }
+
+  public function unsetDeviceIdentifier():void {
+    this.deviceIdentifier = null;
+  }
+
+  // Returns true if field deviceIdentifier is set (has been assigned a value) and false otherwise
+  public function isSetDeviceIdentifier():Boolean {
+    return this.deviceIdentifier != null;
+  }
+
+  public function get deviceDescription():String {
+    return this._deviceDescription;
+  }
+
+  public function set deviceDescription(deviceDescription:String):void {
+    this._deviceDescription = deviceDescription;
+  }
+
+  public function unsetDeviceDescription():void {
+    this.deviceDescription = null;
+  }
+
+  // Returns true if field deviceDescription is set (has been assigned a value) and false otherwise
+  public function isSetDeviceDescription():Boolean {
+    return this.deviceDescription != null;
+  }
+
+  public function setFieldValue(fieldID:int, value:*):void {
+    switch (fieldID) {
+    case USERNAME:
+      if (value == null) {
+        unsetUsername();
+      } else {
+        this.username = value;
+      }
+      break;
+
+    case PASSWORD:
+      if (value == null) {
+        unsetPassword();
+      } else {
+        this.password = value;
+      }
+      break;
+
+    case CONSUMERKEY:
+      if (value == null) {
+        unsetConsumerKey();
+      } else {
+        this.consumerKey = value;
+      }
+      break;
+
+    case CONSUMERSECRET:
+      if (value == null) {
+        unsetConsumerSecret();
+      } else {
+        this.consumerSecret = value;
+      }
+      break;
+
+    case DEVICEIDENTIFIER:
+      if (value == null) {
+        unsetDeviceIdentifier();
+      } else {
+        this.deviceIdentifier = value;
+      }
+      break;
+
+    case DEVICEDESCRIPTION:
+      if (value == null) {
+        unsetDeviceDescription();
+      } else {
+        this.deviceDescription = value;
+      }
+      break;
+
+    default:
+      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
+    }
+  }
+
+  public function getFieldValue(fieldID:int):* {
+    switch (fieldID) {
+    case USERNAME:
+      return this.username;
+    case PASSWORD:
+      return this.password;
+    case CONSUMERKEY:
+      return this.consumerKey;
+    case CONSUMERSECRET:
+      return this.consumerSecret;
+    case DEVICEIDENTIFIER:
+      return this.deviceIdentifier;
+    case DEVICEDESCRIPTION:
+      return this.deviceDescription;
+    default:
+      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
+    }
+  }
+
+  // Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
+  public function isSet(fieldID:int):Boolean {
+    switch (fieldID) {
+    case USERNAME:
+      return isSetUsername();
+    case PASSWORD:
+      return isSetPassword();
+    case CONSUMERKEY:
+      return isSetConsumerKey();
+    case CONSUMERSECRET:
+      return isSetConsumerSecret();
+    case DEVICEIDENTIFIER:
+      return isSetDeviceIdentifier();
+    case DEVICEDESCRIPTION:
+      return isSetDeviceDescription();
+    default:
+      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
+    }
+  }
+
+  public function read(iprot:TProtocol):void {
+    var field:TField;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) { 
+        break;
+      }
+      switch (field.id)
+      {
+        case USERNAME:
+          if (field.type == TType.STRING) {
+            this.username = iprot.readString();
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case PASSWORD:
+          if (field.type == TType.STRING) {
+            this.password = iprot.readString();
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case CONSUMERKEY:
+          if (field.type == TType.STRING) {
+            this.consumerKey = iprot.readString();
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case CONSUMERSECRET:
+          if (field.type == TType.STRING) {
+            this.consumerSecret = iprot.readString();
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case DEVICEIDENTIFIER:
+          if (field.type == TType.STRING) {
+            this.deviceIdentifier = iprot.readString();
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case DEVICEDESCRIPTION:
+          if (field.type == TType.STRING) {
+            this.deviceDescription = iprot.readString();
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+          break;
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public function write(oprot:TProtocol):void {
+    validate();
+
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.username != null) {
+      oprot.writeFieldBegin(USERNAME_FIELD_DESC);
+      oprot.writeString(this.username);
+      oprot.writeFieldEnd();
+    }
+    if (this.password != null) {
+      oprot.writeFieldBegin(PASSWORD_FIELD_DESC);
+      oprot.writeString(this.password);
+      oprot.writeFieldEnd();
+    }
+    if (this.consumerKey != null) {
+      oprot.writeFieldBegin(CONSUMER_KEY_FIELD_DESC);
+      oprot.writeString(this.consumerKey);
+      oprot.writeFieldEnd();
+    }
+    if (this.consumerSecret != null) {
+      oprot.writeFieldBegin(CONSUMER_SECRET_FIELD_DESC);
+      oprot.writeString(this.consumerSecret);
+      oprot.writeFieldEnd();
+    }
+    if (this.deviceIdentifier != null) {
+      oprot.writeFieldBegin(DEVICE_IDENTIFIER_FIELD_DESC);
+      oprot.writeString(this.deviceIdentifier);
+      oprot.writeFieldEnd();
+    }
+    if (this.deviceDescription != null) {
+      oprot.writeFieldBegin(DEVICE_DESCRIPTION_FIELD_DESC);
+      oprot.writeString(this.deviceDescription);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  public function toString():String {
+    var ret:String = new String("authenticateLongSession_args(");
+    var first:Boolean = true;
+
+    ret += "username:";
+    if (this.username == null) {
+      ret += "null";
+    } else {
+      ret += this.username;
+    }
+    first = false;
+    if (!first) ret +=  ", ";
+    ret += "password:";
+    if (this.password == null) {
+      ret += "null";
+    } else {
+      ret += this.password;
+    }
+    first = false;
+    if (!first) ret +=  ", ";
+    ret += "consumerKey:";
+    if (this.consumerKey == null) {
+      ret += "null";
+    } else {
+      ret += this.consumerKey;
+    }
+    first = false;
+    if (!first) ret +=  ", ";
+    ret += "consumerSecret:";
+    if (this.consumerSecret == null) {
+      ret += "null";
+    } else {
+      ret += this.consumerSecret;
+    }
+    first = false;
+    if (!first) ret +=  ", ";
+    ret += "deviceIdentifier:";
+    if (this.deviceIdentifier == null) {
+      ret += "null";
+    } else {
+      ret += this.deviceIdentifier;
+    }
+    first = false;
+    if (!first) ret +=  ", ";
+    ret += "deviceDescription:";
+    if (this.deviceDescription == null) {
+      ret += "null";
+    } else {
+      ret += this.deviceDescription;
+    }
+    first = false;
+    ret += ")";
+    return ret;
+  }
+
+  public function validate():void {
+    // check for required fields
+    // check that fields of type enum have valid values
+  }
+
+}
+
+class authenticateLongSession_result implements TBase {
+  private static const STRUCT_DESC:TStruct = new TStruct("authenticateLongSession_result");
+  private static const SUCCESS_FIELD_DESC:TField = new TField("success", TType.STRUCT, 0);
+  private static const USER_EXCEPTION_FIELD_DESC:TField = new TField("userException", TType.STRUCT, 1);
+  private static const SYSTEM_EXCEPTION_FIELD_DESC:TField = new TField("systemException", TType.STRUCT, 2);
+
+  private var _success:AuthenticationResult;
+  public static const SUCCESS:int = 0;
+  private var _userException:EDAMUserException;
+  public static const USEREXCEPTION:int = 1;
+  private var _systemException:EDAMSystemException;
+  public static const SYSTEMEXCEPTION:int = 2;
+
+
+  public static const metaDataMap:Dictionary = new Dictionary();
+  {
+    metaDataMap[SUCCESS] = new FieldMetaData("success", TFieldRequirementType.DEFAULT, 
+        new StructMetaData(TType.STRUCT, AuthenticationResult));
+    metaDataMap[USEREXCEPTION] = new FieldMetaData("userException", TFieldRequirementType.DEFAULT, 
+        new FieldValueMetaData(TType.STRUCT));
+    metaDataMap[SYSTEMEXCEPTION] = new FieldMetaData("systemException", TFieldRequirementType.DEFAULT, 
+        new FieldValueMetaData(TType.STRUCT));
+  }
+  {
+    FieldMetaData.addStructMetaDataMap(authenticateLongSession_result, metaDataMap);
+  }
+
+  public function authenticateLongSession_result() {
+  }
+
+  public function get success():AuthenticationResult {
+    return this._success;
+  }
+
+  public function set success(success:AuthenticationResult):void {
+    this._success = success;
+  }
+
+  public function unsetSuccess():void {
+    this.success = null;
+  }
+
+  // Returns true if field success is set (has been assigned a value) and false otherwise
+  public function isSetSuccess():Boolean {
+    return this.success != null;
+  }
+
+  public function get userException():EDAMUserException {
+    return this._userException;
+  }
+
+  public function set userException(userException:EDAMUserException):void {
+    this._userException = userException;
+  }
+
+  public function unsetUserException():void {
+    this.userException = null;
+  }
+
+  // Returns true if field userException is set (has been assigned a value) and false otherwise
+  public function isSetUserException():Boolean {
+    return this.userException != null;
+  }
+
+  public function get systemException():EDAMSystemException {
+    return this._systemException;
+  }
+
+  public function set systemException(systemException:EDAMSystemException):void {
+    this._systemException = systemException;
+  }
+
+  public function unsetSystemException():void {
+    this.systemException = null;
+  }
+
+  // Returns true if field systemException is set (has been assigned a value) and false otherwise
+  public function isSetSystemException():Boolean {
+    return this.systemException != null;
+  }
+
+  public function setFieldValue(fieldID:int, value:*):void {
+    switch (fieldID) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        this.success = value;
+      }
+      break;
+
+    case USEREXCEPTION:
+      if (value == null) {
+        unsetUserException();
+      } else {
+        this.userException = value;
+      }
+      break;
+
+    case SYSTEMEXCEPTION:
+      if (value == null) {
+        unsetSystemException();
+      } else {
+        this.systemException = value;
+      }
+      break;
+
+    default:
+      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
+    }
+  }
+
+  public function getFieldValue(fieldID:int):* {
+    switch (fieldID) {
+    case SUCCESS:
+      return this.success;
+    case USEREXCEPTION:
+      return this.userException;
+    case SYSTEMEXCEPTION:
+      return this.systemException;
+    default:
+      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
+    }
+  }
+
+  // Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
+  public function isSet(fieldID:int):Boolean {
+    switch (fieldID) {
+    case SUCCESS:
+      return isSetSuccess();
+    case USEREXCEPTION:
+      return isSetUserException();
+    case SYSTEMEXCEPTION:
+      return isSetSystemException();
+    default:
+      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
+    }
+  }
+
+  public function read(iprot:TProtocol):void {
+    var field:TField;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) { 
+        break;
+      }
+      switch (field.id)
+      {
+        case SUCCESS:
+          if (field.type == TType.STRUCT) {
+            this.success = new AuthenticationResult();
+            this.success.read(iprot);
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case USEREXCEPTION:
+          if (field.type == TType.STRUCT) {
+            this.userException = new EDAMUserException();
+            this.userException.read(iprot);
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case SYSTEMEXCEPTION:
+          if (field.type == TType.STRUCT) {
+            this.systemException = new EDAMSystemException();
+            this.systemException.read(iprot);
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+          break;
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public function write(oprot:TProtocol):void {
+    oprot.writeStructBegin(STRUCT_DESC);
+
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    } else if (this.isSetUserException()) {
+      oprot.writeFieldBegin(USER_EXCEPTION_FIELD_DESC);
+      this.userException.write(oprot);
+      oprot.writeFieldEnd();
+    } else if (this.isSetSystemException()) {
+      oprot.writeFieldBegin(SYSTEM_EXCEPTION_FIELD_DESC);
+      this.systemException.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  public function toString():String {
+    var ret:String = new String("authenticateLongSession_result(");
+    var first:Boolean = true;
+
+    ret += "success:";
+    if (this.success == null) {
+      ret += "null";
+    } else {
+      ret += this.success;
+    }
+    first = false;
+    if (!first) ret +=  ", ";
+    ret += "userException:";
+    if (this.userException == null) {
+      ret += "null";
+    } else {
+      ret += this.userException;
+    }
+    first = false;
+    if (!first) ret +=  ", ";
+    ret += "systemException:";
+    if (this.systemException == null) {
+      ret += "null";
+    } else {
+      ret += this.systemException;
+    }
+    first = false;
+    ret += ")";
+    return ret;
+  }
+
+  public function validate():void {
+    // check for required fields
+    // check that fields of type enum have valid values
+  }
+
+}
+
+class authenticateToBusiness_args implements TBase {
+  private static const STRUCT_DESC:TStruct = new TStruct("authenticateToBusiness_args");
+  private static const AUTHENTICATION_TOKEN_FIELD_DESC:TField = new TField("authenticationToken", TType.STRING, 1);
+
+  private var _authenticationToken:String;
+  public static const AUTHENTICATIONTOKEN:int = 1;
+
+
+  public static const metaDataMap:Dictionary = new Dictionary();
+  {
+    metaDataMap[AUTHENTICATIONTOKEN] = new FieldMetaData("authenticationToken", TFieldRequirementType.DEFAULT, 
+        new FieldValueMetaData(TType.STRING));
+  }
+  {
+    FieldMetaData.addStructMetaDataMap(authenticateToBusiness_args, metaDataMap);
+  }
+
+  public function authenticateToBusiness_args() {
+  }
+
+  public function get authenticationToken():String {
+    return this._authenticationToken;
+  }
+
+  public function set authenticationToken(authenticationToken:String):void {
+    this._authenticationToken = authenticationToken;
+  }
+
+  public function unsetAuthenticationToken():void {
+    this.authenticationToken = null;
+  }
+
+  // Returns true if field authenticationToken is set (has been assigned a value) and false otherwise
+  public function isSetAuthenticationToken():Boolean {
+    return this.authenticationToken != null;
+  }
+
+  public function setFieldValue(fieldID:int, value:*):void {
+    switch (fieldID) {
+    case AUTHENTICATIONTOKEN:
+      if (value == null) {
+        unsetAuthenticationToken();
+      } else {
+        this.authenticationToken = value;
+      }
+      break;
+
+    default:
+      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
+    }
+  }
+
+  public function getFieldValue(fieldID:int):* {
+    switch (fieldID) {
+    case AUTHENTICATIONTOKEN:
+      return this.authenticationToken;
+    default:
+      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
+    }
+  }
+
+  // Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
+  public function isSet(fieldID:int):Boolean {
+    switch (fieldID) {
+    case AUTHENTICATIONTOKEN:
+      return isSetAuthenticationToken();
+    default:
+      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
+    }
+  }
+
+  public function read(iprot:TProtocol):void {
+    var field:TField;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) { 
+        break;
+      }
+      switch (field.id)
+      {
+        case AUTHENTICATIONTOKEN:
+          if (field.type == TType.STRING) {
+            this.authenticationToken = iprot.readString();
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+          break;
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public function write(oprot:TProtocol):void {
+    validate();
+
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.authenticationToken != null) {
+      oprot.writeFieldBegin(AUTHENTICATION_TOKEN_FIELD_DESC);
+      oprot.writeString(this.authenticationToken);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  public function toString():String {
+    var ret:String = new String("authenticateToBusiness_args(");
+    var first:Boolean = true;
+
+    ret += "authenticationToken:";
+    if (this.authenticationToken == null) {
+      ret += "null";
+    } else {
+      ret += this.authenticationToken;
+    }
+    first = false;
+    ret += ")";
+    return ret;
+  }
+
+  public function validate():void {
+    // check for required fields
+    // check that fields of type enum have valid values
+  }
+
+}
+
+class authenticateToBusiness_result implements TBase {
+  private static const STRUCT_DESC:TStruct = new TStruct("authenticateToBusiness_result");
+  private static const SUCCESS_FIELD_DESC:TField = new TField("success", TType.STRUCT, 0);
+  private static const USER_EXCEPTION_FIELD_DESC:TField = new TField("userException", TType.STRUCT, 1);
+  private static const SYSTEM_EXCEPTION_FIELD_DESC:TField = new TField("systemException", TType.STRUCT, 2);
+
+  private var _success:AuthenticationResult;
+  public static const SUCCESS:int = 0;
+  private var _userException:EDAMUserException;
+  public static const USEREXCEPTION:int = 1;
+  private var _systemException:EDAMSystemException;
+  public static const SYSTEMEXCEPTION:int = 2;
+
+
+  public static const metaDataMap:Dictionary = new Dictionary();
+  {
+    metaDataMap[SUCCESS] = new FieldMetaData("success", TFieldRequirementType.DEFAULT, 
+        new StructMetaData(TType.STRUCT, AuthenticationResult));
+    metaDataMap[USEREXCEPTION] = new FieldMetaData("userException", TFieldRequirementType.DEFAULT, 
+        new FieldValueMetaData(TType.STRUCT));
+    metaDataMap[SYSTEMEXCEPTION] = new FieldMetaData("systemException", TFieldRequirementType.DEFAULT, 
+        new FieldValueMetaData(TType.STRUCT));
+  }
+  {
+    FieldMetaData.addStructMetaDataMap(authenticateToBusiness_result, metaDataMap);
+  }
+
+  public function authenticateToBusiness_result() {
+  }
+
+  public function get success():AuthenticationResult {
+    return this._success;
+  }
+
+  public function set success(success:AuthenticationResult):void {
+    this._success = success;
+  }
+
+  public function unsetSuccess():void {
+    this.success = null;
+  }
+
+  // Returns true if field success is set (has been assigned a value) and false otherwise
+  public function isSetSuccess():Boolean {
+    return this.success != null;
+  }
+
+  public function get userException():EDAMUserException {
+    return this._userException;
+  }
+
+  public function set userException(userException:EDAMUserException):void {
+    this._userException = userException;
+  }
+
+  public function unsetUserException():void {
+    this.userException = null;
+  }
+
+  // Returns true if field userException is set (has been assigned a value) and false otherwise
+  public function isSetUserException():Boolean {
+    return this.userException != null;
+  }
+
+  public function get systemException():EDAMSystemException {
+    return this._systemException;
+  }
+
+  public function set systemException(systemException:EDAMSystemException):void {
+    this._systemException = systemException;
+  }
+
+  public function unsetSystemException():void {
+    this.systemException = null;
+  }
+
+  // Returns true if field systemException is set (has been assigned a value) and false otherwise
+  public function isSetSystemException():Boolean {
+    return this.systemException != null;
+  }
+
+  public function setFieldValue(fieldID:int, value:*):void {
+    switch (fieldID) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        this.success = value;
+      }
+      break;
+
+    case USEREXCEPTION:
+      if (value == null) {
+        unsetUserException();
+      } else {
+        this.userException = value;
+      }
+      break;
+
+    case SYSTEMEXCEPTION:
+      if (value == null) {
+        unsetSystemException();
+      } else {
+        this.systemException = value;
+      }
+      break;
+
+    default:
+      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
+    }
+  }
+
+  public function getFieldValue(fieldID:int):* {
+    switch (fieldID) {
+    case SUCCESS:
+      return this.success;
+    case USEREXCEPTION:
+      return this.userException;
+    case SYSTEMEXCEPTION:
+      return this.systemException;
+    default:
+      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
+    }
+  }
+
+  // Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
+  public function isSet(fieldID:int):Boolean {
+    switch (fieldID) {
+    case SUCCESS:
+      return isSetSuccess();
+    case USEREXCEPTION:
+      return isSetUserException();
+    case SYSTEMEXCEPTION:
+      return isSetSystemException();
+    default:
+      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
+    }
+  }
+
+  public function read(iprot:TProtocol):void {
+    var field:TField;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) { 
+        break;
+      }
+      switch (field.id)
+      {
+        case SUCCESS:
+          if (field.type == TType.STRUCT) {
+            this.success = new AuthenticationResult();
+            this.success.read(iprot);
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case USEREXCEPTION:
+          if (field.type == TType.STRUCT) {
+            this.userException = new EDAMUserException();
+            this.userException.read(iprot);
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case SYSTEMEXCEPTION:
+          if (field.type == TType.STRUCT) {
+            this.systemException = new EDAMSystemException();
+            this.systemException.read(iprot);
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+          break;
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public function write(oprot:TProtocol):void {
+    oprot.writeStructBegin(STRUCT_DESC);
+
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      this.success.write(oprot);
+      oprot.writeFieldEnd();
+    } else if (this.isSetUserException()) {
+      oprot.writeFieldBegin(USER_EXCEPTION_FIELD_DESC);
+      this.userException.write(oprot);
+      oprot.writeFieldEnd();
+    } else if (this.isSetSystemException()) {
+      oprot.writeFieldBegin(SYSTEM_EXCEPTION_FIELD_DESC);
+      this.systemException.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  public function toString():String {
+    var ret:String = new String("authenticateToBusiness_result(");
     var first:Boolean = true;
 
     ret += "success:";

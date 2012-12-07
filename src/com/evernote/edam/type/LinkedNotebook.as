@@ -38,8 +38,8 @@ import org.apache.thrift.protocol.*;
    * 
    * <dt>guid</dt>
    *   <dd>The unique identifier of this linked notebook.  Will be set whenever
-   *   a resource is retrieved from the service, but may be null when a client
-   *   is creating a resource.
+   *   a linked notebook is retrieved from the service, but may be null when a client
+   *   is creating a linked notebook.
    *   <br/>
    *   Length:  EDAM_GUID_LEN_MIN - EDAM_GUID_LEN_MAX
    *   <br/>
@@ -71,6 +71,20 @@ import org.apache.thrift.protocol.*;
    *   end of this string to construct the full URL, as documented on our
    *   developer web site.
    *   </dd>
+   * 
+   * <dt>stack</dt>
+   *   <dd>If this is set, then the notebook is visually contained within a stack
+   *   of notebooks with this name.  All notebooks in the same account with the
+   *   same 'stack' field are considered to be in the same stack.
+   *   Notebooks with no stack set are "top level" and not contained within a
+   *   stack.  The link owner can change this and this field is for the benefit
+   *   of the link owner.
+   *   </dd>
+   * 
+   * <dt>businessId</dt>
+   *   <dd>If set, this will be the unique identifier for the business that owns
+   *   the notebook to which the linked notebook refers.
+   * 
    * </dl>
    */
   public class LinkedNotebook implements TBase   {
@@ -84,6 +98,8 @@ import org.apache.thrift.protocol.*;
     private static const UPDATE_SEQUENCE_NUM_FIELD_DESC:TField = new TField("updateSequenceNum", TType.I32, 8);
     private static const NOTE_STORE_URL_FIELD_DESC:TField = new TField("noteStoreUrl", TType.STRING, 9);
     private static const WEB_API_URL_PREFIX_FIELD_DESC:TField = new TField("webApiUrlPrefix", TType.STRING, 10);
+    private static const STACK_FIELD_DESC:TField = new TField("stack", TType.STRING, 11);
+    private static const BUSINESS_ID_FIELD_DESC:TField = new TField("businessId", TType.I32, 12);
 
     private var _shareName:String;
     public static const SHARENAME:int = 2;
@@ -103,8 +119,13 @@ import org.apache.thrift.protocol.*;
     public static const NOTESTOREURL:int = 9;
     private var _webApiUrlPrefix:String;
     public static const WEBAPIURLPREFIX:int = 10;
+    private var _stack:String;
+    public static const STACK:int = 11;
+    private var _businessId:int;
+    public static const BUSINESSID:int = 12;
 
     private var __isset_updateSequenceNum:Boolean = false;
+    private var __isset_businessId:Boolean = false;
 
     public static const metaDataMap:Dictionary = new Dictionary();
     {
@@ -126,6 +147,10 @@ import org.apache.thrift.protocol.*;
           new FieldValueMetaData(TType.STRING));
       metaDataMap[WEBAPIURLPREFIX] = new FieldMetaData("webApiUrlPrefix", TFieldRequirementType.OPTIONAL, 
           new FieldValueMetaData(TType.STRING));
+      metaDataMap[STACK] = new FieldMetaData("stack", TFieldRequirementType.OPTIONAL, 
+          new FieldValueMetaData(TType.STRING));
+      metaDataMap[BUSINESSID] = new FieldMetaData("businessId", TFieldRequirementType.OPTIONAL, 
+          new FieldValueMetaData(TType.I32));
     }
     {
       FieldMetaData.addStructMetaDataMap(LinkedNotebook, metaDataMap);
@@ -288,6 +313,41 @@ import org.apache.thrift.protocol.*;
       return this.webApiUrlPrefix != null;
     }
 
+    public function get stack():String {
+      return this._stack;
+    }
+
+    public function set stack(stack:String):void {
+      this._stack = stack;
+    }
+
+    public function unsetStack():void {
+      this.stack = null;
+    }
+
+    // Returns true if field stack is set (has been assigned a value) and false otherwise
+    public function isSetStack():Boolean {
+      return this.stack != null;
+    }
+
+    public function get businessId():int {
+      return this._businessId;
+    }
+
+    public function set businessId(businessId:int):void {
+      this._businessId = businessId;
+      this.__isset_businessId = true;
+    }
+
+    public function unsetBusinessId():void {
+      this.__isset_businessId = false;
+    }
+
+    // Returns true if field businessId is set (has been assigned a value) and false otherwise
+    public function isSetBusinessId():Boolean {
+      return this.__isset_businessId;
+    }
+
     public function setFieldValue(fieldID:int, value:*):void {
       switch (fieldID) {
       case SHARENAME:
@@ -362,6 +422,22 @@ import org.apache.thrift.protocol.*;
         }
         break;
 
+      case STACK:
+        if (value == null) {
+          unsetStack();
+        } else {
+          this.stack = value;
+        }
+        break;
+
+      case BUSINESSID:
+        if (value == null) {
+          unsetBusinessId();
+        } else {
+          this.businessId = value;
+        }
+        break;
+
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -387,6 +463,10 @@ import org.apache.thrift.protocol.*;
         return this.noteStoreUrl;
       case WEBAPIURLPREFIX:
         return this.webApiUrlPrefix;
+      case STACK:
+        return this.stack;
+      case BUSINESSID:
+        return this.businessId;
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -413,6 +493,10 @@ import org.apache.thrift.protocol.*;
         return isSetNoteStoreUrl();
       case WEBAPIURLPREFIX:
         return isSetWebApiUrlPrefix();
+      case STACK:
+        return isSetStack();
+      case BUSINESSID:
+        return isSetBusinessId();
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -489,6 +573,21 @@ import org.apache.thrift.protocol.*;
           case WEBAPIURLPREFIX:
             if (field.type == TType.STRING) {
               this.webApiUrlPrefix = iprot.readString();
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case STACK:
+            if (field.type == TType.STRING) {
+              this.stack = iprot.readString();
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case BUSINESSID:
+            if (field.type == TType.I32) {
+              this.businessId = iprot.readI32();
+              this.__isset_businessId = true;
             } else { 
               TProtocolUtil.skip(iprot, field.type);
             }
@@ -570,6 +669,18 @@ import org.apache.thrift.protocol.*;
           oprot.writeString(this.webApiUrlPrefix);
           oprot.writeFieldEnd();
         }
+      }
+      if (this.stack != null) {
+        if (isSetStack()) {
+          oprot.writeFieldBegin(STACK_FIELD_DESC);
+          oprot.writeString(this.stack);
+          oprot.writeFieldEnd();
+        }
+      }
+      if (isSetBusinessId()) {
+        oprot.writeFieldBegin(BUSINESS_ID_FIELD_DESC);
+        oprot.writeI32(this.businessId);
+        oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
@@ -662,6 +773,22 @@ import org.apache.thrift.protocol.*;
         } else {
           ret += this.webApiUrlPrefix;
         }
+        first = false;
+      }
+      if (isSetStack()) {
+        if (!first) ret +=  ", ";
+        ret += "stack:";
+        if (this.stack == null) {
+          ret += "null";
+        } else {
+          ret += this.stack;
+        }
+        first = false;
+      }
+      if (isSetBusinessId()) {
+        if (!first) ret +=  ", ";
+        ret += "businessId:";
+        ret += this.businessId;
         first = false;
       }
       ret += ")";

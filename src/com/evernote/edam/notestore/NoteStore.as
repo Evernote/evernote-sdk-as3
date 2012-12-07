@@ -29,8 +29,6 @@ import com.evernote.edam.type.LazyMap;
 import com.evernote.edam.type.Note;
 import com.evernote.edam.type.Resource;
 import com.evernote.edam.type.ResourceAttributes;
-import com.evernote.edam.notestore.AdParameters;
-import com.evernote.edam.type.Ad;
 import com.evernote.edam.type.SharedNotebook;
 import com.evernote.edam.userstore.AuthenticationResult;
 import com.evernote.edam.notestore.NoteEmailParameters;
@@ -2844,140 +2842,6 @@ import com.evernote.edam.notestore.RelatedResultSpec;
     }
 
     //function onError(Error):void;
-    //function onSuccess(BigInteger):void;
-    public function getAccountSize(authenticationToken:String, onError:Function, onSuccess:Function):void
-    {
-      oprot_.writeMessageBegin(new TMessage("getAccountSize", TMessageType.CALL, seqid_));
-      var args:getAccountSize_args = new getAccountSize_args();
-      args.authenticationToken = authenticationToken;
-      args.write(oprot_);
-      oprot_.writeMessageEnd();
-      oprot_.getTransport().flush(function(error:Error):void {
-        try {
-          if (error != null) {
-            if (onError != null) onError(error);
-            return;
-          }
-          var msg:TMessage = iprot_.readMessageBegin();
-          if (msg.type == TMessageType.EXCEPTION) {
-            var x:TApplicationError = TApplicationError.read(iprot_);
-            iprot_.readMessageEnd();
-            if (onError != null) onError(x);
-            return;
-          }
-          var result :getAccountSize_result = new getAccountSize_result();
-          result.read(iprot_);
-          iprot_.readMessageEnd();
-          if (result.isSetSuccess()) {
-            if (onSuccess != null) onSuccess(result.success);
-            return;
-          }
-          if (result.userException != null) {
-            if (onError != null) onError(result.userException);
-            return;
-          }
-          if (result.systemException != null) {
-            if (onError != null) onError(result.systemException);
-            return;
-          }
-          if (onError != null) onError(new TApplicationError(TApplicationError.MISSING_RESULT, "getAccountSize failed: unknown result"));
-        } catch (e:TError) {
-          if (onError != null) onError(e);
-        }
-      });
-    }
-
-    //function onError(Error):void;
-    //function onSuccess(Array):void;
-    public function getAds(authenticationToken:String, adParameters:AdParameters, onError:Function, onSuccess:Function):void
-    {
-      oprot_.writeMessageBegin(new TMessage("getAds", TMessageType.CALL, seqid_));
-      var args:getAds_args = new getAds_args();
-      args.authenticationToken = authenticationToken;
-      args.adParameters = adParameters;
-      args.write(oprot_);
-      oprot_.writeMessageEnd();
-      oprot_.getTransport().flush(function(error:Error):void {
-        try {
-          if (error != null) {
-            if (onError != null) onError(error);
-            return;
-          }
-          var msg:TMessage = iprot_.readMessageBegin();
-          if (msg.type == TMessageType.EXCEPTION) {
-            var x:TApplicationError = TApplicationError.read(iprot_);
-            iprot_.readMessageEnd();
-            if (onError != null) onError(x);
-            return;
-          }
-          var result :getAds_result = new getAds_result();
-          result.read(iprot_);
-          iprot_.readMessageEnd();
-          if (result.isSetSuccess()) {
-            if (onSuccess != null) onSuccess(result.success);
-            return;
-          }
-          if (result.userException != null) {
-            if (onError != null) onError(result.userException);
-            return;
-          }
-          if (result.systemException != null) {
-            if (onError != null) onError(result.systemException);
-            return;
-          }
-          if (onError != null) onError(new TApplicationError(TApplicationError.MISSING_RESULT, "getAds failed: unknown result"));
-        } catch (e:TError) {
-          if (onError != null) onError(e);
-        }
-      });
-    }
-
-    //function onError(Error):void;
-    //function onSuccess(Ad):void;
-    public function getRandomAd(authenticationToken:String, adParameters:AdParameters, onError:Function, onSuccess:Function):void
-    {
-      oprot_.writeMessageBegin(new TMessage("getRandomAd", TMessageType.CALL, seqid_));
-      var args:getRandomAd_args = new getRandomAd_args();
-      args.authenticationToken = authenticationToken;
-      args.adParameters = adParameters;
-      args.write(oprot_);
-      oprot_.writeMessageEnd();
-      oprot_.getTransport().flush(function(error:Error):void {
-        try {
-          if (error != null) {
-            if (onError != null) onError(error);
-            return;
-          }
-          var msg:TMessage = iprot_.readMessageBegin();
-          if (msg.type == TMessageType.EXCEPTION) {
-            var x:TApplicationError = TApplicationError.read(iprot_);
-            iprot_.readMessageEnd();
-            if (onError != null) onError(x);
-            return;
-          }
-          var result :getRandomAd_result = new getRandomAd_result();
-          result.read(iprot_);
-          iprot_.readMessageEnd();
-          if (result.isSetSuccess()) {
-            if (onSuccess != null) onSuccess(result.success);
-            return;
-          }
-          if (result.userException != null) {
-            if (onError != null) onError(result.userException);
-            return;
-          }
-          if (result.systemException != null) {
-            if (onError != null) onError(result.systemException);
-            return;
-          }
-          if (onError != null) onError(new TApplicationError(TApplicationError.MISSING_RESULT, "getRandomAd failed: unknown result"));
-        } catch (e:TError) {
-          if (onError != null) onError(e);
-        }
-      });
-    }
-
-    //function onError(Error):void;
     //function onSuccess(Notebook):void;
     public function getPublicNotebook(userId:int, publicUri:String, onError:Function, onSuccess:Function):void
     {
@@ -3065,6 +2929,55 @@ import com.evernote.edam.notestore.RelatedResultSpec;
             return;
           }
           if (onError != null) onError(new TApplicationError(TApplicationError.MISSING_RESULT, "createSharedNotebook failed: unknown result"));
+        } catch (e:TError) {
+          if (onError != null) onError(e);
+        }
+      });
+    }
+
+    //function onError(Error):void;
+    //function onSuccess(int):void;
+    public function updateSharedNotebook(authenticationToken:String, sharedNotebook:SharedNotebook, onError:Function, onSuccess:Function):void
+    {
+      oprot_.writeMessageBegin(new TMessage("updateSharedNotebook", TMessageType.CALL, seqid_));
+      var args:updateSharedNotebook_args = new updateSharedNotebook_args();
+      args.authenticationToken = authenticationToken;
+      args.sharedNotebook = sharedNotebook;
+      args.write(oprot_);
+      oprot_.writeMessageEnd();
+      oprot_.getTransport().flush(function(error:Error):void {
+        try {
+          if (error != null) {
+            if (onError != null) onError(error);
+            return;
+          }
+          var msg:TMessage = iprot_.readMessageBegin();
+          if (msg.type == TMessageType.EXCEPTION) {
+            var x:TApplicationError = TApplicationError.read(iprot_);
+            iprot_.readMessageEnd();
+            if (onError != null) onError(x);
+            return;
+          }
+          var result :updateSharedNotebook_result = new updateSharedNotebook_result();
+          result.read(iprot_);
+          iprot_.readMessageEnd();
+          if (result.isSetSuccess()) {
+            if (onSuccess != null) onSuccess(result.success);
+            return;
+          }
+          if (result.userException != null) {
+            if (onError != null) onError(result.userException);
+            return;
+          }
+          if (result.notFoundException != null) {
+            if (onError != null) onError(result.notFoundException);
+            return;
+          }
+          if (result.systemException != null) {
+            if (onError != null) onError(result.systemException);
+            return;
+          }
+          if (onError != null) onError(new TApplicationError(TApplicationError.MISSING_RESULT, "updateSharedNotebook failed: unknown result"));
         } catch (e:TError) {
           if (onError != null) onError(e);
         }
@@ -3777,8 +3690,6 @@ import com.evernote.edam.type.LazyMap;
 import com.evernote.edam.type.Note;
 import com.evernote.edam.type.Resource;
 import com.evernote.edam.type.ResourceAttributes;
-import com.evernote.edam.notestore.AdParameters;
-import com.evernote.edam.type.Ad;
 import com.evernote.edam.type.SharedNotebook;
 import com.evernote.edam.userstore.AuthenticationResult;
 import com.evernote.edam.notestore.NoteEmailParameters;
@@ -7104,14 +7015,14 @@ class listNotebooks_result implements TBase {
         case SUCCESS:
           if (field.type == TType.LIST) {
             {
-              var _list263:TList = iprot.readListBegin();
+              var _list256:TList = iprot.readListBegin();
               this.success = new Array();
-              for (var _i264:int = 0; _i264 < _list263.size; ++_i264)
+              for (var _i257:int = 0; _i257 < _list256.size; ++_i257)
               {
-                var _elem265:Notebook;
-                _elem265 = new Notebook();
-                _elem265.read(iprot);
-                this.success.push(_elem265);
+                var _elem258:Notebook;
+                _elem258 = new Notebook();
+                _elem258.read(iprot);
+                this.success.push(_elem258);
               }
               iprot.readListEnd();
             }
@@ -7155,8 +7066,8 @@ class listNotebooks_result implements TBase {
       oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.success.length));
-        for each (var elem266:* in this.success)        {
-          elem266.write(oprot);
+        for each (var elem259:* in this.success)        {
+          elem259.write(oprot);
         }
         oprot.writeListEnd();
       }
@@ -9789,14 +9700,14 @@ class listTags_result implements TBase {
         case SUCCESS:
           if (field.type == TType.LIST) {
             {
-              var _list298:TList = iprot.readListBegin();
+              var _list291:TList = iprot.readListBegin();
               this.success = new Array();
-              for (var _i299:int = 0; _i299 < _list298.size; ++_i299)
+              for (var _i292:int = 0; _i292 < _list291.size; ++_i292)
               {
-                var _elem300:Tag;
-                _elem300 = new Tag();
-                _elem300.read(iprot);
-                this.success.push(_elem300);
+                var _elem293:Tag;
+                _elem293 = new Tag();
+                _elem293.read(iprot);
+                this.success.push(_elem293);
               }
               iprot.readListEnd();
             }
@@ -9840,8 +9751,8 @@ class listTags_result implements TBase {
       oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.success.length));
-        for each (var elem301:* in this.success)        {
-          elem301.write(oprot);
+        for each (var elem294:* in this.success)        {
+          elem294.write(oprot);
         }
         oprot.writeListEnd();
       }
@@ -10276,14 +10187,14 @@ class listTagsByNotebook_result implements TBase {
         case SUCCESS:
           if (field.type == TType.LIST) {
             {
-              var _list308:TList = iprot.readListBegin();
+              var _list301:TList = iprot.readListBegin();
               this.success = new Array();
-              for (var _i309:int = 0; _i309 < _list308.size; ++_i309)
+              for (var _i302:int = 0; _i302 < _list301.size; ++_i302)
               {
-                var _elem310:Tag;
-                _elem310 = new Tag();
-                _elem310.read(iprot);
-                this.success.push(_elem310);
+                var _elem303:Tag;
+                _elem303 = new Tag();
+                _elem303.read(iprot);
+                this.success.push(_elem303);
               }
               iprot.readListEnd();
             }
@@ -10335,8 +10246,8 @@ class listTagsByNotebook_result implements TBase {
       oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.success.length));
-        for each (var elem311:* in this.success)        {
-          elem311.write(oprot);
+        for each (var elem304:* in this.success)        {
+          elem304.write(oprot);
         }
         oprot.writeListEnd();
       }
@@ -13089,14 +13000,14 @@ class listSearches_result implements TBase {
         case SUCCESS:
           if (field.type == TType.LIST) {
             {
-              var _list345:TList = iprot.readListBegin();
+              var _list338:TList = iprot.readListBegin();
               this.success = new Array();
-              for (var _i346:int = 0; _i346 < _list345.size; ++_i346)
+              for (var _i339:int = 0; _i339 < _list338.size; ++_i339)
               {
-                var _elem347:SavedSearch;
-                _elem347 = new SavedSearch();
-                _elem347.read(iprot);
-                this.success.push(_elem347);
+                var _elem340:SavedSearch;
+                _elem340 = new SavedSearch();
+                _elem340.read(iprot);
+                this.success.push(_elem340);
               }
               iprot.readListEnd();
             }
@@ -13140,8 +13051,8 @@ class listSearches_result implements TBase {
       oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.success.length));
-        for each (var elem348:* in this.success)        {
-          elem348.write(oprot);
+        for each (var elem341:* in this.success)        {
+          elem341.write(oprot);
         }
         oprot.writeListEnd();
       }
@@ -22240,13 +22151,13 @@ class getNoteTagNames_result implements TBase {
         case SUCCESS:
           if (field.type == TType.LIST) {
             {
-              var _list467:TList = iprot.readListBegin();
+              var _list460:TList = iprot.readListBegin();
               this.success = new Array();
-              for (var _i468:int = 0; _i468 < _list467.size; ++_i468)
+              for (var _i461:int = 0; _i461 < _list460.size; ++_i461)
               {
-                var _elem469:String;
-                _elem469 = iprot.readString();
-                this.success.push(_elem469);
+                var _elem462:String;
+                _elem462 = iprot.readString();
+                this.success.push(_elem462);
               }
               iprot.readListEnd();
             }
@@ -22298,8 +22209,8 @@ class getNoteTagNames_result implements TBase {
       oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRING, this.success.length));
-        for each (var elem470:* in this.success)        {
-          oprot.writeString(elem470);
+        for each (var elem463:* in this.success)        {
+          oprot.writeString(elem463);
         }
         oprot.writeListEnd();
       }
@@ -24452,13 +24363,13 @@ class expungeNotes_args implements TBase {
         case NOTEGUIDS:
           if (field.type == TType.LIST) {
             {
-              var _list497:TList = iprot.readListBegin();
+              var _list490:TList = iprot.readListBegin();
               this.noteGuids = new Array();
-              for (var _i498:int = 0; _i498 < _list497.size; ++_i498)
+              for (var _i491:int = 0; _i491 < _list490.size; ++_i491)
               {
-                var _elem499:String;
-                _elem499 = iprot.readString();
-                this.noteGuids.push(_elem499);
+                var _elem492:String;
+                _elem492 = iprot.readString();
+                this.noteGuids.push(_elem492);
               }
               iprot.readListEnd();
             }
@@ -24492,8 +24403,8 @@ class expungeNotes_args implements TBase {
       oprot.writeFieldBegin(NOTE_GUIDS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRING, this.noteGuids.length));
-        for each (var elem500:* in this.noteGuids)        {
-          oprot.writeString(elem500);
+        for each (var elem493:* in this.noteGuids)        {
+          oprot.writeString(elem493);
         }
         oprot.writeListEnd();
       }
@@ -26133,14 +26044,14 @@ class listNoteVersions_result implements TBase {
         case SUCCESS:
           if (field.type == TType.LIST) {
             {
-              var _list522:TList = iprot.readListBegin();
+              var _list515:TList = iprot.readListBegin();
               this.success = new Array();
-              for (var _i523:int = 0; _i523 < _list522.size; ++_i523)
+              for (var _i516:int = 0; _i516 < _list515.size; ++_i516)
               {
-                var _elem524:NoteVersionId;
-                _elem524 = new NoteVersionId();
-                _elem524.read(iprot);
-                this.success.push(_elem524);
+                var _elem517:NoteVersionId;
+                _elem517 = new NoteVersionId();
+                _elem517.read(iprot);
+                this.success.push(_elem517);
               }
               iprot.readListEnd();
             }
@@ -26192,8 +26103,8 @@ class listNoteVersions_result implements TBase {
       oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.success.length));
-        for each (var elem525:* in this.success)        {
-          elem525.write(oprot);
+        for each (var elem518:* in this.success)        {
+          elem518.write(oprot);
         }
         oprot.writeListEnd();
       }
@@ -32963,1277 +32874,6 @@ class getResourceAttributes_result implements TBase {
 
 }
 
-class getAccountSize_args implements TBase {
-  private static const STRUCT_DESC:TStruct = new TStruct("getAccountSize_args");
-  private static const AUTHENTICATION_TOKEN_FIELD_DESC:TField = new TField("authenticationToken", TType.STRING, 1);
-
-  private var _authenticationToken:String;
-  public static const AUTHENTICATIONTOKEN:int = 1;
-
-
-  public static const metaDataMap:Dictionary = new Dictionary();
-  {
-    metaDataMap[AUTHENTICATIONTOKEN] = new FieldMetaData("authenticationToken", TFieldRequirementType.DEFAULT, 
-        new FieldValueMetaData(TType.STRING));
-  }
-  {
-    FieldMetaData.addStructMetaDataMap(getAccountSize_args, metaDataMap);
-  }
-
-  public function getAccountSize_args() {
-  }
-
-  public function get authenticationToken():String {
-    return this._authenticationToken;
-  }
-
-  public function set authenticationToken(authenticationToken:String):void {
-    this._authenticationToken = authenticationToken;
-  }
-
-  public function unsetAuthenticationToken():void {
-    this.authenticationToken = null;
-  }
-
-  // Returns true if field authenticationToken is set (has been assigned a value) and false otherwise
-  public function isSetAuthenticationToken():Boolean {
-    return this.authenticationToken != null;
-  }
-
-  public function setFieldValue(fieldID:int, value:*):void {
-    switch (fieldID) {
-    case AUTHENTICATIONTOKEN:
-      if (value == null) {
-        unsetAuthenticationToken();
-      } else {
-        this.authenticationToken = value;
-      }
-      break;
-
-    default:
-      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
-    }
-  }
-
-  public function getFieldValue(fieldID:int):* {
-    switch (fieldID) {
-    case AUTHENTICATIONTOKEN:
-      return this.authenticationToken;
-    default:
-      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
-    }
-  }
-
-  // Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
-  public function isSet(fieldID:int):Boolean {
-    switch (fieldID) {
-    case AUTHENTICATIONTOKEN:
-      return isSetAuthenticationToken();
-    default:
-      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
-    }
-  }
-
-  public function read(iprot:TProtocol):void {
-    var field:TField;
-    iprot.readStructBegin();
-    while (true)
-    {
-      field = iprot.readFieldBegin();
-      if (field.type == TType.STOP) { 
-        break;
-      }
-      switch (field.id)
-      {
-        case AUTHENTICATIONTOKEN:
-          if (field.type == TType.STRING) {
-            this.authenticationToken = iprot.readString();
-          } else { 
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        default:
-          TProtocolUtil.skip(iprot, field.type);
-          break;
-      }
-      iprot.readFieldEnd();
-    }
-    iprot.readStructEnd();
-
-
-    // check for required fields of primitive type, which can't be checked in the validate method
-    validate();
-  }
-
-  public function write(oprot:TProtocol):void {
-    validate();
-
-    oprot.writeStructBegin(STRUCT_DESC);
-    if (this.authenticationToken != null) {
-      oprot.writeFieldBegin(AUTHENTICATION_TOKEN_FIELD_DESC);
-      oprot.writeString(this.authenticationToken);
-      oprot.writeFieldEnd();
-    }
-    oprot.writeFieldStop();
-    oprot.writeStructEnd();
-  }
-
-  public function toString():String {
-    var ret:String = new String("getAccountSize_args(");
-    var first:Boolean = true;
-
-    ret += "authenticationToken:";
-    if (this.authenticationToken == null) {
-      ret += "null";
-    } else {
-      ret += this.authenticationToken;
-    }
-    first = false;
-    ret += ")";
-    return ret;
-  }
-
-  public function validate():void {
-    // check for required fields
-    // check that fields of type enum have valid values
-  }
-
-}
-
-class getAccountSize_result implements TBase {
-  private static const STRUCT_DESC:TStruct = new TStruct("getAccountSize_result");
-  private static const SUCCESS_FIELD_DESC:TField = new TField("success", TType.I64, 0);
-  private static const USER_EXCEPTION_FIELD_DESC:TField = new TField("userException", TType.STRUCT, 1);
-  private static const SYSTEM_EXCEPTION_FIELD_DESC:TField = new TField("systemException", TType.STRUCT, 2);
-
-  private var _success:BigInteger;
-  public static const SUCCESS:int = 0;
-  private var _userException:EDAMUserException;
-  public static const USEREXCEPTION:int = 1;
-  private var _systemException:EDAMSystemException;
-  public static const SYSTEMEXCEPTION:int = 2;
-
-  private var __isset_success:Boolean = false;
-
-  public static const metaDataMap:Dictionary = new Dictionary();
-  {
-    metaDataMap[SUCCESS] = new FieldMetaData("success", TFieldRequirementType.DEFAULT, 
-        new FieldValueMetaData(TType.I64));
-    metaDataMap[USEREXCEPTION] = new FieldMetaData("userException", TFieldRequirementType.DEFAULT, 
-        new FieldValueMetaData(TType.STRUCT));
-    metaDataMap[SYSTEMEXCEPTION] = new FieldMetaData("systemException", TFieldRequirementType.DEFAULT, 
-        new FieldValueMetaData(TType.STRUCT));
-  }
-  {
-    FieldMetaData.addStructMetaDataMap(getAccountSize_result, metaDataMap);
-  }
-
-  public function getAccountSize_result() {
-  }
-
-  public function get success():BigInteger {
-    return this._success;
-  }
-
-  public function set success(success:BigInteger):void {
-    this._success = success;
-    this.__isset_success = true;
-  }
-
-  public function unsetSuccess():void {
-    this.__isset_success = false;
-  }
-
-  // Returns true if field success is set (has been assigned a value) and false otherwise
-  public function isSetSuccess():Boolean {
-    return this.__isset_success;
-  }
-
-  public function get userException():EDAMUserException {
-    return this._userException;
-  }
-
-  public function set userException(userException:EDAMUserException):void {
-    this._userException = userException;
-  }
-
-  public function unsetUserException():void {
-    this.userException = null;
-  }
-
-  // Returns true if field userException is set (has been assigned a value) and false otherwise
-  public function isSetUserException():Boolean {
-    return this.userException != null;
-  }
-
-  public function get systemException():EDAMSystemException {
-    return this._systemException;
-  }
-
-  public function set systemException(systemException:EDAMSystemException):void {
-    this._systemException = systemException;
-  }
-
-  public function unsetSystemException():void {
-    this.systemException = null;
-  }
-
-  // Returns true if field systemException is set (has been assigned a value) and false otherwise
-  public function isSetSystemException():Boolean {
-    return this.systemException != null;
-  }
-
-  public function setFieldValue(fieldID:int, value:*):void {
-    switch (fieldID) {
-    case SUCCESS:
-      if (value == null) {
-        unsetSuccess();
-      } else {
-        this.success = value;
-      }
-      break;
-
-    case USEREXCEPTION:
-      if (value == null) {
-        unsetUserException();
-      } else {
-        this.userException = value;
-      }
-      break;
-
-    case SYSTEMEXCEPTION:
-      if (value == null) {
-        unsetSystemException();
-      } else {
-        this.systemException = value;
-      }
-      break;
-
-    default:
-      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
-    }
-  }
-
-  public function getFieldValue(fieldID:int):* {
-    switch (fieldID) {
-    case SUCCESS:
-      return this.success;
-    case USEREXCEPTION:
-      return this.userException;
-    case SYSTEMEXCEPTION:
-      return this.systemException;
-    default:
-      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
-    }
-  }
-
-  // Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
-  public function isSet(fieldID:int):Boolean {
-    switch (fieldID) {
-    case SUCCESS:
-      return isSetSuccess();
-    case USEREXCEPTION:
-      return isSetUserException();
-    case SYSTEMEXCEPTION:
-      return isSetSystemException();
-    default:
-      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
-    }
-  }
-
-  public function read(iprot:TProtocol):void {
-    var field:TField;
-    iprot.readStructBegin();
-    while (true)
-    {
-      field = iprot.readFieldBegin();
-      if (field.type == TType.STOP) { 
-        break;
-      }
-      switch (field.id)
-      {
-        case SUCCESS:
-          if (field.type == TType.I64) {
-            this.success = iprot.readI64();
-            this.__isset_success = true;
-          } else { 
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case USEREXCEPTION:
-          if (field.type == TType.STRUCT) {
-            this.userException = new EDAMUserException();
-            this.userException.read(iprot);
-          } else { 
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case SYSTEMEXCEPTION:
-          if (field.type == TType.STRUCT) {
-            this.systemException = new EDAMSystemException();
-            this.systemException.read(iprot);
-          } else { 
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        default:
-          TProtocolUtil.skip(iprot, field.type);
-          break;
-      }
-      iprot.readFieldEnd();
-    }
-    iprot.readStructEnd();
-
-
-    // check for required fields of primitive type, which can't be checked in the validate method
-    validate();
-  }
-
-  public function write(oprot:TProtocol):void {
-    oprot.writeStructBegin(STRUCT_DESC);
-
-    if (this.isSetSuccess()) {
-      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
-      oprot.writeI64(this.success);
-      oprot.writeFieldEnd();
-    } else if (this.isSetUserException()) {
-      oprot.writeFieldBegin(USER_EXCEPTION_FIELD_DESC);
-      this.userException.write(oprot);
-      oprot.writeFieldEnd();
-    } else if (this.isSetSystemException()) {
-      oprot.writeFieldBegin(SYSTEM_EXCEPTION_FIELD_DESC);
-      this.systemException.write(oprot);
-      oprot.writeFieldEnd();
-    }
-    oprot.writeFieldStop();
-    oprot.writeStructEnd();
-  }
-
-  public function toString():String {
-    var ret:String = new String("getAccountSize_result(");
-    var first:Boolean = true;
-
-    ret += "success:";
-    ret += this.success;
-    first = false;
-    if (!first) ret +=  ", ";
-    ret += "userException:";
-    if (this.userException == null) {
-      ret += "null";
-    } else {
-      ret += this.userException;
-    }
-    first = false;
-    if (!first) ret +=  ", ";
-    ret += "systemException:";
-    if (this.systemException == null) {
-      ret += "null";
-    } else {
-      ret += this.systemException;
-    }
-    first = false;
-    ret += ")";
-    return ret;
-  }
-
-  public function validate():void {
-    // check for required fields
-    // check that fields of type enum have valid values
-  }
-
-}
-
-class getAds_args implements TBase {
-  private static const STRUCT_DESC:TStruct = new TStruct("getAds_args");
-  private static const AUTHENTICATION_TOKEN_FIELD_DESC:TField = new TField("authenticationToken", TType.STRING, 1);
-  private static const AD_PARAMETERS_FIELD_DESC:TField = new TField("adParameters", TType.STRUCT, 2);
-
-  private var _authenticationToken:String;
-  public static const AUTHENTICATIONTOKEN:int = 1;
-  private var _adParameters:AdParameters;
-  public static const ADPARAMETERS:int = 2;
-
-
-  public static const metaDataMap:Dictionary = new Dictionary();
-  {
-    metaDataMap[AUTHENTICATIONTOKEN] = new FieldMetaData("authenticationToken", TFieldRequirementType.DEFAULT, 
-        new FieldValueMetaData(TType.STRING));
-    metaDataMap[ADPARAMETERS] = new FieldMetaData("adParameters", TFieldRequirementType.DEFAULT, 
-        new StructMetaData(TType.STRUCT, AdParameters));
-  }
-  {
-    FieldMetaData.addStructMetaDataMap(getAds_args, metaDataMap);
-  }
-
-  public function getAds_args() {
-  }
-
-  public function get authenticationToken():String {
-    return this._authenticationToken;
-  }
-
-  public function set authenticationToken(authenticationToken:String):void {
-    this._authenticationToken = authenticationToken;
-  }
-
-  public function unsetAuthenticationToken():void {
-    this.authenticationToken = null;
-  }
-
-  // Returns true if field authenticationToken is set (has been assigned a value) and false otherwise
-  public function isSetAuthenticationToken():Boolean {
-    return this.authenticationToken != null;
-  }
-
-  public function get adParameters():AdParameters {
-    return this._adParameters;
-  }
-
-  public function set adParameters(adParameters:AdParameters):void {
-    this._adParameters = adParameters;
-  }
-
-  public function unsetAdParameters():void {
-    this.adParameters = null;
-  }
-
-  // Returns true if field adParameters is set (has been assigned a value) and false otherwise
-  public function isSetAdParameters():Boolean {
-    return this.adParameters != null;
-  }
-
-  public function setFieldValue(fieldID:int, value:*):void {
-    switch (fieldID) {
-    case AUTHENTICATIONTOKEN:
-      if (value == null) {
-        unsetAuthenticationToken();
-      } else {
-        this.authenticationToken = value;
-      }
-      break;
-
-    case ADPARAMETERS:
-      if (value == null) {
-        unsetAdParameters();
-      } else {
-        this.adParameters = value;
-      }
-      break;
-
-    default:
-      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
-    }
-  }
-
-  public function getFieldValue(fieldID:int):* {
-    switch (fieldID) {
-    case AUTHENTICATIONTOKEN:
-      return this.authenticationToken;
-    case ADPARAMETERS:
-      return this.adParameters;
-    default:
-      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
-    }
-  }
-
-  // Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
-  public function isSet(fieldID:int):Boolean {
-    switch (fieldID) {
-    case AUTHENTICATIONTOKEN:
-      return isSetAuthenticationToken();
-    case ADPARAMETERS:
-      return isSetAdParameters();
-    default:
-      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
-    }
-  }
-
-  public function read(iprot:TProtocol):void {
-    var field:TField;
-    iprot.readStructBegin();
-    while (true)
-    {
-      field = iprot.readFieldBegin();
-      if (field.type == TType.STOP) { 
-        break;
-      }
-      switch (field.id)
-      {
-        case AUTHENTICATIONTOKEN:
-          if (field.type == TType.STRING) {
-            this.authenticationToken = iprot.readString();
-          } else { 
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case ADPARAMETERS:
-          if (field.type == TType.STRUCT) {
-            this.adParameters = new AdParameters();
-            this.adParameters.read(iprot);
-          } else { 
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        default:
-          TProtocolUtil.skip(iprot, field.type);
-          break;
-      }
-      iprot.readFieldEnd();
-    }
-    iprot.readStructEnd();
-
-
-    // check for required fields of primitive type, which can't be checked in the validate method
-    validate();
-  }
-
-  public function write(oprot:TProtocol):void {
-    validate();
-
-    oprot.writeStructBegin(STRUCT_DESC);
-    if (this.authenticationToken != null) {
-      oprot.writeFieldBegin(AUTHENTICATION_TOKEN_FIELD_DESC);
-      oprot.writeString(this.authenticationToken);
-      oprot.writeFieldEnd();
-    }
-    if (this.adParameters != null) {
-      oprot.writeFieldBegin(AD_PARAMETERS_FIELD_DESC);
-      this.adParameters.write(oprot);
-      oprot.writeFieldEnd();
-    }
-    oprot.writeFieldStop();
-    oprot.writeStructEnd();
-  }
-
-  public function toString():String {
-    var ret:String = new String("getAds_args(");
-    var first:Boolean = true;
-
-    ret += "authenticationToken:";
-    if (this.authenticationToken == null) {
-      ret += "null";
-    } else {
-      ret += this.authenticationToken;
-    }
-    first = false;
-    if (!first) ret +=  ", ";
-    ret += "adParameters:";
-    if (this.adParameters == null) {
-      ret += "null";
-    } else {
-      ret += this.adParameters;
-    }
-    first = false;
-    ret += ")";
-    return ret;
-  }
-
-  public function validate():void {
-    // check for required fields
-    // check that fields of type enum have valid values
-  }
-
-}
-
-class getAds_result implements TBase {
-  private static const STRUCT_DESC:TStruct = new TStruct("getAds_result");
-  private static const SUCCESS_FIELD_DESC:TField = new TField("success", TType.LIST, 0);
-  private static const USER_EXCEPTION_FIELD_DESC:TField = new TField("userException", TType.STRUCT, 1);
-  private static const SYSTEM_EXCEPTION_FIELD_DESC:TField = new TField("systemException", TType.STRUCT, 2);
-
-  private var _success:Array;
-  public static const SUCCESS:int = 0;
-  private var _userException:EDAMUserException;
-  public static const USEREXCEPTION:int = 1;
-  private var _systemException:EDAMSystemException;
-  public static const SYSTEMEXCEPTION:int = 2;
-
-
-  public static const metaDataMap:Dictionary = new Dictionary();
-  {
-    metaDataMap[SUCCESS] = new FieldMetaData("success", TFieldRequirementType.DEFAULT, 
-        new ListMetaData(TType.LIST, 
-            new StructMetaData(TType.STRUCT, Ad)));
-    metaDataMap[USEREXCEPTION] = new FieldMetaData("userException", TFieldRequirementType.DEFAULT, 
-        new FieldValueMetaData(TType.STRUCT));
-    metaDataMap[SYSTEMEXCEPTION] = new FieldMetaData("systemException", TFieldRequirementType.DEFAULT, 
-        new FieldValueMetaData(TType.STRUCT));
-  }
-  {
-    FieldMetaData.addStructMetaDataMap(getAds_result, metaDataMap);
-  }
-
-  public function getAds_result() {
-  }
-
-  public function get success():Array {
-    return this._success;
-  }
-
-  public function set success(success:Array):void {
-    this._success = success;
-  }
-
-  public function unsetSuccess():void {
-    this.success = null;
-  }
-
-  // Returns true if field success is set (has been assigned a value) and false otherwise
-  public function isSetSuccess():Boolean {
-    return this.success != null;
-  }
-
-  public function get userException():EDAMUserException {
-    return this._userException;
-  }
-
-  public function set userException(userException:EDAMUserException):void {
-    this._userException = userException;
-  }
-
-  public function unsetUserException():void {
-    this.userException = null;
-  }
-
-  // Returns true if field userException is set (has been assigned a value) and false otherwise
-  public function isSetUserException():Boolean {
-    return this.userException != null;
-  }
-
-  public function get systemException():EDAMSystemException {
-    return this._systemException;
-  }
-
-  public function set systemException(systemException:EDAMSystemException):void {
-    this._systemException = systemException;
-  }
-
-  public function unsetSystemException():void {
-    this.systemException = null;
-  }
-
-  // Returns true if field systemException is set (has been assigned a value) and false otherwise
-  public function isSetSystemException():Boolean {
-    return this.systemException != null;
-  }
-
-  public function setFieldValue(fieldID:int, value:*):void {
-    switch (fieldID) {
-    case SUCCESS:
-      if (value == null) {
-        unsetSuccess();
-      } else {
-        this.success = value;
-      }
-      break;
-
-    case USEREXCEPTION:
-      if (value == null) {
-        unsetUserException();
-      } else {
-        this.userException = value;
-      }
-      break;
-
-    case SYSTEMEXCEPTION:
-      if (value == null) {
-        unsetSystemException();
-      } else {
-        this.systemException = value;
-      }
-      break;
-
-    default:
-      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
-    }
-  }
-
-  public function getFieldValue(fieldID:int):* {
-    switch (fieldID) {
-    case SUCCESS:
-      return this.success;
-    case USEREXCEPTION:
-      return this.userException;
-    case SYSTEMEXCEPTION:
-      return this.systemException;
-    default:
-      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
-    }
-  }
-
-  // Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
-  public function isSet(fieldID:int):Boolean {
-    switch (fieldID) {
-    case SUCCESS:
-      return isSetSuccess();
-    case USEREXCEPTION:
-      return isSetUserException();
-    case SYSTEMEXCEPTION:
-      return isSetSystemException();
-    default:
-      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
-    }
-  }
-
-  public function read(iprot:TProtocol):void {
-    var field:TField;
-    iprot.readStructBegin();
-    while (true)
-    {
-      field = iprot.readFieldBegin();
-      if (field.type == TType.STOP) { 
-        break;
-      }
-      switch (field.id)
-      {
-        case SUCCESS:
-          if (field.type == TType.LIST) {
-            {
-              var _list623:TList = iprot.readListBegin();
-              this.success = new Array();
-              for (var _i624:int = 0; _i624 < _list623.size; ++_i624)
-              {
-                var _elem625:Ad;
-                _elem625 = new Ad();
-                _elem625.read(iprot);
-                this.success.push(_elem625);
-              }
-              iprot.readListEnd();
-            }
-          } else { 
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case USEREXCEPTION:
-          if (field.type == TType.STRUCT) {
-            this.userException = new EDAMUserException();
-            this.userException.read(iprot);
-          } else { 
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case SYSTEMEXCEPTION:
-          if (field.type == TType.STRUCT) {
-            this.systemException = new EDAMSystemException();
-            this.systemException.read(iprot);
-          } else { 
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        default:
-          TProtocolUtil.skip(iprot, field.type);
-          break;
-      }
-      iprot.readFieldEnd();
-    }
-    iprot.readStructEnd();
-
-
-    // check for required fields of primitive type, which can't be checked in the validate method
-    validate();
-  }
-
-  public function write(oprot:TProtocol):void {
-    oprot.writeStructBegin(STRUCT_DESC);
-
-    if (this.isSetSuccess()) {
-      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
-      {
-        oprot.writeListBegin(new TList(TType.STRUCT, this.success.length));
-        for each (var elem626:* in this.success)        {
-          elem626.write(oprot);
-        }
-        oprot.writeListEnd();
-      }
-      oprot.writeFieldEnd();
-    } else if (this.isSetUserException()) {
-      oprot.writeFieldBegin(USER_EXCEPTION_FIELD_DESC);
-      this.userException.write(oprot);
-      oprot.writeFieldEnd();
-    } else if (this.isSetSystemException()) {
-      oprot.writeFieldBegin(SYSTEM_EXCEPTION_FIELD_DESC);
-      this.systemException.write(oprot);
-      oprot.writeFieldEnd();
-    }
-    oprot.writeFieldStop();
-    oprot.writeStructEnd();
-  }
-
-  public function toString():String {
-    var ret:String = new String("getAds_result(");
-    var first:Boolean = true;
-
-    ret += "success:";
-    if (this.success == null) {
-      ret += "null";
-    } else {
-      ret += this.success;
-    }
-    first = false;
-    if (!first) ret +=  ", ";
-    ret += "userException:";
-    if (this.userException == null) {
-      ret += "null";
-    } else {
-      ret += this.userException;
-    }
-    first = false;
-    if (!first) ret +=  ", ";
-    ret += "systemException:";
-    if (this.systemException == null) {
-      ret += "null";
-    } else {
-      ret += this.systemException;
-    }
-    first = false;
-    ret += ")";
-    return ret;
-  }
-
-  public function validate():void {
-    // check for required fields
-    // check that fields of type enum have valid values
-  }
-
-}
-
-class getRandomAd_args implements TBase {
-  private static const STRUCT_DESC:TStruct = new TStruct("getRandomAd_args");
-  private static const AUTHENTICATION_TOKEN_FIELD_DESC:TField = new TField("authenticationToken", TType.STRING, 1);
-  private static const AD_PARAMETERS_FIELD_DESC:TField = new TField("adParameters", TType.STRUCT, 2);
-
-  private var _authenticationToken:String;
-  public static const AUTHENTICATIONTOKEN:int = 1;
-  private var _adParameters:AdParameters;
-  public static const ADPARAMETERS:int = 2;
-
-
-  public static const metaDataMap:Dictionary = new Dictionary();
-  {
-    metaDataMap[AUTHENTICATIONTOKEN] = new FieldMetaData("authenticationToken", TFieldRequirementType.DEFAULT, 
-        new FieldValueMetaData(TType.STRING));
-    metaDataMap[ADPARAMETERS] = new FieldMetaData("adParameters", TFieldRequirementType.DEFAULT, 
-        new StructMetaData(TType.STRUCT, AdParameters));
-  }
-  {
-    FieldMetaData.addStructMetaDataMap(getRandomAd_args, metaDataMap);
-  }
-
-  public function getRandomAd_args() {
-  }
-
-  public function get authenticationToken():String {
-    return this._authenticationToken;
-  }
-
-  public function set authenticationToken(authenticationToken:String):void {
-    this._authenticationToken = authenticationToken;
-  }
-
-  public function unsetAuthenticationToken():void {
-    this.authenticationToken = null;
-  }
-
-  // Returns true if field authenticationToken is set (has been assigned a value) and false otherwise
-  public function isSetAuthenticationToken():Boolean {
-    return this.authenticationToken != null;
-  }
-
-  public function get adParameters():AdParameters {
-    return this._adParameters;
-  }
-
-  public function set adParameters(adParameters:AdParameters):void {
-    this._adParameters = adParameters;
-  }
-
-  public function unsetAdParameters():void {
-    this.adParameters = null;
-  }
-
-  // Returns true if field adParameters is set (has been assigned a value) and false otherwise
-  public function isSetAdParameters():Boolean {
-    return this.adParameters != null;
-  }
-
-  public function setFieldValue(fieldID:int, value:*):void {
-    switch (fieldID) {
-    case AUTHENTICATIONTOKEN:
-      if (value == null) {
-        unsetAuthenticationToken();
-      } else {
-        this.authenticationToken = value;
-      }
-      break;
-
-    case ADPARAMETERS:
-      if (value == null) {
-        unsetAdParameters();
-      } else {
-        this.adParameters = value;
-      }
-      break;
-
-    default:
-      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
-    }
-  }
-
-  public function getFieldValue(fieldID:int):* {
-    switch (fieldID) {
-    case AUTHENTICATIONTOKEN:
-      return this.authenticationToken;
-    case ADPARAMETERS:
-      return this.adParameters;
-    default:
-      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
-    }
-  }
-
-  // Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
-  public function isSet(fieldID:int):Boolean {
-    switch (fieldID) {
-    case AUTHENTICATIONTOKEN:
-      return isSetAuthenticationToken();
-    case ADPARAMETERS:
-      return isSetAdParameters();
-    default:
-      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
-    }
-  }
-
-  public function read(iprot:TProtocol):void {
-    var field:TField;
-    iprot.readStructBegin();
-    while (true)
-    {
-      field = iprot.readFieldBegin();
-      if (field.type == TType.STOP) { 
-        break;
-      }
-      switch (field.id)
-      {
-        case AUTHENTICATIONTOKEN:
-          if (field.type == TType.STRING) {
-            this.authenticationToken = iprot.readString();
-          } else { 
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case ADPARAMETERS:
-          if (field.type == TType.STRUCT) {
-            this.adParameters = new AdParameters();
-            this.adParameters.read(iprot);
-          } else { 
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        default:
-          TProtocolUtil.skip(iprot, field.type);
-          break;
-      }
-      iprot.readFieldEnd();
-    }
-    iprot.readStructEnd();
-
-
-    // check for required fields of primitive type, which can't be checked in the validate method
-    validate();
-  }
-
-  public function write(oprot:TProtocol):void {
-    validate();
-
-    oprot.writeStructBegin(STRUCT_DESC);
-    if (this.authenticationToken != null) {
-      oprot.writeFieldBegin(AUTHENTICATION_TOKEN_FIELD_DESC);
-      oprot.writeString(this.authenticationToken);
-      oprot.writeFieldEnd();
-    }
-    if (this.adParameters != null) {
-      oprot.writeFieldBegin(AD_PARAMETERS_FIELD_DESC);
-      this.adParameters.write(oprot);
-      oprot.writeFieldEnd();
-    }
-    oprot.writeFieldStop();
-    oprot.writeStructEnd();
-  }
-
-  public function toString():String {
-    var ret:String = new String("getRandomAd_args(");
-    var first:Boolean = true;
-
-    ret += "authenticationToken:";
-    if (this.authenticationToken == null) {
-      ret += "null";
-    } else {
-      ret += this.authenticationToken;
-    }
-    first = false;
-    if (!first) ret +=  ", ";
-    ret += "adParameters:";
-    if (this.adParameters == null) {
-      ret += "null";
-    } else {
-      ret += this.adParameters;
-    }
-    first = false;
-    ret += ")";
-    return ret;
-  }
-
-  public function validate():void {
-    // check for required fields
-    // check that fields of type enum have valid values
-  }
-
-}
-
-class getRandomAd_result implements TBase {
-  private static const STRUCT_DESC:TStruct = new TStruct("getRandomAd_result");
-  private static const SUCCESS_FIELD_DESC:TField = new TField("success", TType.STRUCT, 0);
-  private static const USER_EXCEPTION_FIELD_DESC:TField = new TField("userException", TType.STRUCT, 1);
-  private static const SYSTEM_EXCEPTION_FIELD_DESC:TField = new TField("systemException", TType.STRUCT, 2);
-
-  private var _success:Ad;
-  public static const SUCCESS:int = 0;
-  private var _userException:EDAMUserException;
-  public static const USEREXCEPTION:int = 1;
-  private var _systemException:EDAMSystemException;
-  public static const SYSTEMEXCEPTION:int = 2;
-
-
-  public static const metaDataMap:Dictionary = new Dictionary();
-  {
-    metaDataMap[SUCCESS] = new FieldMetaData("success", TFieldRequirementType.DEFAULT, 
-        new StructMetaData(TType.STRUCT, Ad));
-    metaDataMap[USEREXCEPTION] = new FieldMetaData("userException", TFieldRequirementType.DEFAULT, 
-        new FieldValueMetaData(TType.STRUCT));
-    metaDataMap[SYSTEMEXCEPTION] = new FieldMetaData("systemException", TFieldRequirementType.DEFAULT, 
-        new FieldValueMetaData(TType.STRUCT));
-  }
-  {
-    FieldMetaData.addStructMetaDataMap(getRandomAd_result, metaDataMap);
-  }
-
-  public function getRandomAd_result() {
-  }
-
-  public function get success():Ad {
-    return this._success;
-  }
-
-  public function set success(success:Ad):void {
-    this._success = success;
-  }
-
-  public function unsetSuccess():void {
-    this.success = null;
-  }
-
-  // Returns true if field success is set (has been assigned a value) and false otherwise
-  public function isSetSuccess():Boolean {
-    return this.success != null;
-  }
-
-  public function get userException():EDAMUserException {
-    return this._userException;
-  }
-
-  public function set userException(userException:EDAMUserException):void {
-    this._userException = userException;
-  }
-
-  public function unsetUserException():void {
-    this.userException = null;
-  }
-
-  // Returns true if field userException is set (has been assigned a value) and false otherwise
-  public function isSetUserException():Boolean {
-    return this.userException != null;
-  }
-
-  public function get systemException():EDAMSystemException {
-    return this._systemException;
-  }
-
-  public function set systemException(systemException:EDAMSystemException):void {
-    this._systemException = systemException;
-  }
-
-  public function unsetSystemException():void {
-    this.systemException = null;
-  }
-
-  // Returns true if field systemException is set (has been assigned a value) and false otherwise
-  public function isSetSystemException():Boolean {
-    return this.systemException != null;
-  }
-
-  public function setFieldValue(fieldID:int, value:*):void {
-    switch (fieldID) {
-    case SUCCESS:
-      if (value == null) {
-        unsetSuccess();
-      } else {
-        this.success = value;
-      }
-      break;
-
-    case USEREXCEPTION:
-      if (value == null) {
-        unsetUserException();
-      } else {
-        this.userException = value;
-      }
-      break;
-
-    case SYSTEMEXCEPTION:
-      if (value == null) {
-        unsetSystemException();
-      } else {
-        this.systemException = value;
-      }
-      break;
-
-    default:
-      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
-    }
-  }
-
-  public function getFieldValue(fieldID:int):* {
-    switch (fieldID) {
-    case SUCCESS:
-      return this.success;
-    case USEREXCEPTION:
-      return this.userException;
-    case SYSTEMEXCEPTION:
-      return this.systemException;
-    default:
-      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
-    }
-  }
-
-  // Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
-  public function isSet(fieldID:int):Boolean {
-    switch (fieldID) {
-    case SUCCESS:
-      return isSetSuccess();
-    case USEREXCEPTION:
-      return isSetUserException();
-    case SYSTEMEXCEPTION:
-      return isSetSystemException();
-    default:
-      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
-    }
-  }
-
-  public function read(iprot:TProtocol):void {
-    var field:TField;
-    iprot.readStructBegin();
-    while (true)
-    {
-      field = iprot.readFieldBegin();
-      if (field.type == TType.STOP) { 
-        break;
-      }
-      switch (field.id)
-      {
-        case SUCCESS:
-          if (field.type == TType.STRUCT) {
-            this.success = new Ad();
-            this.success.read(iprot);
-          } else { 
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case USEREXCEPTION:
-          if (field.type == TType.STRUCT) {
-            this.userException = new EDAMUserException();
-            this.userException.read(iprot);
-          } else { 
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case SYSTEMEXCEPTION:
-          if (field.type == TType.STRUCT) {
-            this.systemException = new EDAMSystemException();
-            this.systemException.read(iprot);
-          } else { 
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        default:
-          TProtocolUtil.skip(iprot, field.type);
-          break;
-      }
-      iprot.readFieldEnd();
-    }
-    iprot.readStructEnd();
-
-
-    // check for required fields of primitive type, which can't be checked in the validate method
-    validate();
-  }
-
-  public function write(oprot:TProtocol):void {
-    oprot.writeStructBegin(STRUCT_DESC);
-
-    if (this.isSetSuccess()) {
-      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
-      this.success.write(oprot);
-      oprot.writeFieldEnd();
-    } else if (this.isSetUserException()) {
-      oprot.writeFieldBegin(USER_EXCEPTION_FIELD_DESC);
-      this.userException.write(oprot);
-      oprot.writeFieldEnd();
-    } else if (this.isSetSystemException()) {
-      oprot.writeFieldBegin(SYSTEM_EXCEPTION_FIELD_DESC);
-      this.systemException.write(oprot);
-      oprot.writeFieldEnd();
-    }
-    oprot.writeFieldStop();
-    oprot.writeStructEnd();
-  }
-
-  public function toString():String {
-    var ret:String = new String("getRandomAd_result(");
-    var first:Boolean = true;
-
-    ret += "success:";
-    if (this.success == null) {
-      ret += "null";
-    } else {
-      ret += this.success;
-    }
-    first = false;
-    if (!first) ret +=  ", ";
-    ret += "userException:";
-    if (this.userException == null) {
-      ret += "null";
-    } else {
-      ret += this.userException;
-    }
-    first = false;
-    if (!first) ret +=  ", ";
-    ret += "systemException:";
-    if (this.systemException == null) {
-      ret += "null";
-    } else {
-      ret += this.systemException;
-    }
-    first = false;
-    ret += ")";
-    return ret;
-  }
-
-  public function validate():void {
-    // check for required fields
-    // check that fields of type enum have valid values
-  }
-
-}
-
 class getPublicNotebook_args implements TBase {
   private static const STRUCT_DESC:TStruct = new TStruct("getPublicNotebook_args");
   private static const USER_ID_FIELD_DESC:TField = new TField("userId", TType.I32, 1);
@@ -35158,6 +33798,495 @@ class createSharedNotebook_result implements TBase {
 
 }
 
+class updateSharedNotebook_args implements TBase {
+  private static const STRUCT_DESC:TStruct = new TStruct("updateSharedNotebook_args");
+  private static const AUTHENTICATION_TOKEN_FIELD_DESC:TField = new TField("authenticationToken", TType.STRING, 1);
+  private static const SHARED_NOTEBOOK_FIELD_DESC:TField = new TField("sharedNotebook", TType.STRUCT, 2);
+
+  private var _authenticationToken:String;
+  public static const AUTHENTICATIONTOKEN:int = 1;
+  private var _sharedNotebook:SharedNotebook;
+  public static const SHAREDNOTEBOOK:int = 2;
+
+
+  public static const metaDataMap:Dictionary = new Dictionary();
+  {
+    metaDataMap[AUTHENTICATIONTOKEN] = new FieldMetaData("authenticationToken", TFieldRequirementType.DEFAULT, 
+        new FieldValueMetaData(TType.STRING));
+    metaDataMap[SHAREDNOTEBOOK] = new FieldMetaData("sharedNotebook", TFieldRequirementType.DEFAULT, 
+        new StructMetaData(TType.STRUCT, SharedNotebook));
+  }
+  {
+    FieldMetaData.addStructMetaDataMap(updateSharedNotebook_args, metaDataMap);
+  }
+
+  public function updateSharedNotebook_args() {
+  }
+
+  public function get authenticationToken():String {
+    return this._authenticationToken;
+  }
+
+  public function set authenticationToken(authenticationToken:String):void {
+    this._authenticationToken = authenticationToken;
+  }
+
+  public function unsetAuthenticationToken():void {
+    this.authenticationToken = null;
+  }
+
+  // Returns true if field authenticationToken is set (has been assigned a value) and false otherwise
+  public function isSetAuthenticationToken():Boolean {
+    return this.authenticationToken != null;
+  }
+
+  public function get sharedNotebook():SharedNotebook {
+    return this._sharedNotebook;
+  }
+
+  public function set sharedNotebook(sharedNotebook:SharedNotebook):void {
+    this._sharedNotebook = sharedNotebook;
+  }
+
+  public function unsetSharedNotebook():void {
+    this.sharedNotebook = null;
+  }
+
+  // Returns true if field sharedNotebook is set (has been assigned a value) and false otherwise
+  public function isSetSharedNotebook():Boolean {
+    return this.sharedNotebook != null;
+  }
+
+  public function setFieldValue(fieldID:int, value:*):void {
+    switch (fieldID) {
+    case AUTHENTICATIONTOKEN:
+      if (value == null) {
+        unsetAuthenticationToken();
+      } else {
+        this.authenticationToken = value;
+      }
+      break;
+
+    case SHAREDNOTEBOOK:
+      if (value == null) {
+        unsetSharedNotebook();
+      } else {
+        this.sharedNotebook = value;
+      }
+      break;
+
+    default:
+      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
+    }
+  }
+
+  public function getFieldValue(fieldID:int):* {
+    switch (fieldID) {
+    case AUTHENTICATIONTOKEN:
+      return this.authenticationToken;
+    case SHAREDNOTEBOOK:
+      return this.sharedNotebook;
+    default:
+      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
+    }
+  }
+
+  // Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
+  public function isSet(fieldID:int):Boolean {
+    switch (fieldID) {
+    case AUTHENTICATIONTOKEN:
+      return isSetAuthenticationToken();
+    case SHAREDNOTEBOOK:
+      return isSetSharedNotebook();
+    default:
+      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
+    }
+  }
+
+  public function read(iprot:TProtocol):void {
+    var field:TField;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) { 
+        break;
+      }
+      switch (field.id)
+      {
+        case AUTHENTICATIONTOKEN:
+          if (field.type == TType.STRING) {
+            this.authenticationToken = iprot.readString();
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case SHAREDNOTEBOOK:
+          if (field.type == TType.STRUCT) {
+            this.sharedNotebook = new SharedNotebook();
+            this.sharedNotebook.read(iprot);
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+          break;
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public function write(oprot:TProtocol):void {
+    validate();
+
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.authenticationToken != null) {
+      oprot.writeFieldBegin(AUTHENTICATION_TOKEN_FIELD_DESC);
+      oprot.writeString(this.authenticationToken);
+      oprot.writeFieldEnd();
+    }
+    if (this.sharedNotebook != null) {
+      oprot.writeFieldBegin(SHARED_NOTEBOOK_FIELD_DESC);
+      this.sharedNotebook.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  public function toString():String {
+    var ret:String = new String("updateSharedNotebook_args(");
+    var first:Boolean = true;
+
+    ret += "authenticationToken:";
+    if (this.authenticationToken == null) {
+      ret += "null";
+    } else {
+      ret += this.authenticationToken;
+    }
+    first = false;
+    if (!first) ret +=  ", ";
+    ret += "sharedNotebook:";
+    if (this.sharedNotebook == null) {
+      ret += "null";
+    } else {
+      ret += this.sharedNotebook;
+    }
+    first = false;
+    ret += ")";
+    return ret;
+  }
+
+  public function validate():void {
+    // check for required fields
+    // check that fields of type enum have valid values
+  }
+
+}
+
+class updateSharedNotebook_result implements TBase {
+  private static const STRUCT_DESC:TStruct = new TStruct("updateSharedNotebook_result");
+  private static const SUCCESS_FIELD_DESC:TField = new TField("success", TType.I32, 0);
+  private static const USER_EXCEPTION_FIELD_DESC:TField = new TField("userException", TType.STRUCT, 1);
+  private static const NOT_FOUND_EXCEPTION_FIELD_DESC:TField = new TField("notFoundException", TType.STRUCT, 2);
+  private static const SYSTEM_EXCEPTION_FIELD_DESC:TField = new TField("systemException", TType.STRUCT, 3);
+
+  private var _success:int;
+  public static const SUCCESS:int = 0;
+  private var _userException:EDAMUserException;
+  public static const USEREXCEPTION:int = 1;
+  private var _notFoundException:EDAMNotFoundException;
+  public static const NOTFOUNDEXCEPTION:int = 2;
+  private var _systemException:EDAMSystemException;
+  public static const SYSTEMEXCEPTION:int = 3;
+
+  private var __isset_success:Boolean = false;
+
+  public static const metaDataMap:Dictionary = new Dictionary();
+  {
+    metaDataMap[SUCCESS] = new FieldMetaData("success", TFieldRequirementType.DEFAULT, 
+        new FieldValueMetaData(TType.I32));
+    metaDataMap[USEREXCEPTION] = new FieldMetaData("userException", TFieldRequirementType.DEFAULT, 
+        new FieldValueMetaData(TType.STRUCT));
+    metaDataMap[NOTFOUNDEXCEPTION] = new FieldMetaData("notFoundException", TFieldRequirementType.DEFAULT, 
+        new FieldValueMetaData(TType.STRUCT));
+    metaDataMap[SYSTEMEXCEPTION] = new FieldMetaData("systemException", TFieldRequirementType.DEFAULT, 
+        new FieldValueMetaData(TType.STRUCT));
+  }
+  {
+    FieldMetaData.addStructMetaDataMap(updateSharedNotebook_result, metaDataMap);
+  }
+
+  public function updateSharedNotebook_result() {
+  }
+
+  public function get success():int {
+    return this._success;
+  }
+
+  public function set success(success:int):void {
+    this._success = success;
+    this.__isset_success = true;
+  }
+
+  public function unsetSuccess():void {
+    this.__isset_success = false;
+  }
+
+  // Returns true if field success is set (has been assigned a value) and false otherwise
+  public function isSetSuccess():Boolean {
+    return this.__isset_success;
+  }
+
+  public function get userException():EDAMUserException {
+    return this._userException;
+  }
+
+  public function set userException(userException:EDAMUserException):void {
+    this._userException = userException;
+  }
+
+  public function unsetUserException():void {
+    this.userException = null;
+  }
+
+  // Returns true if field userException is set (has been assigned a value) and false otherwise
+  public function isSetUserException():Boolean {
+    return this.userException != null;
+  }
+
+  public function get notFoundException():EDAMNotFoundException {
+    return this._notFoundException;
+  }
+
+  public function set notFoundException(notFoundException:EDAMNotFoundException):void {
+    this._notFoundException = notFoundException;
+  }
+
+  public function unsetNotFoundException():void {
+    this.notFoundException = null;
+  }
+
+  // Returns true if field notFoundException is set (has been assigned a value) and false otherwise
+  public function isSetNotFoundException():Boolean {
+    return this.notFoundException != null;
+  }
+
+  public function get systemException():EDAMSystemException {
+    return this._systemException;
+  }
+
+  public function set systemException(systemException:EDAMSystemException):void {
+    this._systemException = systemException;
+  }
+
+  public function unsetSystemException():void {
+    this.systemException = null;
+  }
+
+  // Returns true if field systemException is set (has been assigned a value) and false otherwise
+  public function isSetSystemException():Boolean {
+    return this.systemException != null;
+  }
+
+  public function setFieldValue(fieldID:int, value:*):void {
+    switch (fieldID) {
+    case SUCCESS:
+      if (value == null) {
+        unsetSuccess();
+      } else {
+        this.success = value;
+      }
+      break;
+
+    case USEREXCEPTION:
+      if (value == null) {
+        unsetUserException();
+      } else {
+        this.userException = value;
+      }
+      break;
+
+    case NOTFOUNDEXCEPTION:
+      if (value == null) {
+        unsetNotFoundException();
+      } else {
+        this.notFoundException = value;
+      }
+      break;
+
+    case SYSTEMEXCEPTION:
+      if (value == null) {
+        unsetSystemException();
+      } else {
+        this.systemException = value;
+      }
+      break;
+
+    default:
+      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
+    }
+  }
+
+  public function getFieldValue(fieldID:int):* {
+    switch (fieldID) {
+    case SUCCESS:
+      return this.success;
+    case USEREXCEPTION:
+      return this.userException;
+    case NOTFOUNDEXCEPTION:
+      return this.notFoundException;
+    case SYSTEMEXCEPTION:
+      return this.systemException;
+    default:
+      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
+    }
+  }
+
+  // Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
+  public function isSet(fieldID:int):Boolean {
+    switch (fieldID) {
+    case SUCCESS:
+      return isSetSuccess();
+    case USEREXCEPTION:
+      return isSetUserException();
+    case NOTFOUNDEXCEPTION:
+      return isSetNotFoundException();
+    case SYSTEMEXCEPTION:
+      return isSetSystemException();
+    default:
+      throw new ArgumentError("Field " + fieldID + " doesn't exist!");
+    }
+  }
+
+  public function read(iprot:TProtocol):void {
+    var field:TField;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) { 
+        break;
+      }
+      switch (field.id)
+      {
+        case SUCCESS:
+          if (field.type == TType.I32) {
+            this.success = iprot.readI32();
+            this.__isset_success = true;
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case USEREXCEPTION:
+          if (field.type == TType.STRUCT) {
+            this.userException = new EDAMUserException();
+            this.userException.read(iprot);
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case NOTFOUNDEXCEPTION:
+          if (field.type == TType.STRUCT) {
+            this.notFoundException = new EDAMNotFoundException();
+            this.notFoundException.read(iprot);
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case SYSTEMEXCEPTION:
+          if (field.type == TType.STRUCT) {
+            this.systemException = new EDAMSystemException();
+            this.systemException.read(iprot);
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+          break;
+      }
+      iprot.readFieldEnd();
+    }
+    iprot.readStructEnd();
+
+
+    // check for required fields of primitive type, which can't be checked in the validate method
+    validate();
+  }
+
+  public function write(oprot:TProtocol):void {
+    oprot.writeStructBegin(STRUCT_DESC);
+
+    if (this.isSetSuccess()) {
+      oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+      oprot.writeI32(this.success);
+      oprot.writeFieldEnd();
+    } else if (this.isSetUserException()) {
+      oprot.writeFieldBegin(USER_EXCEPTION_FIELD_DESC);
+      this.userException.write(oprot);
+      oprot.writeFieldEnd();
+    } else if (this.isSetNotFoundException()) {
+      oprot.writeFieldBegin(NOT_FOUND_EXCEPTION_FIELD_DESC);
+      this.notFoundException.write(oprot);
+      oprot.writeFieldEnd();
+    } else if (this.isSetSystemException()) {
+      oprot.writeFieldBegin(SYSTEM_EXCEPTION_FIELD_DESC);
+      this.systemException.write(oprot);
+      oprot.writeFieldEnd();
+    }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
+
+  public function toString():String {
+    var ret:String = new String("updateSharedNotebook_result(");
+    var first:Boolean = true;
+
+    ret += "success:";
+    ret += this.success;
+    first = false;
+    if (!first) ret +=  ", ";
+    ret += "userException:";
+    if (this.userException == null) {
+      ret += "null";
+    } else {
+      ret += this.userException;
+    }
+    first = false;
+    if (!first) ret +=  ", ";
+    ret += "notFoundException:";
+    if (this.notFoundException == null) {
+      ret += "null";
+    } else {
+      ret += this.notFoundException;
+    }
+    first = false;
+    if (!first) ret +=  ", ";
+    ret += "systemException:";
+    if (this.systemException == null) {
+      ret += "null";
+    } else {
+      ret += this.systemException;
+    }
+    first = false;
+    ret += ")";
+    return ret;
+  }
+
+  public function validate():void {
+    // check for required fields
+    // check that fields of type enum have valid values
+  }
+
+}
+
 class sendMessageToSharedNotebookMembers_args implements TBase {
   private static const STRUCT_DESC:TStruct = new TStruct("sendMessageToSharedNotebookMembers_args");
   private static const AUTHENTICATION_TOKEN_FIELD_DESC:TField = new TField("authenticationToken", TType.STRING, 1);
@@ -35367,13 +34496,13 @@ class sendMessageToSharedNotebookMembers_args implements TBase {
         case RECIPIENTS:
           if (field.type == TType.LIST) {
             {
-              var _list647:TList = iprot.readListBegin();
+              var _list628:TList = iprot.readListBegin();
               this.recipients = new Array();
-              for (var _i648:int = 0; _i648 < _list647.size; ++_i648)
+              for (var _i629:int = 0; _i629 < _list628.size; ++_i629)
               {
-                var _elem649:String;
-                _elem649 = iprot.readString();
-                this.recipients.push(_elem649);
+                var _elem630:String;
+                _elem630 = iprot.readString();
+                this.recipients.push(_elem630);
               }
               iprot.readListEnd();
             }
@@ -35417,8 +34546,8 @@ class sendMessageToSharedNotebookMembers_args implements TBase {
       oprot.writeFieldBegin(RECIPIENTS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRING, this.recipients.length));
-        for each (var elem650:* in this.recipients)        {
-          oprot.writeString(elem650);
+        for each (var elem631:* in this.recipients)        {
+          oprot.writeString(elem631);
         }
         oprot.writeListEnd();
       }
@@ -36096,14 +35225,14 @@ class listSharedNotebooks_result implements TBase {
         case SUCCESS:
           if (field.type == TType.LIST) {
             {
-              var _list660:TList = iprot.readListBegin();
+              var _list641:TList = iprot.readListBegin();
               this.success = new Array();
-              for (var _i661:int = 0; _i661 < _list660.size; ++_i661)
+              for (var _i642:int = 0; _i642 < _list641.size; ++_i642)
               {
-                var _elem662:SharedNotebook;
-                _elem662 = new SharedNotebook();
-                _elem662.read(iprot);
-                this.success.push(_elem662);
+                var _elem643:SharedNotebook;
+                _elem643 = new SharedNotebook();
+                _elem643.read(iprot);
+                this.success.push(_elem643);
               }
               iprot.readListEnd();
             }
@@ -36155,8 +35284,8 @@ class listSharedNotebooks_result implements TBase {
       oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.success.length));
-        for each (var elem663:* in this.success)        {
-          elem663.write(oprot);
+        for each (var elem644:* in this.success)        {
+          elem644.write(oprot);
         }
         oprot.writeListEnd();
       }
@@ -36351,13 +35480,13 @@ class expungeSharedNotebooks_args implements TBase {
         case SHAREDNOTEBOOKIDS:
           if (field.type == TType.LIST) {
             {
-              var _list666:TList = iprot.readListBegin();
+              var _list647:TList = iprot.readListBegin();
               this.sharedNotebookIds = new Array();
-              for (var _i667:int = 0; _i667 < _list666.size; ++_i667)
+              for (var _i648:int = 0; _i648 < _list647.size; ++_i648)
               {
-                var _elem668:BigInteger;
-                _elem668 = iprot.readI64();
-                this.sharedNotebookIds.push(_elem668);
+                var _elem649:BigInteger;
+                _elem649 = iprot.readI64();
+                this.sharedNotebookIds.push(_elem649);
               }
               iprot.readListEnd();
             }
@@ -36391,8 +35520,8 @@ class expungeSharedNotebooks_args implements TBase {
       oprot.writeFieldBegin(SHARED_NOTEBOOK_IDS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.I64, this.sharedNotebookIds.length));
-        for each (var elem669:* in this.sharedNotebookIds)        {
-          oprot.writeI64(elem669);
+        for each (var elem650:* in this.sharedNotebookIds)        {
+          oprot.writeI64(elem650);
         }
         oprot.writeListEnd();
       }
@@ -38034,14 +37163,14 @@ class listLinkedNotebooks_result implements TBase {
         case SUCCESS:
           if (field.type == TType.LIST) {
             {
-              var _list691:TList = iprot.readListBegin();
+              var _list672:TList = iprot.readListBegin();
               this.success = new Array();
-              for (var _i692:int = 0; _i692 < _list691.size; ++_i692)
+              for (var _i673:int = 0; _i673 < _list672.size; ++_i673)
               {
-                var _elem693:LinkedNotebook;
-                _elem693 = new LinkedNotebook();
-                _elem693.read(iprot);
-                this.success.push(_elem693);
+                var _elem674:LinkedNotebook;
+                _elem674 = new LinkedNotebook();
+                _elem674.read(iprot);
+                this.success.push(_elem674);
               }
               iprot.readListEnd();
             }
@@ -38093,8 +37222,8 @@ class listLinkedNotebooks_result implements TBase {
       oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
       {
         oprot.writeListBegin(new TList(TType.STRUCT, this.success.length));
-        for each (var elem694:* in this.success)        {
-          elem694.write(oprot);
+        for each (var elem675:* in this.success)        {
+          elem675.write(oprot);
         }
         oprot.writeListEnd();
       }

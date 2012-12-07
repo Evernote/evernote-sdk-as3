@@ -16,6 +16,9 @@ import org.apache.thrift.protocol.*;
 
 import com.evernote.edam.type.Publishing;
 import com.evernote.edam.type.SharedNotebook;
+import com.evernote.edam.type.BusinessNotebook;
+import com.evernote.edam.type.User;
+import com.evernote.edam.type.NotebookRestrictions;
 
   /**
    * A unique container for a set of notes.
@@ -74,20 +77,22 @@ import com.evernote.edam.type.SharedNotebook;
    *   </dd>
    * 
    * <dt>publishing</dt>
-   *   <dd>If the Notebook has been opened for public access (i.e.
-   *   if 'published' is set to true), then this will point to the set of
-   *   publishing information for the Notebook (URI, description, etc.).  A
-   *   Notebook cannot be published without providing this information, but it
-   *   will persist for later use if publishing is ever disabled on the Notebook.
-   *   Clients that do not wish to change the publishing behavior of a Notebook
-   *   should not set this value when calling NoteStore.updateNotebook().
+   *   <dd>If the Notebook has been opened for public access, or
+   *   business users shared with their business (i.e. if 'published' is
+   *   set to true), then this will point to the set of publishing
+   *   information for the Notebook (URI, description, etc.).  A
+   *   Notebook cannot be published without providing this information,
+   *   but it will persist for later use if publishing is ever disabled
+   *   on the Notebook.  Clients that do not wish to change the
+   *   publishing behavior of a Notebook should not set this value when
+   *   calling NoteStore.updateNotebook().
    *   </dd>
    * 
    * <dt>published</dt>
    *   <dd>If this is set to true, then the Notebook will be
-   *   accessible to the public via the 'publishing' specification, which must
-   *   also be set.  If this is set to false, the Notebook will not be available
-   *   to the public.
+   *   accessible either to the public, or for business users to their business,
+   *   via the 'publishing' specification, which must also be set.  If this is set
+   *   to false, the Notebook will not be available to the public (or business).
    *   Clients that do not wish to change the publishing behavior of a Notebook
    *   should not set this value when calling NoteStore.updateNotebook().
    *   </dd>
@@ -113,6 +118,24 @@ import com.evernote.edam.type.SharedNotebook;
    *   via this field.
    *   </dd>
    * 
+   * <dt>businessNotebook</dt>
+   *   <dd>If the notebook is part of a business account and has been published to the
+   *   business library, this will contain information for the library listing.
+   *   The presence or absence of this field is not a reliable test of whether a given
+   *   notebook is in fact a business notebook - the field is only used when a notebook is or
+   *   has been published to the business library.
+   *   </dd>
+   * 
+   * <dt>contact</dt>
+   *   <dd>Intended for use with Business accounts, this field identifies the user who
+   *   has been designated as the "contact".  For notebooks created in business
+   *   accounts, the server will automatically set this value to the user who created
+   *   the notebook unless Notebook.contact.username has been set, in which that value
+   *   will be used.  When updating a notebook, it is common to leave Notebook.contact
+   *   field unset, indicating that no change to the value is being requested and that
+   *   the existing value, if any, should be preserved.
+   *   </dd>
+   * 
    * </dl>
    */
   public class Notebook implements TBase   {
@@ -128,6 +151,9 @@ import com.evernote.edam.type.SharedNotebook;
     private static const STACK_FIELD_DESC:TField = new TField("stack", TType.STRING, 12);
     private static const SHARED_NOTEBOOK_IDS_FIELD_DESC:TField = new TField("sharedNotebookIds", TType.LIST, 13);
     private static const SHARED_NOTEBOOKS_FIELD_DESC:TField = new TField("sharedNotebooks", TType.LIST, 14);
+    private static const BUSINESS_NOTEBOOK_FIELD_DESC:TField = new TField("businessNotebook", TType.STRUCT, 15);
+    private static const CONTACT_FIELD_DESC:TField = new TField("contact", TType.STRUCT, 16);
+    private static const RESTRICTIONS_FIELD_DESC:TField = new TField("restrictions", TType.STRUCT, 17);
 
     private var _guid:String;
     public static const GUID:int = 1;
@@ -151,6 +177,12 @@ import com.evernote.edam.type.SharedNotebook;
     public static const SHAREDNOTEBOOKIDS:int = 13;
     private var _sharedNotebooks:Array;
     public static const SHAREDNOTEBOOKS:int = 14;
+    private var _businessNotebook:BusinessNotebook;
+    public static const BUSINESSNOTEBOOK:int = 15;
+    private var _contact:User;
+    public static const CONTACT:int = 16;
+    private var _restrictions:NotebookRestrictions;
+    public static const RESTRICTIONS:int = 17;
 
     private var __isset_updateSequenceNum:Boolean = false;
     private var __isset_defaultNotebook:Boolean = false;
@@ -184,6 +216,12 @@ import com.evernote.edam.type.SharedNotebook;
       metaDataMap[SHAREDNOTEBOOKS] = new FieldMetaData("sharedNotebooks", TFieldRequirementType.OPTIONAL, 
           new ListMetaData(TType.LIST, 
               new StructMetaData(TType.STRUCT, SharedNotebook)));
+      metaDataMap[BUSINESSNOTEBOOK] = new FieldMetaData("businessNotebook", TFieldRequirementType.OPTIONAL, 
+          new StructMetaData(TType.STRUCT, BusinessNotebook));
+      metaDataMap[CONTACT] = new FieldMetaData("contact", TFieldRequirementType.OPTIONAL, 
+          new StructMetaData(TType.STRUCT, User));
+      metaDataMap[RESTRICTIONS] = new FieldMetaData("restrictions", TFieldRequirementType.OPTIONAL, 
+          new StructMetaData(TType.STRUCT, NotebookRestrictions));
     }
     {
       FieldMetaData.addStructMetaDataMap(Notebook, metaDataMap);
@@ -384,6 +422,57 @@ import com.evernote.edam.type.SharedNotebook;
       return this.sharedNotebooks != null;
     }
 
+    public function get businessNotebook():BusinessNotebook {
+      return this._businessNotebook;
+    }
+
+    public function set businessNotebook(businessNotebook:BusinessNotebook):void {
+      this._businessNotebook = businessNotebook;
+    }
+
+    public function unsetBusinessNotebook():void {
+      this.businessNotebook = null;
+    }
+
+    // Returns true if field businessNotebook is set (has been assigned a value) and false otherwise
+    public function isSetBusinessNotebook():Boolean {
+      return this.businessNotebook != null;
+    }
+
+    public function get contact():User {
+      return this._contact;
+    }
+
+    public function set contact(contact:User):void {
+      this._contact = contact;
+    }
+
+    public function unsetContact():void {
+      this.contact = null;
+    }
+
+    // Returns true if field contact is set (has been assigned a value) and false otherwise
+    public function isSetContact():Boolean {
+      return this.contact != null;
+    }
+
+    public function get restrictions():NotebookRestrictions {
+      return this._restrictions;
+    }
+
+    public function set restrictions(restrictions:NotebookRestrictions):void {
+      this._restrictions = restrictions;
+    }
+
+    public function unsetRestrictions():void {
+      this.restrictions = null;
+    }
+
+    // Returns true if field restrictions is set (has been assigned a value) and false otherwise
+    public function isSetRestrictions():Boolean {
+      return this.restrictions != null;
+    }
+
     public function setFieldValue(fieldID:int, value:*):void {
       switch (fieldID) {
       case GUID:
@@ -474,6 +563,30 @@ import com.evernote.edam.type.SharedNotebook;
         }
         break;
 
+      case BUSINESSNOTEBOOK:
+        if (value == null) {
+          unsetBusinessNotebook();
+        } else {
+          this.businessNotebook = value;
+        }
+        break;
+
+      case CONTACT:
+        if (value == null) {
+          unsetContact();
+        } else {
+          this.contact = value;
+        }
+        break;
+
+      case RESTRICTIONS:
+        if (value == null) {
+          unsetRestrictions();
+        } else {
+          this.restrictions = value;
+        }
+        break;
+
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -503,6 +616,12 @@ import com.evernote.edam.type.SharedNotebook;
         return this.sharedNotebookIds;
       case SHAREDNOTEBOOKS:
         return this.sharedNotebooks;
+      case BUSINESSNOTEBOOK:
+        return this.businessNotebook;
+      case CONTACT:
+        return this.contact;
+      case RESTRICTIONS:
+        return this.restrictions;
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -533,6 +652,12 @@ import com.evernote.edam.type.SharedNotebook;
         return isSetSharedNotebookIds();
       case SHAREDNOTEBOOKS:
         return isSetSharedNotebooks();
+      case BUSINESSNOTEBOOK:
+        return isSetBusinessNotebook();
+      case CONTACT:
+        return isSetContact();
+      case RESTRICTIONS:
+        return isSetRestrictions();
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -621,13 +746,13 @@ import com.evernote.edam.type.SharedNotebook;
           case SHAREDNOTEBOOKIDS:
             if (field.type == TType.LIST) {
               {
-                var _list195:TList = iprot.readListBegin();
+                var _list233:TList = iprot.readListBegin();
                 this.sharedNotebookIds = new Array();
-                for (var _i196:int = 0; _i196 < _list195.size; ++_i196)
+                for (var _i234:int = 0; _i234 < _list233.size; ++_i234)
                 {
-                  var _elem197:BigInteger;
-                  _elem197 = iprot.readI64();
-                  this.sharedNotebookIds.push(_elem197);
+                  var _elem235:BigInteger;
+                  _elem235 = iprot.readI64();
+                  this.sharedNotebookIds.push(_elem235);
                 }
                 iprot.readListEnd();
               }
@@ -638,17 +763,41 @@ import com.evernote.edam.type.SharedNotebook;
           case SHAREDNOTEBOOKS:
             if (field.type == TType.LIST) {
               {
-                var _list198:TList = iprot.readListBegin();
+                var _list236:TList = iprot.readListBegin();
                 this.sharedNotebooks = new Array();
-                for (var _i199:int = 0; _i199 < _list198.size; ++_i199)
+                for (var _i237:int = 0; _i237 < _list236.size; ++_i237)
                 {
-                  var _elem200:SharedNotebook;
-                  _elem200 = new SharedNotebook();
-                  _elem200.read(iprot);
-                  this.sharedNotebooks.push(_elem200);
+                  var _elem238:SharedNotebook;
+                  _elem238 = new SharedNotebook();
+                  _elem238.read(iprot);
+                  this.sharedNotebooks.push(_elem238);
                 }
                 iprot.readListEnd();
               }
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case BUSINESSNOTEBOOK:
+            if (field.type == TType.STRUCT) {
+              this.businessNotebook = new BusinessNotebook();
+              this.businessNotebook.read(iprot);
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case CONTACT:
+            if (field.type == TType.STRUCT) {
+              this.contact = new User();
+              this.contact.read(iprot);
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case RESTRICTIONS:
+            if (field.type == TType.STRUCT) {
+              this.restrictions = new NotebookRestrictions();
+              this.restrictions.read(iprot);
             } else { 
               TProtocolUtil.skip(iprot, field.type);
             }
@@ -728,8 +877,8 @@ import com.evernote.edam.type.SharedNotebook;
           oprot.writeFieldBegin(SHARED_NOTEBOOK_IDS_FIELD_DESC);
           {
             oprot.writeListBegin(new TList(TType.I64, this.sharedNotebookIds.length));
-            for each (var elem201:* in this.sharedNotebookIds)            {
-              oprot.writeI64(elem201);
+            for each (var elem239:* in this.sharedNotebookIds)            {
+              oprot.writeI64(elem239);
             }
             oprot.writeListEnd();
           }
@@ -741,11 +890,32 @@ import com.evernote.edam.type.SharedNotebook;
           oprot.writeFieldBegin(SHARED_NOTEBOOKS_FIELD_DESC);
           {
             oprot.writeListBegin(new TList(TType.STRUCT, this.sharedNotebooks.length));
-            for each (var elem202:* in this.sharedNotebooks)            {
-              elem202.write(oprot);
+            for each (var elem240:* in this.sharedNotebooks)            {
+              elem240.write(oprot);
             }
             oprot.writeListEnd();
           }
+          oprot.writeFieldEnd();
+        }
+      }
+      if (this.businessNotebook != null) {
+        if (isSetBusinessNotebook()) {
+          oprot.writeFieldBegin(BUSINESS_NOTEBOOK_FIELD_DESC);
+          this.businessNotebook.write(oprot);
+          oprot.writeFieldEnd();
+        }
+      }
+      if (this.contact != null) {
+        if (isSetContact()) {
+          oprot.writeFieldBegin(CONTACT_FIELD_DESC);
+          this.contact.write(oprot);
+          oprot.writeFieldEnd();
+        }
+      }
+      if (this.restrictions != null) {
+        if (isSetRestrictions()) {
+          oprot.writeFieldBegin(RESTRICTIONS_FIELD_DESC);
+          this.restrictions.write(oprot);
           oprot.writeFieldEnd();
         }
       }
@@ -843,6 +1013,36 @@ import com.evernote.edam.type.SharedNotebook;
           ret += "null";
         } else {
           ret += this.sharedNotebooks;
+        }
+        first = false;
+      }
+      if (isSetBusinessNotebook()) {
+        if (!first) ret +=  ", ";
+        ret += "businessNotebook:";
+        if (this.businessNotebook == null) {
+          ret += "null";
+        } else {
+          ret += this.businessNotebook;
+        }
+        first = false;
+      }
+      if (isSetContact()) {
+        if (!first) ret +=  ", ";
+        ret += "contact:";
+        if (this.contact == null) {
+          ret += "null";
+        } else {
+          ret += this.contact;
+        }
+        first = false;
+      }
+      if (isSetRestrictions()) {
+        if (!first) ret +=  ", ";
+        ret += "restrictions:";
+        if (this.restrictions == null) {
+          ret += "null";
+        } else {
+          ret += this.restrictions;
         }
         first = false;
       }

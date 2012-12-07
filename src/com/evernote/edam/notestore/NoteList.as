@@ -346,14 +346,14 @@ import com.evernote.edam.type.Note;
           case NOTES:
             if (field.type == TType.LIST) {
               {
-                var _list92:TList = iprot.readListBegin();
+                var _list93:TList = iprot.readListBegin();
                 this.notes = new Array();
-                for (var _i93:int = 0; _i93 < _list92.size; ++_i93)
+                for (var _i94:int = 0; _i94 < _list93.size; ++_i94)
                 {
-                  var _elem94:Note;
-                  _elem94 = new Note();
-                  _elem94.read(iprot);
-                  this.notes.push(_elem94);
+                  var _elem95:Note;
+                  _elem95 = new Note();
+                  _elem95.read(iprot);
+                  this.notes.push(_elem95);
                 }
                 iprot.readListEnd();
               }
@@ -364,13 +364,13 @@ import com.evernote.edam.type.Note;
           case STOPPEDWORDS:
             if (field.type == TType.LIST) {
               {
-                var _list95:TList = iprot.readListBegin();
+                var _list96:TList = iprot.readListBegin();
                 this.stoppedWords = new Array();
-                for (var _i96:int = 0; _i96 < _list95.size; ++_i96)
+                for (var _i97:int = 0; _i97 < _list96.size; ++_i97)
                 {
-                  var _elem97:String;
-                  _elem97 = iprot.readString();
-                  this.stoppedWords.push(_elem97);
+                  var _elem98:String;
+                  _elem98 = iprot.readString();
+                  this.stoppedWords.push(_elem98);
                 }
                 iprot.readListEnd();
               }
@@ -381,13 +381,13 @@ import com.evernote.edam.type.Note;
           case SEARCHEDWORDS:
             if (field.type == TType.LIST) {
               {
-                var _list98:TList = iprot.readListBegin();
+                var _list99:TList = iprot.readListBegin();
                 this.searchedWords = new Array();
-                for (var _i99:int = 0; _i99 < _list98.size; ++_i99)
+                for (var _i100:int = 0; _i100 < _list99.size; ++_i100)
                 {
-                  var _elem100:String;
-                  _elem100 = iprot.readString();
-                  this.searchedWords.push(_elem100);
+                  var _elem101:String;
+                  _elem101 = iprot.readString();
+                  this.searchedWords.push(_elem101);
                 }
                 iprot.readListEnd();
               }
@@ -436,8 +436,8 @@ import com.evernote.edam.type.Note;
         oprot.writeFieldBegin(NOTES_FIELD_DESC);
         {
           oprot.writeListBegin(new TList(TType.STRUCT, this.notes.length));
-          for each (var elem101:* in this.notes)          {
-            elem101.write(oprot);
+          for each (var elem102:* in this.notes)          {
+            elem102.write(oprot);
           }
           oprot.writeListEnd();
         }
@@ -448,8 +448,8 @@ import com.evernote.edam.type.Note;
           oprot.writeFieldBegin(STOPPED_WORDS_FIELD_DESC);
           {
             oprot.writeListBegin(new TList(TType.STRING, this.stoppedWords.length));
-            for each (var elem102:* in this.stoppedWords)            {
-              oprot.writeString(elem102);
+            for each (var elem103:* in this.stoppedWords)            {
+              oprot.writeString(elem103);
             }
             oprot.writeListEnd();
           }
@@ -461,8 +461,8 @@ import com.evernote.edam.type.Note;
           oprot.writeFieldBegin(SEARCHED_WORDS_FIELD_DESC);
           {
             oprot.writeListBegin(new TList(TType.STRING, this.searchedWords.length));
-            for each (var elem103:* in this.searchedWords)            {
-              oprot.writeString(elem103);
+            for each (var elem104:* in this.searchedWords)            {
+              oprot.writeString(elem104);
             }
             oprot.writeListEnd();
           }

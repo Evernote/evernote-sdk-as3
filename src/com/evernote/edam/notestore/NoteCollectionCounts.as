@@ -200,15 +200,15 @@ import org.apache.thrift.protocol.*;
           case NOTEBOOKCOUNTS:
             if (field.type == TType.MAP) {
               {
-                var _map150:TMap = iprot.readMapBegin();
+                var _map151:TMap = iprot.readMapBegin();
                 this.notebookCounts = new Dictionary();
-                for (var _i151:int = 0; _i151 < _map150.size; ++_i151)
+                for (var _i152:int = 0; _i152 < _map151.size; ++_i152)
                 {
-                  var _key152:String;
-                  var _val153:int;
-                  _key152 = iprot.readString();
-                  _val153 = iprot.readI32();
-                  this.notebookCounts[_key152] = _val153;
+                  var _key153:String;
+                  var _val154:int;
+                  _key153 = iprot.readString();
+                  _val154 = iprot.readI32();
+                  this.notebookCounts[_key153] = _val154;
                 }
                 iprot.readMapEnd();
               }
@@ -219,15 +219,15 @@ import org.apache.thrift.protocol.*;
           case TAGCOUNTS:
             if (field.type == TType.MAP) {
               {
-                var _map154:TMap = iprot.readMapBegin();
+                var _map155:TMap = iprot.readMapBegin();
                 this.tagCounts = new Dictionary();
-                for (var _i155:int = 0; _i155 < _map154.size; ++_i155)
+                for (var _i156:int = 0; _i156 < _map155.size; ++_i156)
                 {
-                  var _key156:String;
-                  var _val157:int;
-                  _key156 = iprot.readString();
-                  _val157 = iprot.readI32();
-                  this.tagCounts[_key156] = _val157;
+                  var _key157:String;
+                  var _val158:int;
+                  _key157 = iprot.readString();
+                  _val158 = iprot.readI32();
+                  this.tagCounts[_key157] = _val158;
                 }
                 iprot.readMapEnd();
               }
@@ -264,14 +264,14 @@ import org.apache.thrift.protocol.*;
         if (isSetNotebookCounts()) {
           oprot.writeFieldBegin(NOTEBOOK_COUNTS_FIELD_DESC);
           {
-            var _sizeCounter159:int = 0;
-            for (var _key158:* in this.notebookCounts) {
-              _sizeCounter159++;
+            var _sizeCounter160:int = 0;
+            for (var _key159:* in this.notebookCounts) {
+              _sizeCounter160++;
             }
-            oprot.writeMapBegin(new TMap(TType.STRING, TType.I32, _sizeCounter159));
-            for (var elem160:* in this.notebookCounts)            {
-              oprot.writeString(elem160);
-              oprot.writeI32(this.notebookCounts[elem160]);
+            oprot.writeMapBegin(new TMap(TType.STRING, TType.I32, _sizeCounter160));
+            for (var elem161:* in this.notebookCounts)            {
+              oprot.writeString(elem161);
+              oprot.writeI32(this.notebookCounts[elem161]);
             }
             oprot.writeMapEnd();
           }
@@ -282,14 +282,14 @@ import org.apache.thrift.protocol.*;
         if (isSetTagCounts()) {
           oprot.writeFieldBegin(TAG_COUNTS_FIELD_DESC);
           {
-            var _sizeCounter162:int = 0;
-            for (var _key161:* in this.tagCounts) {
-              _sizeCounter162++;
+            var _sizeCounter163:int = 0;
+            for (var _key162:* in this.tagCounts) {
+              _sizeCounter163++;
             }
-            oprot.writeMapBegin(new TMap(TType.STRING, TType.I32, _sizeCounter162));
-            for (var elem163:* in this.tagCounts)            {
-              oprot.writeString(elem163);
-              oprot.writeI32(this.tagCounts[elem163]);
+            oprot.writeMapBegin(new TMap(TType.STRING, TType.I32, _sizeCounter163));
+            for (var elem164:* in this.tagCounts)            {
+              oprot.writeString(elem164);
+              oprot.writeI32(this.tagCounts[elem164]);
             }
             oprot.writeMapEnd();
           }

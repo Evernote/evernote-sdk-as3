@@ -17,6 +17,7 @@ import org.apache.thrift.protocol.*;
 import com.evernote.edam.type.PrivilegeLevel;
 import com.evernote.edam.type.UserAttributes;
 import com.evernote.edam.type.Accounting;
+import com.evernote.edam.type.PremiumInfo;
 
   /**
    *  This represents the information about a single user account.
@@ -27,9 +28,9 @@ import com.evernote.edam.type.Accounting;
    *    </dd>
    * 
    *  <dt>username</dt>
-   *    <dd>The name that the user provides to log in to their
-   *    account. In the future, this may be empty for some accounts if their login
-   *    process is indirect (e.g. via social networks, etc.).
+   *    <dd>The name that uniquely identifies a single user account. This name
+   *    may be presented by the user, along with their password, to log into
+   *    their account.
    *    May only contain a-z, 0-9, or '-', and may not start or end with the '-'
    *    <br/>
    *    Length:  EDAM_USER_USERNAME_LEN_MIN - EDAM_USER_USERNAME_LEN_MAX
@@ -40,6 +41,8 @@ import com.evernote.edam.type.Accounting;
    *  <dt>email</dt>
    *    <dd>The email address registered for the user.  Must comply with
    *    RFC 2821 and RFC 2822.<br/>
+   *    For privacy reasons, this field may not be populated when a User
+   *    is retrieved via a call to UserStore.getUser().
    *    Length:  EDAM_EMAIL_LEN_MIN - EDAM_EMAIL_LEN_MAX
    *    <br/>
    *    Regex:  EDAM_EMAIL_REGEX
@@ -60,9 +63,7 @@ import com.evernote.edam.type.Accounting;
    *  <dt>timezone</dt>
    *    <dd>The zone ID for the user's default location.  If present,
    *    this may be used to localize the display of any timestamp for which no
-   *    other timezone is available - for example, an note that arrives via
-   *    a micro-browser may not contain enough information to display its
-   *    local time, so this default timezone may be assigned to the note.
+   *    other timezone is available.
    *    The format must be encoded as a standard zone ID such as
    *    "America/Los_Angeles" or "GMT+08:00"
    *    <br/>
@@ -97,9 +98,7 @@ import com.evernote.edam.type.Accounting;
    *    </dd>
    * 
    *  <dt>shardId</dt>
-   *    <dd>The name of the virtual server that manages the state of
-   *    this user.  This value is used internally to determine which system should
-   *    service requests about this user's data.
+   *    <dd>DEPRECATED - Client applications should have no need to use this field.
    *    </dd>
    * 
    *  <dt>attributes</dt>
@@ -109,6 +108,11 @@ import com.evernote.edam.type.Accounting;
    * 
    *  <dt>accounting</dt>
    *    <dd>Bookkeeping information for the user's subscription.
+   *    </dd>
+   * 
+   *  <dt>premiumInfo</dt>
+   *    <dd>If present, this will contain a set of commerce information
+   *    relating to the user's premium service level.
    *    </dd>
    *  </dl>
    */
@@ -127,6 +131,7 @@ import com.evernote.edam.type.Accounting;
     private static const SHARD_ID_FIELD_DESC:TField = new TField("shardId", TType.STRING, 14);
     private static const ATTRIBUTES_FIELD_DESC:TField = new TField("attributes", TType.STRUCT, 15);
     private static const ACCOUNTING_FIELD_DESC:TField = new TField("accounting", TType.STRUCT, 16);
+    private static const PREMIUM_INFO_FIELD_DESC:TField = new TField("premiumInfo", TType.STRUCT, 17);
 
     private var _id:int;
     public static const ID:int = 1;
@@ -154,6 +159,8 @@ import com.evernote.edam.type.Accounting;
     public static const ATTRIBUTES:int = 15;
     private var _accounting:Accounting;
     public static const ACCOUNTING:int = 16;
+    private var _premiumInfo:PremiumInfo;
+    public static const PREMIUMINFO:int = 17;
 
     private var __isset_id:Boolean = false;
     private var __isset_privilege:Boolean = false;
@@ -190,6 +197,8 @@ import com.evernote.edam.type.Accounting;
           new StructMetaData(TType.STRUCT, UserAttributes));
       metaDataMap[ACCOUNTING] = new FieldMetaData("accounting", TFieldRequirementType.OPTIONAL, 
           new StructMetaData(TType.STRUCT, Accounting));
+      metaDataMap[PREMIUMINFO] = new FieldMetaData("premiumInfo", TFieldRequirementType.OPTIONAL, 
+          new StructMetaData(TType.STRUCT, PremiumInfo));
     }
     {
       FieldMetaData.addStructMetaDataMap(User, metaDataMap);
@@ -425,6 +434,23 @@ import com.evernote.edam.type.Accounting;
       return this.accounting != null;
     }
 
+    public function get premiumInfo():PremiumInfo {
+      return this._premiumInfo;
+    }
+
+    public function set premiumInfo(premiumInfo:PremiumInfo):void {
+      this._premiumInfo = premiumInfo;
+    }
+
+    public function unsetPremiumInfo():void {
+      this.premiumInfo = null;
+    }
+
+    // Returns true if field premiumInfo is set (has been assigned a value) and false otherwise
+    public function isSetPremiumInfo():Boolean {
+      return this.premiumInfo != null;
+    }
+
     public function setFieldValue(fieldID:int, value:*):void {
       switch (fieldID) {
       case ID:
@@ -531,6 +557,14 @@ import com.evernote.edam.type.Accounting;
         }
         break;
 
+      case PREMIUMINFO:
+        if (value == null) {
+          unsetPremiumInfo();
+        } else {
+          this.premiumInfo = value;
+        }
+        break;
+
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -564,6 +598,8 @@ import com.evernote.edam.type.Accounting;
         return this.attributes;
       case ACCOUNTING:
         return this.accounting;
+      case PREMIUMINFO:
+        return this.premiumInfo;
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -598,6 +634,8 @@ import com.evernote.edam.type.Accounting;
         return isSetAttributes();
       case ACCOUNTING:
         return isSetAccounting();
+      case PREMIUMINFO:
+        return isSetPremiumInfo();
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -713,6 +751,14 @@ import com.evernote.edam.type.Accounting;
               TProtocolUtil.skip(iprot, field.type);
             }
             break;
+          case PREMIUMINFO:
+            if (field.type == TType.STRUCT) {
+              this.premiumInfo = new PremiumInfo();
+              this.premiumInfo.read(iprot);
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
           default:
             TProtocolUtil.skip(iprot, field.type);
             break;
@@ -806,6 +852,13 @@ import com.evernote.edam.type.Accounting;
         if (isSetAccounting()) {
           oprot.writeFieldBegin(ACCOUNTING_FIELD_DESC);
           this.accounting.write(oprot);
+          oprot.writeFieldEnd();
+        }
+      }
+      if (this.premiumInfo != null) {
+        if (isSetPremiumInfo()) {
+          oprot.writeFieldBegin(PREMIUM_INFO_FIELD_DESC);
+          this.premiumInfo.write(oprot);
           oprot.writeFieldEnd();
         }
       }
@@ -927,6 +980,16 @@ import com.evernote.edam.type.Accounting;
           ret += "null";
         } else {
           ret += this.accounting;
+        }
+        first = false;
+      }
+      if (isSetPremiumInfo()) {
+        if (!first) ret +=  ", ";
+        ret += "premiumInfo:";
+        if (this.premiumInfo == null) {
+          ret += "null";
+        } else {
+          ret += this.premiumInfo;
         }
         first = false;
       }

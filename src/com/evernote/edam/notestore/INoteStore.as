@@ -29,8 +29,6 @@ import com.evernote.edam.type.LazyMap;
 import com.evernote.edam.type.Note;
 import com.evernote.edam.type.Resource;
 import com.evernote.edam.type.ResourceAttributes;
-import com.evernote.edam.notestore.AdParameters;
-import com.evernote.edam.type.Ad;
 import com.evernote.edam.type.SharedNotebook;
 import com.evernote.edam.userstore.AuthenticationResult;
 import com.evernote.edam.notestore.NoteEmailParameters;
@@ -1549,7 +1547,7 @@ import com.evernote.edam.notestore.RelatedResultSpec;
      * This call is only available for notes in Premium accounts.  (I.e. access
      * to past versions of Notes is a Premium-only feature.)
      * 
-     * @param guid
+     * @param noteGuid
      *   The GUID of the note to be retrieved.
      * 
      * @param updateSequenceNum
@@ -1796,7 +1794,10 @@ import com.evernote.edam.notestore.RelatedResultSpec;
      *   The GUID of the note that holds the resource to be retrieved.
      * 
      * @param contentHash
-     *   The MD5 checksum of the resource within that note.
+     *   The MD5 checksum of the resource within that note. Note that
+     *   this is the binary checksum, for example from Resource.data.bodyHash,
+     *   and not the hex-encoded checksum that is used within an en-media
+     *   tag in a note body.
      * 
      * @param withData
      *   If true, the Resource will include the binary contents of the
@@ -1927,58 +1928,19 @@ import com.evernote.edam.notestore.RelatedResultSpec;
     function getResourceAttributes(authenticationToken:String, guid:String, onError:Function, onSuccess:Function):void;
 
     /**
-     * @deprecated -
-     *   This function is deprecated, and should no longer be used.  This will
-     *   always return a value of '0'.
-     * 
-     * @param authenticationToken
-     */
-    //function onError(Error):void;
-    //function onSuccess(BigInteger):void;
-    function getAccountSize(authenticationToken:String, onError:Function, onSuccess:Function):void;
-
-    /**
-     * Clients should make this call once per day to receive a bundle of ads that
-     * will be displayed for the subsequent 24 hour period.
-     * <p/>
-     * NOTE: This function is not available to third party applications.
-     * 
-     * @param adParameters
-     *   A set of parameters that help the service determine which ads to return.
-     * 
-     * @param authenticationToken
-     * @param adParameters
-     */
-    //function onError(Error):void;
-    //function onSuccess(Array):void;
-    function getAds(authenticationToken:String, adParameters:AdParameters, onError:Function, onSuccess:Function):void;
-
-    /**
-     * A thin client should make this call to retrieve a single random ad for
-     * immediate display.
-     * <p/>
-     * NOTE: This function is not available to third party applications.
-     * 
-     * @param adParameters
-     *   A set of parameters to help the service determine which ad to return.
-     *   The 'impression' field should either be absent (if no ads have been
-     *   displayed previously), or else it should contain the identifier for
-     *   the most recently-displayed ad so that the service can give a different
-     *   ad.
-     * 
-     * @param authenticationToken
-     * @param adParameters
-     */
-    //function onError(Error):void;
-    //function onSuccess(Ad):void;
-    function getRandomAd(authenticationToken:String, adParameters:AdParameters, onError:Function, onSuccess:Function):void;
-
-    /**
+     * <p>
      * Looks for a user account with the provided userId on this NoteStore
      * shard and determines whether that account contains a public notebook
      * with the given URI.  If the account is not found, or no public notebook
      * exists with this URI, this will throw an EDAMNotFoundException,
      * otherwise this will return the information for that Notebook.
+     * </p>
+     * <p>
+     * If a notebook is visible on the web with a full URL like
+     * http://www.evernote.com/pub/sethdemo/api
+     * Then 'sethdemo' is the username that can be used to look up the userId,
+     * and 'api' is the publicUri.
+     * </p>
      * 
      * @param userId
      *    The numeric identifier for the user who owns the public notebook.
@@ -1987,9 +1949,6 @@ import com.evernote.edam.notestore.RelatedResultSpec;
      * 
      * @param publicUri
      *    The uri string for the public notebook, from Notebook.publishing.uri.
-     *    If a notebook is visible on the web with a full URL like
-     *    http://www.evernote.com/pub/ensupport/faq
-     *    Then 'ensupport' is the username and 'faq' is the uri.
      * 
      * @throws EDAMNotFoundException <ul>
      *   <li> "Publishing.uri" - not found, by URI
@@ -2032,6 +1991,42 @@ import com.evernote.edam.notestore.RelatedResultSpec;
     //function onError(Error):void;
     //function onSuccess(SharedNotebook):void;
     function createSharedNotebook(authenticationToken:String, sharedNotebook:SharedNotebook, onError:Function, onSuccess:Function):void;
+
+    /**
+     * Update a SharedNotebook object.
+     * 
+     * @param authenticationToken
+     *   Must be an authentication token from the owner or a shared notebook
+     *   authentication token with sufficient permissions to change invitations
+     *   for a notebook.
+     * 
+     * @param sharedNotebook
+     *  The SharedNotebook object containing the requested changes.
+     *  The "id" of the shared notebook must be set to allow the service
+     *  to identify the SharedNotebook to be updated. In addition, you MUST set
+     *  the email, permission, and allowPreview fields to the desired values.
+     *  All other fields will be ignored if set.
+     * 
+     * @return
+     *  The Update Serial Number for this change within the account.
+     * 
+     * @throws EDAMUserException <ul>
+     *   <li>UNSUPPORTED_OPERATION "updateSharedNotebook" - if this service instance does not support shared notebooks.</li>
+     *   <li>BAD_DATA_FORMAT "SharedNotebook.email" - if the email was not valid.</li>
+     *   <li>DATA_REQUIRED "SharedNotebook.id" - if the id field was not set.</li>
+     *   <li>DATA_REQUIRED "SharedNotebook.privilege" - if the privilege field was not set.</li>
+     *   <li>DATA_REQUIRED "SharedNotebook.allowPreview" - if the allowPreview field was not set.</li>
+     *   </ul>
+     * @throws EDAMNotFoundException <ul>
+     *   <li>SharedNotebook.id - if no shared notebook with the specified ID was found.
+     *   </ul>
+     * 
+     * @param authenticationToken
+     * @param sharedNotebook
+     */
+    //function onError(Error):void;
+    //function onSuccess(int):void;
+    function updateSharedNotebook(authenticationToken:String, sharedNotebook:SharedNotebook, onError:Function, onSuccess:Function):void;
 
     /**
      * Send a reminder message to some or all of the email addresses that a notebook has been
@@ -2439,6 +2434,12 @@ import com.evernote.edam.notestore.RelatedResultSpec;
      *   <li>BAD_DATA_FORMAT "RelatedQuery.noteGuid" - If you provided an
      *     invalid Note GUID, that is, one that does not match the constraints
      *     defined by EDAM_GUID_LEN_MIN, EDAM_GUID_LEN_MAX, EDAM_GUID_REGEX.
+     *   </li>
+     *   <li> BAD_DATA_FORMAT "NoteFilter.notebookGuid" - if malformed
+     *   </li>
+     *   <li> BAD_DATA_FORMAT "NoteFilter.tagGuids" - if any are malformed
+     *   </li>
+     *   <li> BAD_DATA_FORMAT "NoteFilter.words" - if search string too long
      *   </li>
      *   <li>PERMISSION_DENIED "Note" - If the caller does not have access to
      *     the note identified by RelatedQuery.noteGuid.

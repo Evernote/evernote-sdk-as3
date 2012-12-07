@@ -54,6 +54,7 @@ import com.evernote.edam.type.NoteSortOrder;
    *   <br/>
    *   Regex:  EDAM_PUBLISHING_DESCRIPTION_REGEX
    *   </dd>
+   * 
    * </dl>
    */
   public class Publishing implements TBase   {

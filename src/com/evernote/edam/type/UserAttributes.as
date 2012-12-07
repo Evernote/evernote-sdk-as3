@@ -182,6 +182,11 @@ import org.apache.thrift.protocol.*;
    *        account owner's settings page
    *    </dd>
    *  </dl>
+   * 
+   *  <dt>taxExempt</dt>
+   *    <dd>A flag indicating the user's sponsored group is exempt from sale tax
+   *    </dd>
+   *  </dl>
    */
   public class UserAttributes implements TBase   {
     private static const STRUCT_DESC:TStruct = new TStruct("UserAttributes");
@@ -214,6 +219,7 @@ import org.apache.thrift.protocol.*;
     private static const EDUCATIONAL_DISCOUNT_FIELD_DESC:TField = new TField("educationalDiscount", TType.BOOL, 29);
     private static const BUSINESS_ADDRESS_FIELD_DESC:TField = new TField("businessAddress", TType.STRING, 30);
     private static const HIDE_SPONSOR_BILLING_FIELD_DESC:TField = new TField("hideSponsorBilling", TType.BOOL, 31);
+    private static const TAX_EXEMPT_FIELD_DESC:TField = new TField("taxExempt", TType.BOOL, 32);
 
     private var _defaultLocationName:String;
     public static const DEFAULTLOCATIONNAME:int = 1;
@@ -273,6 +279,8 @@ import org.apache.thrift.protocol.*;
     public static const BUSINESSADDRESS:int = 30;
     private var _hideSponsorBilling:Boolean;
     public static const HIDESPONSORBILLING:int = 31;
+    private var _taxExempt:Boolean;
+    public static const TAXEXEMPT:int = 32;
 
     private var __isset_defaultLatitude:Boolean = false;
     private var __isset_defaultLongitude:Boolean = false;
@@ -289,6 +297,7 @@ import org.apache.thrift.protocol.*;
     private var __isset_customerProfileId:Boolean = false;
     private var __isset_educationalDiscount:Boolean = false;
     private var __isset_hideSponsorBilling:Boolean = false;
+    private var __isset_taxExempt:Boolean = false;
 
     public static const metaDataMap:Dictionary = new Dictionary();
     {
@@ -351,6 +360,8 @@ import org.apache.thrift.protocol.*;
       metaDataMap[BUSINESSADDRESS] = new FieldMetaData("businessAddress", TFieldRequirementType.OPTIONAL, 
           new FieldValueMetaData(TType.STRING));
       metaDataMap[HIDESPONSORBILLING] = new FieldMetaData("hideSponsorBilling", TFieldRequirementType.OPTIONAL, 
+          new FieldValueMetaData(TType.BOOL));
+      metaDataMap[TAXEXEMPT] = new FieldMetaData("taxExempt", TFieldRequirementType.OPTIONAL, 
           new FieldValueMetaData(TType.BOOL));
     }
     {
@@ -868,6 +879,24 @@ import org.apache.thrift.protocol.*;
       return this.__isset_hideSponsorBilling;
     }
 
+    public function get taxExempt():Boolean {
+      return this._taxExempt;
+    }
+
+    public function set taxExempt(taxExempt:Boolean):void {
+      this._taxExempt = taxExempt;
+      this.__isset_taxExempt = true;
+    }
+
+    public function unsetTaxExempt():void {
+      this.__isset_taxExempt = false;
+    }
+
+    // Returns true if field taxExempt is set (has been assigned a value) and false otherwise
+    public function isSetTaxExempt():Boolean {
+      return this.__isset_taxExempt;
+    }
+
     public function setFieldValue(fieldID:int, value:*):void {
       switch (fieldID) {
       case DEFAULTLOCATIONNAME:
@@ -1102,6 +1131,14 @@ import org.apache.thrift.protocol.*;
         }
         break;
 
+      case TAXEXEMPT:
+        if (value == null) {
+          unsetTaxExempt();
+        } else {
+          this.taxExempt = value;
+        }
+        break;
+
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -1167,6 +1204,8 @@ import org.apache.thrift.protocol.*;
         return this.businessAddress;
       case HIDESPONSORBILLING:
         return this.hideSponsorBilling;
+      case TAXEXEMPT:
+        return this.taxExempt;
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -1233,6 +1272,8 @@ import org.apache.thrift.protocol.*;
         return isSetBusinessAddress();
       case HIDESPONSORBILLING:
         return isSetHideSponsorBilling();
+      case TAXEXEMPT:
+        return isSetTaxExempt();
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -1283,13 +1324,13 @@ import org.apache.thrift.protocol.*;
           case VIEWEDPROMOTIONS:
             if (field.type == TType.LIST) {
               {
-                var _list32:TList = iprot.readListBegin();
+                var _list33:TList = iprot.readListBegin();
                 this.viewedPromotions = new Array();
-                for (var _i33:int = 0; _i33 < _list32.size; ++_i33)
+                for (var _i34:int = 0; _i34 < _list33.size; ++_i34)
                 {
-                  var _elem34:String;
-                  _elem34 = iprot.readString();
-                  this.viewedPromotions.push(_elem34);
+                  var _elem35:String;
+                  _elem35 = iprot.readString();
+                  this.viewedPromotions.push(_elem35);
                 }
                 iprot.readListEnd();
               }
@@ -1307,13 +1348,13 @@ import org.apache.thrift.protocol.*;
           case RECENTMAILEDADDRESSES:
             if (field.type == TType.LIST) {
               {
-                var _list35:TList = iprot.readListBegin();
+                var _list36:TList = iprot.readListBegin();
                 this.recentMailedAddresses = new Array();
-                for (var _i36:int = 0; _i36 < _list35.size; ++_i36)
+                for (var _i37:int = 0; _i37 < _list36.size; ++_i37)
                 {
-                  var _elem37:String;
-                  _elem37 = iprot.readString();
-                  this.recentMailedAddresses.push(_elem37);
+                  var _elem38:String;
+                  _elem38 = iprot.readString();
+                  this.recentMailedAddresses.push(_elem38);
                 }
                 iprot.readListEnd();
               }
@@ -1487,6 +1528,14 @@ import org.apache.thrift.protocol.*;
               TProtocolUtil.skip(iprot, field.type);
             }
             break;
+          case TAXEXEMPT:
+            if (field.type == TType.BOOL) {
+              this.taxExempt = iprot.readBool();
+              this.__isset_taxExempt = true;
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
           default:
             TProtocolUtil.skip(iprot, field.type);
             break;
@@ -1531,8 +1580,8 @@ import org.apache.thrift.protocol.*;
           oprot.writeFieldBegin(VIEWED_PROMOTIONS_FIELD_DESC);
           {
             oprot.writeListBegin(new TList(TType.STRING, this.viewedPromotions.length));
-            for each (var elem38:* in this.viewedPromotions)            {
-              oprot.writeString(elem38);
+            for each (var elem39:* in this.viewedPromotions)            {
+              oprot.writeString(elem39);
             }
             oprot.writeListEnd();
           }
@@ -1551,8 +1600,8 @@ import org.apache.thrift.protocol.*;
           oprot.writeFieldBegin(RECENT_MAILED_ADDRESSES_FIELD_DESC);
           {
             oprot.writeListBegin(new TList(TType.STRING, this.recentMailedAddresses.length));
-            for each (var elem39:* in this.recentMailedAddresses)            {
-              oprot.writeString(elem39);
+            for each (var elem40:* in this.recentMailedAddresses)            {
+              oprot.writeString(elem40);
             }
             oprot.writeListEnd();
           }
@@ -1687,6 +1736,11 @@ import org.apache.thrift.protocol.*;
       if (isSetHideSponsorBilling()) {
         oprot.writeFieldBegin(HIDE_SPONSOR_BILLING_FIELD_DESC);
         oprot.writeBool(this.hideSponsorBilling);
+        oprot.writeFieldEnd();
+      }
+      if (isSetTaxExempt()) {
+        oprot.writeFieldBegin(TAX_EXEMPT_FIELD_DESC);
+        oprot.writeBool(this.taxExempt);
         oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
@@ -1924,6 +1978,12 @@ import org.apache.thrift.protocol.*;
         if (!first) ret +=  ", ";
         ret += "hideSponsorBilling:";
         ret += this.hideSponsorBilling;
+        first = false;
+      }
+      if (isSetTaxExempt()) {
+        if (!first) ret +=  ", ";
+        ret += "taxExempt:";
+        ret += this.taxExempt;
         first = false;
       }
       ret += ")";

@@ -38,6 +38,8 @@ import flash.utils.Dictionary;
 
     public static const EDAM_EMAIL_REGEX:String = "^[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+(\\.[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*\\.([A-Za-z]{2,})$";
 
+    public static const EDAM_VAT_REGEX:String = "[A-Za-z]{2}.+";
+
     public static const EDAM_TIMEZONE_LEN_MIN:int = 1;
 
     public static const EDAM_TIMEZONE_LEN_MAX:int = 32;
@@ -62,6 +64,10 @@ import flash.utils.Dictionary;
 
     public static const EDAM_MIME_TYPE_AMR:String = "audio/amr";
 
+    public static const EDAM_MIME_TYPE_AAC:String = "audio/aac";
+
+    public static const EDAM_MIME_TYPE_M4A:String = "audio/mp4";
+
     public static const EDAM_MIME_TYPE_MP4_VIDEO:String = "video/mp4";
 
     public static const EDAM_MIME_TYPE_INK:String = "application/vnd.evernote.ink";
@@ -82,24 +88,10 @@ import flash.utils.Dictionary;
         EDAM_MIME_TYPES.add("application/vnd.evernote.ink");
         EDAM_MIME_TYPES.add("application/pdf");
         EDAM_MIME_TYPES.add("video/mp4");
+        EDAM_MIME_TYPES.add("audio/aac");
+        EDAM_MIME_TYPES.add("audio/mp4");
       }();
     }
-
-    public static const EDAM_COMMERCE_SERVICE_GOOGLE:String = "Google";
-
-    public static const EDAM_COMMERCE_SERVICE_PAYPAL:String = "Paypal";
-
-    public static const EDAM_COMMERCE_SERVICE_GIFT:String = "Gift";
-
-    public static const EDAM_COMMERCE_SERVICE_TRIALPAY:String = "TrialPay";
-
-    public static const EDAM_COMMERCE_SERVICE_TRIAL:String = "Trial";
-
-    public static const EDAM_COMMERCE_SERVICE_GROUP:String = "Group";
-
-    public static const EDAM_COMMERCE_SERVICE_CYBERSOURCE:String = "CYBERSRC";
-
-    public static const EDAM_COMMERCE_DEFAULT_CURRENCY_COUNTRY_CODE:String = "USD";
 
     public static const EDAM_SEARCH_QUERY_LEN_MIN:int = 0;
 
@@ -194,17 +186,25 @@ import flash.utils.Dictionary;
 
     public static const EDAM_USER_PASSWORD_REGEX:String = "^[A-Za-z0-9!#$%&'()*+,./:;<=>?@^_`{|}~\\[\\]\\\\-]{6,64}$";
 
+    public static const EDAM_BUSINESS_URI_LEN_MAX:int = 32;
+
     public static const EDAM_NOTE_TAGS_MAX:int = 100;
 
     public static const EDAM_NOTE_RESOURCES_MAX:int = 1000;
 
     public static const EDAM_USER_TAGS_MAX:int = 100000;
 
+    public static const EDAM_BUSINESS_TAGS_MAX:int = 100000;
+
     public static const EDAM_USER_SAVED_SEARCHES_MAX:int = 100;
 
     public static const EDAM_USER_NOTES_MAX:int = 100000;
 
+    public static const EDAM_BUSINESS_NOTES_MAX:int = 500000;
+
     public static const EDAM_USER_NOTEBOOKS_MAX:int = 250;
+
+    public static const EDAM_BUSINESS_NOTEBOOKS_MAX:int = 5000;
 
     public static const EDAM_USER_RECENT_MAILED_ADDRESSES_MAX:int = 10;
 
@@ -216,13 +216,15 @@ import flash.utils.Dictionary;
 
     public static const EDAM_USER_UPLOAD_LIMIT_PREMIUM:BigInteger = BigInteger.parseString('1073741824');
 
+    public static const EDAM_USER_UPLOAD_LIMIT_BUSINESS:BigInteger = BigInteger.parseString('1073741824');
+
     public static const EDAM_NOTE_SIZE_MAX_FREE:int = 26214400;
 
-    public static const EDAM_NOTE_SIZE_MAX_PREMIUM:int = 52428800;
+    public static const EDAM_NOTE_SIZE_MAX_PREMIUM:int = 104857600;
 
     public static const EDAM_RESOURCE_SIZE_MAX_FREE:int = 26214400;
 
-    public static const EDAM_RESOURCE_SIZE_MAX_PREMIUM:int = 52428800;
+    public static const EDAM_RESOURCE_SIZE_MAX_PREMIUM:int = 104857600;
 
     public static const EDAM_USER_LINKED_NOTEBOOK_MAX:int = 100;
 
@@ -246,6 +248,8 @@ import flash.utils.Dictionary;
 
     public static const EDAM_CONTENT_CLASS_SKITCH:String = "evernote.skitch";
 
+    public static const EDAM_CONTENT_CLASS_PENULTIMATE:String = "evernote.penultimate";
+
     public static const EDAM_RELATED_PLAINTEXT_LEN_MIN:int = 1;
 
     public static const EDAM_RELATED_PLAINTEXT_LEN_MAX:int = 131072;
@@ -255,6 +259,36 @@ import flash.utils.Dictionary;
     public static const EDAM_RELATED_MAX_NOTEBOOKS:int = 1;
 
     public static const EDAM_RELATED_MAX_TAGS:int = 25;
+
+    public static const EDAM_BUSINESS_NOTEBOOK_DESCRIPTION_LEN_MIN:int = 1;
+
+    public static const EDAM_BUSINESS_NOTEBOOK_DESCRIPTION_LEN_MAX:int = 200;
+
+    public static const EDAM_BUSINESS_NOTEBOOK_DESCRIPTION_REGEX:String = "^[^\\p{Cc}\\p{Z}]([^\\p{Cc}\\p{Zl}\\p{Zp}]{0,198}[^\\p{Cc}\\p{Z}])?$";
+
+    public static const EDAM_PREFERENCE_NAME_LEN_MIN:int = 3;
+
+    public static const EDAM_PREFERENCE_NAME_LEN_MAX:int = 32;
+
+    public static const EDAM_PREFERENCE_VALUE_LEN_MIN:int = 1;
+
+    public static const EDAM_PREFERENCE_VALUE_LEN_MAX:int = 1024;
+
+    public static const EDAM_MAX_PREFERENCES:int = 100;
+
+    public static const EDAM_MAX_VALUES_PER_PREFERENCE:int = 250;
+
+    public static const EDAM_PREFERENCE_NAME_REGEX:String = "^[A-Za-z0-9_.-]{3,32}$";
+
+    public static const EDAM_PREFERENCE_VALUE_REGEX:String = "^[^\\p{Cc}]{1,1024}$";
+
+    public static const EDAM_DEVICE_ID_LEN_MAX:int = 32;
+
+    public static const EDAM_DEVICE_ID_REGEX:String = "^[^\\p{Cc}]{1,32}$";
+
+    public static const EDAM_DEVICE_DESCRIPTION_LEN_MAX:int = 64;
+
+    public static const EDAM_DEVICE_DESCRIPTION_REGEX:String = "^[^\\p{Cc}]{1,64}$";
 
   }
 }

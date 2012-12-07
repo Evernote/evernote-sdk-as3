@@ -14,6 +14,7 @@ import org.apache.thrift.*;
 import org.apache.thrift.meta_data.*;
 import org.apache.thrift.protocol.*;
 
+import com.evernote.edam.type.SharedNotebookPrivilegeLevel;
 
   /**
    * Shared notebooks represent a relationship between a notebook and a single
@@ -33,10 +34,15 @@ import org.apache.thrift.protocol.*;
    * owner to identify who they shared with.</dd>
    * 
    * <dt>notebookModifiable</dt>
-   * <dd>a flag indicating the share is read/write -otherwise it's read only</dd>
+   * <dd>(DEPRECATED) a flag indicating the share is read/write -otherwise it's read
+   *     only.  This field is deprecated in favor of the new "privilege" field.</dd>
    * 
    * <dt>requireLogin</dt>
-   * <dd>indicates that a user must login to access the share</dd>
+   * <dd>(DEPRECATED) indicates that a user must login to access the share.  This
+   *     field is deprecated and will be "true" for all new shared notebooks.  It
+   *     is read-only and ignored when creating or modifying a shared notebook,
+   *     except that a shared notebook can be modified to require login.
+   *     See "allowPreview" for information on privileges and shared notebooks.</dd>
    * 
    * <dt>serviceCreated</dt>
    * <dd>the date the owner first created the share with the specific email
@@ -51,6 +57,19 @@ import org.apache.thrift.protocol.*;
    * <dt>username</dt>
    * <dd>the username of the user who can access this share.
    *   Once it's assigned it cannot be changed.</dd>
+   * 
+   * <dt>privilege</dt>
+   * <dd>The privilege level granted to the notebook, activity stream, and
+   *     invitations.  See the corresponding enumeration for details.</dd>
+   * 
+   * <dt>allowPreview</dt>
+   * <dd>Whether or not to grant "READ_NOTEBOOK" privilege without an
+   *     authentication token, for authenticateToSharedNotebook(...).  With
+   *     the change to "requireLogin" always being true for new shared
+   *     notebooks, this is the only way to access a shared notebook without
+   *     an authorization token.  This setting expires after the first use
+   *     of authenticateToSharedNotebook(...) with a valid authentication
+   *     token.</dd>
    * </dl>
    */
   public class SharedNotebook implements TBase   {
@@ -65,6 +84,8 @@ import org.apache.thrift.protocol.*;
     private static const SERVICE_UPDATED_FIELD_DESC:TField = new TField("serviceUpdated", TType.I64, 10);
     private static const SHARE_KEY_FIELD_DESC:TField = new TField("shareKey", TType.STRING, 8);
     private static const USERNAME_FIELD_DESC:TField = new TField("username", TType.STRING, 9);
+    private static const PRIVILEGE_FIELD_DESC:TField = new TField("privilege", TType.I32, 11);
+    private static const ALLOW_PREVIEW_FIELD_DESC:TField = new TField("allowPreview", TType.BOOL, 12);
 
     private var _id:BigInteger;
     public static const ID:int = 1;
@@ -86,6 +107,10 @@ import org.apache.thrift.protocol.*;
     public static const SHAREKEY:int = 8;
     private var _username:String;
     public static const USERNAME:int = 9;
+    private var _privilege:int;
+    public static const PRIVILEGE:int = 11;
+    private var _allowPreview:Boolean;
+    public static const ALLOWPREVIEW:int = 12;
 
     private var __isset_id:Boolean = false;
     private var __isset_userId:Boolean = false;
@@ -93,6 +118,8 @@ import org.apache.thrift.protocol.*;
     private var __isset_requireLogin:Boolean = false;
     private var __isset_serviceCreated:Boolean = false;
     private var __isset_serviceUpdated:Boolean = false;
+    private var __isset_privilege:Boolean = false;
+    private var __isset_allowPreview:Boolean = false;
 
     public static const metaDataMap:Dictionary = new Dictionary();
     {
@@ -116,6 +143,10 @@ import org.apache.thrift.protocol.*;
           new FieldValueMetaData(TType.STRING));
       metaDataMap[USERNAME] = new FieldMetaData("username", TFieldRequirementType.OPTIONAL, 
           new FieldValueMetaData(TType.STRING));
+      metaDataMap[PRIVILEGE] = new FieldMetaData("privilege", TFieldRequirementType.OPTIONAL, 
+          new FieldValueMetaData(TType.I32));
+      metaDataMap[ALLOWPREVIEW] = new FieldMetaData("allowPreview", TFieldRequirementType.OPTIONAL, 
+          new FieldValueMetaData(TType.BOOL));
     }
     {
       FieldMetaData.addStructMetaDataMap(SharedNotebook, metaDataMap);
@@ -300,6 +331,42 @@ import org.apache.thrift.protocol.*;
       return this.username != null;
     }
 
+    public function get privilege():int {
+      return this._privilege;
+    }
+
+    public function set privilege(privilege:int):void {
+      this._privilege = privilege;
+      this.__isset_privilege = true;
+    }
+
+    public function unsetPrivilege():void {
+      this.__isset_privilege = false;
+    }
+
+    // Returns true if field privilege is set (has been assigned a value) and false otherwise
+    public function isSetPrivilege():Boolean {
+      return this.__isset_privilege;
+    }
+
+    public function get allowPreview():Boolean {
+      return this._allowPreview;
+    }
+
+    public function set allowPreview(allowPreview:Boolean):void {
+      this._allowPreview = allowPreview;
+      this.__isset_allowPreview = true;
+    }
+
+    public function unsetAllowPreview():void {
+      this.__isset_allowPreview = false;
+    }
+
+    // Returns true if field allowPreview is set (has been assigned a value) and false otherwise
+    public function isSetAllowPreview():Boolean {
+      return this.__isset_allowPreview;
+    }
+
     public function setFieldValue(fieldID:int, value:*):void {
       switch (fieldID) {
       case ID:
@@ -382,6 +449,22 @@ import org.apache.thrift.protocol.*;
         }
         break;
 
+      case PRIVILEGE:
+        if (value == null) {
+          unsetPrivilege();
+        } else {
+          this.privilege = value;
+        }
+        break;
+
+      case ALLOWPREVIEW:
+        if (value == null) {
+          unsetAllowPreview();
+        } else {
+          this.allowPreview = value;
+        }
+        break;
+
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -409,6 +492,10 @@ import org.apache.thrift.protocol.*;
         return this.shareKey;
       case USERNAME:
         return this.username;
+      case PRIVILEGE:
+        return this.privilege;
+      case ALLOWPREVIEW:
+        return this.allowPreview;
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -437,6 +524,10 @@ import org.apache.thrift.protocol.*;
         return isSetShareKey();
       case USERNAME:
         return isSetUsername();
+      case PRIVILEGE:
+        return isSetPrivilege();
+      case ALLOWPREVIEW:
+        return isSetAllowPreview();
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -529,6 +620,22 @@ import org.apache.thrift.protocol.*;
               TProtocolUtil.skip(iprot, field.type);
             }
             break;
+          case PRIVILEGE:
+            if (field.type == TType.I32) {
+              this.privilege = iprot.readI32();
+              this.__isset_privilege = true;
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case ALLOWPREVIEW:
+            if (field.type == TType.BOOL) {
+              this.allowPreview = iprot.readBool();
+              this.__isset_allowPreview = true;
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
           default:
             TProtocolUtil.skip(iprot, field.type);
             break;
@@ -602,6 +709,16 @@ import org.apache.thrift.protocol.*;
       if (isSetServiceUpdated()) {
         oprot.writeFieldBegin(SERVICE_UPDATED_FIELD_DESC);
         oprot.writeI64(this.serviceUpdated);
+        oprot.writeFieldEnd();
+      }
+      if (isSetPrivilege()) {
+        oprot.writeFieldBegin(PRIVILEGE_FIELD_DESC);
+        oprot.writeI32(this.privilege);
+        oprot.writeFieldEnd();
+      }
+      if (isSetAllowPreview()) {
+        oprot.writeFieldBegin(ALLOW_PREVIEW_FIELD_DESC);
+        oprot.writeBool(this.allowPreview);
         oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
@@ -687,6 +804,26 @@ import org.apache.thrift.protocol.*;
         }
         first = false;
       }
+      if (isSetPrivilege()) {
+        if (!first) ret +=  ", ";
+        ret += "privilege:";
+        var privilege_name:String = SharedNotebookPrivilegeLevel.VALUES_TO_NAMES[this.privilege];
+        if (privilege_name != null) {
+          ret += privilege_name;
+          ret += " (";
+        }
+        ret += this.privilege;
+        if (privilege_name != null) {
+          ret += ")";
+        }
+        first = false;
+      }
+      if (isSetAllowPreview()) {
+        if (!first) ret +=  ", ";
+        ret += "allowPreview:";
+        ret += this.allowPreview;
+        first = false;
+      }
       ret += ")";
       return ret;
     }
@@ -694,6 +831,9 @@ import org.apache.thrift.protocol.*;
     public function validate():void {
       // check for required fields
       // check that fields of type enum have valid values
+      if (isSetPrivilege() && !SharedNotebookPrivilegeLevel.VALID_VALUES.contains(privilege)){
+        throw new TProtocolError(TProtocolError.UNKNOWN, "The field 'privilege' has been assigned the invalid value " + privilege);
+      }
     }
 
   }

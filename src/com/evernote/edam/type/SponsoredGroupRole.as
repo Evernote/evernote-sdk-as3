@@ -3,7 +3,7 @@
  *
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  */
-package com.evernote.edam.userstore 
+package com.evernote.edam.type 
 {
 import org.apache.thrift.Set;
 import flash.utils.Dictionary;

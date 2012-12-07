@@ -15,6 +15,7 @@ import org.apache.thrift.meta_data.*;
 import org.apache.thrift.protocol.*;
 
 import com.evernote.edam.type.PremiumOrderStatus;
+import com.evernote.edam.type.BusinessUserRole;
 
   /**
    *  This represents the bookkeeping information for the user's subscription.
@@ -92,6 +93,15 @@ import com.evernote.edam.type.PremiumOrderStatus;
    *    <dd>ISO 4217 currency code</dd>
    *  <dt>unitPrice</dt>
    *    <dd>charge in the smallest unit of the currency (e.g. cents for USD)</dd>
+   *  <dt>businessId</dt>
+   *    <dd>If set, the ID of the Evernote Business account that the user is a
+   *        member of. If not set, the user is not a member of a business.</dd>
+   *  <dt>businessName</dt>
+   *    <dd>The human-readable name of the Evernote Business account that
+   *        the user is a member of.</dd>
+   *  <dt>businessRole</dt>
+   *    <dd>If set, the role of the user within the Evernote Business account
+   *        that they are a member of.</dd>
    *  </dl>
    */
   public class Accounting implements TBase   {
@@ -114,6 +124,9 @@ import com.evernote.edam.type.PremiumOrderStatus;
     private static const LAST_REQUESTED_CHARGE_FIELD_DESC:TField = new TField("lastRequestedCharge", TType.I64, 17);
     private static const CURRENCY_FIELD_DESC:TField = new TField("currency", TType.STRING, 18);
     private static const UNIT_PRICE_FIELD_DESC:TField = new TField("unitPrice", TType.I32, 19);
+    private static const BUSINESS_ID_FIELD_DESC:TField = new TField("businessId", TType.I32, 20);
+    private static const BUSINESS_NAME_FIELD_DESC:TField = new TField("businessName", TType.STRING, 21);
+    private static const BUSINESS_ROLE_FIELD_DESC:TField = new TField("businessRole", TType.I32, 22);
 
     private var _uploadLimit:BigInteger;
     public static const UPLOADLIMIT:int = 1;
@@ -151,6 +164,12 @@ import com.evernote.edam.type.PremiumOrderStatus;
     public static const CURRENCY:int = 18;
     private var _unitPrice:int;
     public static const UNITPRICE:int = 19;
+    private var _businessId:int;
+    public static const BUSINESSID:int = 20;
+    private var _businessName:String;
+    public static const BUSINESSNAME:int = 21;
+    private var _businessRole:int;
+    public static const BUSINESSROLE:int = 22;
 
     private var __isset_uploadLimit:Boolean = false;
     private var __isset_uploadLimitEnd:Boolean = false;
@@ -164,6 +183,8 @@ import com.evernote.edam.type.PremiumOrderStatus;
     private var __isset_updated:Boolean = false;
     private var __isset_lastRequestedCharge:Boolean = false;
     private var __isset_unitPrice:Boolean = false;
+    private var __isset_businessId:Boolean = false;
+    private var __isset_businessRole:Boolean = false;
 
     public static const metaDataMap:Dictionary = new Dictionary();
     {
@@ -202,6 +223,12 @@ import com.evernote.edam.type.PremiumOrderStatus;
       metaDataMap[CURRENCY] = new FieldMetaData("currency", TFieldRequirementType.OPTIONAL, 
           new FieldValueMetaData(TType.STRING));
       metaDataMap[UNITPRICE] = new FieldMetaData("unitPrice", TFieldRequirementType.OPTIONAL, 
+          new FieldValueMetaData(TType.I32));
+      metaDataMap[BUSINESSID] = new FieldMetaData("businessId", TFieldRequirementType.OPTIONAL, 
+          new FieldValueMetaData(TType.I32));
+      metaDataMap[BUSINESSNAME] = new FieldMetaData("businessName", TFieldRequirementType.OPTIONAL, 
+          new FieldValueMetaData(TType.STRING));
+      metaDataMap[BUSINESSROLE] = new FieldMetaData("businessRole", TFieldRequirementType.OPTIONAL, 
           new FieldValueMetaData(TType.I32));
     }
     {
@@ -529,6 +556,59 @@ import com.evernote.edam.type.PremiumOrderStatus;
       return this.__isset_unitPrice;
     }
 
+    public function get businessId():int {
+      return this._businessId;
+    }
+
+    public function set businessId(businessId:int):void {
+      this._businessId = businessId;
+      this.__isset_businessId = true;
+    }
+
+    public function unsetBusinessId():void {
+      this.__isset_businessId = false;
+    }
+
+    // Returns true if field businessId is set (has been assigned a value) and false otherwise
+    public function isSetBusinessId():Boolean {
+      return this.__isset_businessId;
+    }
+
+    public function get businessName():String {
+      return this._businessName;
+    }
+
+    public function set businessName(businessName:String):void {
+      this._businessName = businessName;
+    }
+
+    public function unsetBusinessName():void {
+      this.businessName = null;
+    }
+
+    // Returns true if field businessName is set (has been assigned a value) and false otherwise
+    public function isSetBusinessName():Boolean {
+      return this.businessName != null;
+    }
+
+    public function get businessRole():int {
+      return this._businessRole;
+    }
+
+    public function set businessRole(businessRole:int):void {
+      this._businessRole = businessRole;
+      this.__isset_businessRole = true;
+    }
+
+    public function unsetBusinessRole():void {
+      this.__isset_businessRole = false;
+    }
+
+    // Returns true if field businessRole is set (has been assigned a value) and false otherwise
+    public function isSetBusinessRole():Boolean {
+      return this.__isset_businessRole;
+    }
+
     public function setFieldValue(fieldID:int, value:*):void {
       switch (fieldID) {
       case UPLOADLIMIT:
@@ -675,6 +755,30 @@ import com.evernote.edam.type.PremiumOrderStatus;
         }
         break;
 
+      case BUSINESSID:
+        if (value == null) {
+          unsetBusinessId();
+        } else {
+          this.businessId = value;
+        }
+        break;
+
+      case BUSINESSNAME:
+        if (value == null) {
+          unsetBusinessName();
+        } else {
+          this.businessName = value;
+        }
+        break;
+
+      case BUSINESSROLE:
+        if (value == null) {
+          unsetBusinessRole();
+        } else {
+          this.businessRole = value;
+        }
+        break;
+
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -718,6 +822,12 @@ import com.evernote.edam.type.PremiumOrderStatus;
         return this.currency;
       case UNITPRICE:
         return this.unitPrice;
+      case BUSINESSID:
+        return this.businessId;
+      case BUSINESSNAME:
+        return this.businessName;
+      case BUSINESSROLE:
+        return this.businessRole;
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -762,6 +872,12 @@ import com.evernote.edam.type.PremiumOrderStatus;
         return isSetCurrency();
       case UNITPRICE:
         return isSetUnitPrice();
+      case BUSINESSID:
+        return isSetBusinessId();
+      case BUSINESSNAME:
+        return isSetBusinessName();
+      case BUSINESSROLE:
+        return isSetBusinessRole();
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -916,6 +1032,29 @@ import com.evernote.edam.type.PremiumOrderStatus;
               TProtocolUtil.skip(iprot, field.type);
             }
             break;
+          case BUSINESSID:
+            if (field.type == TType.I32) {
+              this.businessId = iprot.readI32();
+              this.__isset_businessId = true;
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case BUSINESSNAME:
+            if (field.type == TType.STRING) {
+              this.businessName = iprot.readString();
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case BUSINESSROLE:
+            if (field.type == TType.I32) {
+              this.businessRole = iprot.readI32();
+              this.__isset_businessRole = true;
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
           default:
             TProtocolUtil.skip(iprot, field.type);
             break;
@@ -1033,6 +1172,23 @@ import com.evernote.edam.type.PremiumOrderStatus;
       if (isSetUnitPrice()) {
         oprot.writeFieldBegin(UNIT_PRICE_FIELD_DESC);
         oprot.writeI32(this.unitPrice);
+        oprot.writeFieldEnd();
+      }
+      if (isSetBusinessId()) {
+        oprot.writeFieldBegin(BUSINESS_ID_FIELD_DESC);
+        oprot.writeI32(this.businessId);
+        oprot.writeFieldEnd();
+      }
+      if (this.businessName != null) {
+        if (isSetBusinessName()) {
+          oprot.writeFieldBegin(BUSINESS_NAME_FIELD_DESC);
+          oprot.writeString(this.businessName);
+          oprot.writeFieldEnd();
+        }
+      }
+      if (isSetBusinessRole()) {
+        oprot.writeFieldBegin(BUSINESS_ROLE_FIELD_DESC);
+        oprot.writeI32(this.businessRole);
         oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
@@ -1182,6 +1338,36 @@ import com.evernote.edam.type.PremiumOrderStatus;
         ret += this.unitPrice;
         first = false;
       }
+      if (isSetBusinessId()) {
+        if (!first) ret +=  ", ";
+        ret += "businessId:";
+        ret += this.businessId;
+        first = false;
+      }
+      if (isSetBusinessName()) {
+        if (!first) ret +=  ", ";
+        ret += "businessName:";
+        if (this.businessName == null) {
+          ret += "null";
+        } else {
+          ret += this.businessName;
+        }
+        first = false;
+      }
+      if (isSetBusinessRole()) {
+        if (!first) ret +=  ", ";
+        ret += "businessRole:";
+        var businessRole_name:String = BusinessUserRole.VALUES_TO_NAMES[this.businessRole];
+        if (businessRole_name != null) {
+          ret += businessRole_name;
+          ret += " (";
+        }
+        ret += this.businessRole;
+        if (businessRole_name != null) {
+          ret += ")";
+        }
+        first = false;
+      }
       ret += ")";
       return ret;
     }
@@ -1191,6 +1377,9 @@ import com.evernote.edam.type.PremiumOrderStatus;
       // check that fields of type enum have valid values
       if (isSetPremiumServiceStatus() && !PremiumOrderStatus.VALID_VALUES.contains(premiumServiceStatus)){
         throw new TProtocolError(TProtocolError.UNKNOWN, "The field 'premiumServiceStatus' has been assigned the invalid value " + premiumServiceStatus);
+      }
+      if (isSetBusinessRole() && !BusinessUserRole.VALID_VALUES.contains(businessRole)){
+        throw new TProtocolError(TProtocolError.UNKNOWN, "The field 'businessRole' has been assigned the invalid value " + businessRole);
       }
     }
 

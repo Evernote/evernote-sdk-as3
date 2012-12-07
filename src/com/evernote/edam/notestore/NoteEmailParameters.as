@@ -336,13 +336,13 @@ import com.evernote.edam.type.Note;
           case TOADDRESSES:
             if (field.type == TType.LIST) {
               {
-                var _list188:TList = iprot.readListBegin();
+                var _list171:TList = iprot.readListBegin();
                 this.toAddresses = new Array();
-                for (var _i189:int = 0; _i189 < _list188.size; ++_i189)
+                for (var _i172:int = 0; _i172 < _list171.size; ++_i172)
                 {
-                  var _elem190:String;
-                  _elem190 = iprot.readString();
-                  this.toAddresses.push(_elem190);
+                  var _elem173:String;
+                  _elem173 = iprot.readString();
+                  this.toAddresses.push(_elem173);
                 }
                 iprot.readListEnd();
               }
@@ -353,13 +353,13 @@ import com.evernote.edam.type.Note;
           case CCADDRESSES:
             if (field.type == TType.LIST) {
               {
-                var _list191:TList = iprot.readListBegin();
+                var _list174:TList = iprot.readListBegin();
                 this.ccAddresses = new Array();
-                for (var _i192:int = 0; _i192 < _list191.size; ++_i192)
+                for (var _i175:int = 0; _i175 < _list174.size; ++_i175)
                 {
-                  var _elem193:String;
-                  _elem193 = iprot.readString();
-                  this.ccAddresses.push(_elem193);
+                  var _elem176:String;
+                  _elem176 = iprot.readString();
+                  this.ccAddresses.push(_elem176);
                 }
                 iprot.readListEnd();
               }
@@ -417,8 +417,8 @@ import com.evernote.edam.type.Note;
           oprot.writeFieldBegin(TO_ADDRESSES_FIELD_DESC);
           {
             oprot.writeListBegin(new TList(TType.STRING, this.toAddresses.length));
-            for each (var elem194:* in this.toAddresses)            {
-              oprot.writeString(elem194);
+            for each (var elem177:* in this.toAddresses)            {
+              oprot.writeString(elem177);
             }
             oprot.writeListEnd();
           }
@@ -430,8 +430,8 @@ import com.evernote.edam.type.Note;
           oprot.writeFieldBegin(CC_ADDRESSES_FIELD_DESC);
           {
             oprot.writeListBegin(new TList(TType.STRING, this.ccAddresses.length));
-            for each (var elem195:* in this.ccAddresses)            {
-              oprot.writeString(elem195);
+            for each (var elem178:* in this.ccAddresses)            {
+              oprot.writeString(elem178);
             }
             oprot.writeListEnd();
           }

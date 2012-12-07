@@ -19,7 +19,7 @@ import org.apache.thrift.protocol.*;
    * A description of the thing for which the service will find related
    * entities, via findRelated(), together with a description of what
    * type of entities and how many you are seeking in the
-   * RelatednessResult.
+   * RelatedResult.
    * 
    * <dl>
    * <dt>maxNotes</dt>
@@ -40,12 +40,34 @@ import org.apache.thrift.protocol.*;
    *     will be silently capped.  If you do not set this field, then
    *     no tags will be returned.</dd>
    * </dl>
+   * 
+   * <dt>writableNotebooksOnly</dt>
+   * <dd>Require that all returned related notebooks are writable.
+   *     The user will be able to create notes in all returned notebooks.
+   *     However, individual notes returned may still belong to notebooks
+   *     in which the user lacks the ability to create notes.</dd>
+   * </dl>
+   * 
+   * <dt>includeContainingNotebooks</dt>
+   * <dd>If set to <code>true</code>, return the containingNotebooks field
+   *     in the RelatedResult, which will contain the list of notebooks to
+   *     to which the returned related notes belong.</dd>
+   * </dl>
+   * 
+   * <dt>includeDebugInfo</dt>
+   * <dd>NOTE: This should be excluded from the public API.<br /><br />
+   *     If set to <code>true</code>, indicate that debug information should
+   *     be returned in the 'debugInfo' field of RelatedResult.</dd>
+   * </dl>
    */
   public class RelatedResultSpec implements TBase   {
     private static const STRUCT_DESC:TStruct = new TStruct("RelatedResultSpec");
     private static const MAX_NOTES_FIELD_DESC:TField = new TField("maxNotes", TType.I32, 1);
     private static const MAX_NOTEBOOKS_FIELD_DESC:TField = new TField("maxNotebooks", TType.I32, 2);
     private static const MAX_TAGS_FIELD_DESC:TField = new TField("maxTags", TType.I32, 3);
+    private static const WRITABLE_NOTEBOOKS_ONLY_FIELD_DESC:TField = new TField("writableNotebooksOnly", TType.BOOL, 4);
+    private static const INCLUDE_CONTAINING_NOTEBOOKS_FIELD_DESC:TField = new TField("includeContainingNotebooks", TType.BOOL, 5);
+    private static const INCLUDE_DEBUG_INFO_FIELD_DESC:TField = new TField("includeDebugInfo", TType.BOOL, 6);
 
     private var _maxNotes:int;
     public static const MAXNOTES:int = 1;
@@ -53,10 +75,19 @@ import org.apache.thrift.protocol.*;
     public static const MAXNOTEBOOKS:int = 2;
     private var _maxTags:int;
     public static const MAXTAGS:int = 3;
+    private var _writableNotebooksOnly:Boolean;
+    public static const WRITABLENOTEBOOKSONLY:int = 4;
+    private var _includeContainingNotebooks:Boolean;
+    public static const INCLUDECONTAININGNOTEBOOKS:int = 5;
+    private var _includeDebugInfo:Boolean;
+    public static const INCLUDEDEBUGINFO:int = 6;
 
     private var __isset_maxNotes:Boolean = false;
     private var __isset_maxNotebooks:Boolean = false;
     private var __isset_maxTags:Boolean = false;
+    private var __isset_writableNotebooksOnly:Boolean = false;
+    private var __isset_includeContainingNotebooks:Boolean = false;
+    private var __isset_includeDebugInfo:Boolean = false;
 
     public static const metaDataMap:Dictionary = new Dictionary();
     {
@@ -66,6 +97,12 @@ import org.apache.thrift.protocol.*;
           new FieldValueMetaData(TType.I32));
       metaDataMap[MAXTAGS] = new FieldMetaData("maxTags", TFieldRequirementType.OPTIONAL, 
           new FieldValueMetaData(TType.I32));
+      metaDataMap[WRITABLENOTEBOOKSONLY] = new FieldMetaData("writableNotebooksOnly", TFieldRequirementType.OPTIONAL, 
+          new FieldValueMetaData(TType.BOOL));
+      metaDataMap[INCLUDECONTAININGNOTEBOOKS] = new FieldMetaData("includeContainingNotebooks", TFieldRequirementType.OPTIONAL, 
+          new FieldValueMetaData(TType.BOOL));
+      metaDataMap[INCLUDEDEBUGINFO] = new FieldMetaData("includeDebugInfo", TFieldRequirementType.OPTIONAL, 
+          new FieldValueMetaData(TType.BOOL));
     }
     {
       FieldMetaData.addStructMetaDataMap(RelatedResultSpec, metaDataMap);
@@ -128,6 +165,60 @@ import org.apache.thrift.protocol.*;
       return this.__isset_maxTags;
     }
 
+    public function get writableNotebooksOnly():Boolean {
+      return this._writableNotebooksOnly;
+    }
+
+    public function set writableNotebooksOnly(writableNotebooksOnly:Boolean):void {
+      this._writableNotebooksOnly = writableNotebooksOnly;
+      this.__isset_writableNotebooksOnly = true;
+    }
+
+    public function unsetWritableNotebooksOnly():void {
+      this.__isset_writableNotebooksOnly = false;
+    }
+
+    // Returns true if field writableNotebooksOnly is set (has been assigned a value) and false otherwise
+    public function isSetWritableNotebooksOnly():Boolean {
+      return this.__isset_writableNotebooksOnly;
+    }
+
+    public function get includeContainingNotebooks():Boolean {
+      return this._includeContainingNotebooks;
+    }
+
+    public function set includeContainingNotebooks(includeContainingNotebooks:Boolean):void {
+      this._includeContainingNotebooks = includeContainingNotebooks;
+      this.__isset_includeContainingNotebooks = true;
+    }
+
+    public function unsetIncludeContainingNotebooks():void {
+      this.__isset_includeContainingNotebooks = false;
+    }
+
+    // Returns true if field includeContainingNotebooks is set (has been assigned a value) and false otherwise
+    public function isSetIncludeContainingNotebooks():Boolean {
+      return this.__isset_includeContainingNotebooks;
+    }
+
+    public function get includeDebugInfo():Boolean {
+      return this._includeDebugInfo;
+    }
+
+    public function set includeDebugInfo(includeDebugInfo:Boolean):void {
+      this._includeDebugInfo = includeDebugInfo;
+      this.__isset_includeDebugInfo = true;
+    }
+
+    public function unsetIncludeDebugInfo():void {
+      this.__isset_includeDebugInfo = false;
+    }
+
+    // Returns true if field includeDebugInfo is set (has been assigned a value) and false otherwise
+    public function isSetIncludeDebugInfo():Boolean {
+      return this.__isset_includeDebugInfo;
+    }
+
     public function setFieldValue(fieldID:int, value:*):void {
       switch (fieldID) {
       case MAXNOTES:
@@ -154,6 +245,30 @@ import org.apache.thrift.protocol.*;
         }
         break;
 
+      case WRITABLENOTEBOOKSONLY:
+        if (value == null) {
+          unsetWritableNotebooksOnly();
+        } else {
+          this.writableNotebooksOnly = value;
+        }
+        break;
+
+      case INCLUDECONTAININGNOTEBOOKS:
+        if (value == null) {
+          unsetIncludeContainingNotebooks();
+        } else {
+          this.includeContainingNotebooks = value;
+        }
+        break;
+
+      case INCLUDEDEBUGINFO:
+        if (value == null) {
+          unsetIncludeDebugInfo();
+        } else {
+          this.includeDebugInfo = value;
+        }
+        break;
+
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -167,6 +282,12 @@ import org.apache.thrift.protocol.*;
         return this.maxNotebooks;
       case MAXTAGS:
         return this.maxTags;
+      case WRITABLENOTEBOOKSONLY:
+        return this.writableNotebooksOnly;
+      case INCLUDECONTAININGNOTEBOOKS:
+        return this.includeContainingNotebooks;
+      case INCLUDEDEBUGINFO:
+        return this.includeDebugInfo;
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -181,6 +302,12 @@ import org.apache.thrift.protocol.*;
         return isSetMaxNotebooks();
       case MAXTAGS:
         return isSetMaxTags();
+      case WRITABLENOTEBOOKSONLY:
+        return isSetWritableNotebooksOnly();
+      case INCLUDECONTAININGNOTEBOOKS:
+        return isSetIncludeContainingNotebooks();
+      case INCLUDEDEBUGINFO:
+        return isSetIncludeDebugInfo();
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -221,6 +348,30 @@ import org.apache.thrift.protocol.*;
               TProtocolUtil.skip(iprot, field.type);
             }
             break;
+          case WRITABLENOTEBOOKSONLY:
+            if (field.type == TType.BOOL) {
+              this.writableNotebooksOnly = iprot.readBool();
+              this.__isset_writableNotebooksOnly = true;
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case INCLUDECONTAININGNOTEBOOKS:
+            if (field.type == TType.BOOL) {
+              this.includeContainingNotebooks = iprot.readBool();
+              this.__isset_includeContainingNotebooks = true;
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case INCLUDEDEBUGINFO:
+            if (field.type == TType.BOOL) {
+              this.includeDebugInfo = iprot.readBool();
+              this.__isset_includeDebugInfo = true;
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
           default:
             TProtocolUtil.skip(iprot, field.type);
             break;
@@ -253,6 +404,21 @@ import org.apache.thrift.protocol.*;
         oprot.writeI32(this.maxTags);
         oprot.writeFieldEnd();
       }
+      if (isSetWritableNotebooksOnly()) {
+        oprot.writeFieldBegin(WRITABLE_NOTEBOOKS_ONLY_FIELD_DESC);
+        oprot.writeBool(this.writableNotebooksOnly);
+        oprot.writeFieldEnd();
+      }
+      if (isSetIncludeContainingNotebooks()) {
+        oprot.writeFieldBegin(INCLUDE_CONTAINING_NOTEBOOKS_FIELD_DESC);
+        oprot.writeBool(this.includeContainingNotebooks);
+        oprot.writeFieldEnd();
+      }
+      if (isSetIncludeDebugInfo()) {
+        oprot.writeFieldBegin(INCLUDE_DEBUG_INFO_FIELD_DESC);
+        oprot.writeBool(this.includeDebugInfo);
+        oprot.writeFieldEnd();
+      }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -276,6 +442,24 @@ import org.apache.thrift.protocol.*;
         if (!first) ret +=  ", ";
         ret += "maxTags:";
         ret += this.maxTags;
+        first = false;
+      }
+      if (isSetWritableNotebooksOnly()) {
+        if (!first) ret +=  ", ";
+        ret += "writableNotebooksOnly:";
+        ret += this.writableNotebooksOnly;
+        first = false;
+      }
+      if (isSetIncludeContainingNotebooks()) {
+        if (!first) ret +=  ", ";
+        ret += "includeContainingNotebooks:";
+        ret += this.includeContainingNotebooks;
+        first = false;
+      }
+      if (isSetIncludeDebugInfo()) {
+        if (!first) ret +=  ", ";
+        ret += "includeDebugInfo:";
+        ret += this.includeDebugInfo;
         first = false;
       }
       ret += ")";

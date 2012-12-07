@@ -3,7 +3,7 @@
  *
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  */
-package com.evernote.edam.userstore {
+package com.evernote.edam.type {
 
 import org.apache.thrift.Set;
 import org.apache.thrift.type.BigInteger;
@@ -14,60 +14,52 @@ import org.apache.thrift.*;
 import org.apache.thrift.meta_data.*;
 import org.apache.thrift.protocol.*;
 
-import com.evernote.edam.userstore.SponsoredGroupRole;
+import com.evernote.edam.type.SponsoredGroupRole;
 
   /**
    *  This structure is used to provide information about a user's Premium account.
    * <dl>
-   *  <dt>currentTime:</dt>
+   *  <dt>currentTime</dt>
    *    <dd>
    *    The server-side date and time when this data was generated.
    *    </dd>
-   *  <dt>premium:</dt>
+   *  <dt>premium</dt>
    *    <dd>
-   * 	 True if the user's account is Premium.
+   *    True if the user's account is Premium.
    *    </dd>
    *  <dt>premiumRecurring</dt>
    *    <dd>
    *    True if the user's account is Premium and has a recurring payment method.
    *    </dd>
-   *  <dt>premiumExpirationDate:</dt>
+   *  <dt>premiumExpirationDate</dt>
    *    <dd>
    *    The date when the user's Premium account expires, or the date when the
    *    user's account will be charged if it has a recurring payment method.
    *    </dd>
-   *  <dt>premiumExtendable:</dt>
+   *  <dt>premiumExtendable</dt>
    *    <dd>
    *    True if the user is eligible for purchasing Premium account extensions.
    *    </dd>
-   *  <dt>premiumPending:</dt>
+   *  <dt>premiumPending</dt>
    *    <dd>
    *    True if the user's Premium account is pending payment confirmation
    *    </dd>
-   *  <dt>premiumCancellationPending:</dt>
+   *  <dt>premiumCancellationPending</dt>
    *    <dd>
    *    True if the user has requested that no further charges to be made; the
    *    Premium account will remain active until it expires.
    *    </dd>
-   *  <dt>canPurchaseUploadAllowance:</dt>
+   *  <dt>canPurchaseUploadAllowance</dt>
    *    <dd>
    *    True if the user is eligible for purchasing additional upload allowance.
    *    </dd>
-   *  <dt>sponsoredGroupName:</dt>
+   *  <dt>sponsoredGroupName</dt>
    *    <dd>
    *    The name of the sponsored group that the user is part of.
    *    </dd>
-   *  <dt>sponsoredGroupRole:</dt>
+   *  <dt>sponsoredGroupRole</dt>
    *    <dd>
-   *    The role of the user within a sponsored group.
-   *    </dd>
-   *  <dt>businessName:</dt>
-   *    <dd>
-   *    The name of the business that the user is associated with.
-   *    </dd>
-   *  <dt>businessAdmin:</dt>
-   *    <dd>
-   *    True if the user is the administrator of the business.
+   *    DEPRECATED - will be removed in a future update.
    *    </dd>
    *  </dl>
    */
@@ -83,8 +75,6 @@ import com.evernote.edam.userstore.SponsoredGroupRole;
     private static const CAN_PURCHASE_UPLOAD_ALLOWANCE_FIELD_DESC:TField = new TField("canPurchaseUploadAllowance", TType.BOOL, 8);
     private static const SPONSORED_GROUP_NAME_FIELD_DESC:TField = new TField("sponsoredGroupName", TType.STRING, 9);
     private static const SPONSORED_GROUP_ROLE_FIELD_DESC:TField = new TField("sponsoredGroupRole", TType.I32, 10);
-    private static const BUSINESS_NAME_FIELD_DESC:TField = new TField("businessName", TType.STRING, 11);
-    private static const BUSINESS_ADMIN_FIELD_DESC:TField = new TField("businessAdmin", TType.BOOL, 12);
 
     private var _currentTime:BigInteger;
     public static const CURRENTTIME:int = 1;
@@ -106,10 +96,6 @@ import com.evernote.edam.userstore.SponsoredGroupRole;
     public static const SPONSOREDGROUPNAME:int = 9;
     private var _sponsoredGroupRole:int;
     public static const SPONSOREDGROUPROLE:int = 10;
-    private var _businessName:String;
-    public static const BUSINESSNAME:int = 11;
-    private var _businessAdmin:Boolean;
-    public static const BUSINESSADMIN:int = 12;
 
     private var __isset_currentTime:Boolean = false;
     private var __isset_premium:Boolean = false;
@@ -120,7 +106,6 @@ import com.evernote.edam.userstore.SponsoredGroupRole;
     private var __isset_premiumCancellationPending:Boolean = false;
     private var __isset_canPurchaseUploadAllowance:Boolean = false;
     private var __isset_sponsoredGroupRole:Boolean = false;
-    private var __isset_businessAdmin:Boolean = false;
 
     public static const metaDataMap:Dictionary = new Dictionary();
     {
@@ -144,10 +129,6 @@ import com.evernote.edam.userstore.SponsoredGroupRole;
           new FieldValueMetaData(TType.STRING));
       metaDataMap[SPONSOREDGROUPROLE] = new FieldMetaData("sponsoredGroupRole", TFieldRequirementType.OPTIONAL, 
           new FieldValueMetaData(TType.I32));
-      metaDataMap[BUSINESSNAME] = new FieldMetaData("businessName", TFieldRequirementType.OPTIONAL, 
-          new FieldValueMetaData(TType.STRING));
-      metaDataMap[BUSINESSADMIN] = new FieldMetaData("businessAdmin", TFieldRequirementType.OPTIONAL, 
-          new FieldValueMetaData(TType.BOOL));
     }
     {
       FieldMetaData.addStructMetaDataMap(PremiumInfo, metaDataMap);
@@ -335,41 +316,6 @@ import com.evernote.edam.userstore.SponsoredGroupRole;
       return this.__isset_sponsoredGroupRole;
     }
 
-    public function get businessName():String {
-      return this._businessName;
-    }
-
-    public function set businessName(businessName:String):void {
-      this._businessName = businessName;
-    }
-
-    public function unsetBusinessName():void {
-      this.businessName = null;
-    }
-
-    // Returns true if field businessName is set (has been assigned a value) and false otherwise
-    public function isSetBusinessName():Boolean {
-      return this.businessName != null;
-    }
-
-    public function get businessAdmin():Boolean {
-      return this._businessAdmin;
-    }
-
-    public function set businessAdmin(businessAdmin:Boolean):void {
-      this._businessAdmin = businessAdmin;
-      this.__isset_businessAdmin = true;
-    }
-
-    public function unsetBusinessAdmin():void {
-      this.__isset_businessAdmin = false;
-    }
-
-    // Returns true if field businessAdmin is set (has been assigned a value) and false otherwise
-    public function isSetBusinessAdmin():Boolean {
-      return this.__isset_businessAdmin;
-    }
-
     public function setFieldValue(fieldID:int, value:*):void {
       switch (fieldID) {
       case CURRENTTIME:
@@ -452,22 +398,6 @@ import com.evernote.edam.userstore.SponsoredGroupRole;
         }
         break;
 
-      case BUSINESSNAME:
-        if (value == null) {
-          unsetBusinessName();
-        } else {
-          this.businessName = value;
-        }
-        break;
-
-      case BUSINESSADMIN:
-        if (value == null) {
-          unsetBusinessAdmin();
-        } else {
-          this.businessAdmin = value;
-        }
-        break;
-
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -495,10 +425,6 @@ import com.evernote.edam.userstore.SponsoredGroupRole;
         return this.sponsoredGroupName;
       case SPONSOREDGROUPROLE:
         return this.sponsoredGroupRole;
-      case BUSINESSNAME:
-        return this.businessName;
-      case BUSINESSADMIN:
-        return this.businessAdmin;
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -527,10 +453,6 @@ import com.evernote.edam.userstore.SponsoredGroupRole;
         return isSetSponsoredGroupName();
       case SPONSOREDGROUPROLE:
         return isSetSponsoredGroupRole();
-      case BUSINESSNAME:
-        return isSetBusinessName();
-      case BUSINESSADMIN:
-        return isSetBusinessAdmin();
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -626,21 +548,6 @@ import com.evernote.edam.userstore.SponsoredGroupRole;
               TProtocolUtil.skip(iprot, field.type);
             }
             break;
-          case BUSINESSNAME:
-            if (field.type == TType.STRING) {
-              this.businessName = iprot.readString();
-            } else { 
-              TProtocolUtil.skip(iprot, field.type);
-            }
-            break;
-          case BUSINESSADMIN:
-            if (field.type == TType.BOOL) {
-              this.businessAdmin = iprot.readBool();
-              this.__isset_businessAdmin = true;
-            } else { 
-              TProtocolUtil.skip(iprot, field.type);
-            }
-            break;
           default:
             TProtocolUtil.skip(iprot, field.type);
             break;
@@ -717,18 +624,6 @@ import com.evernote.edam.userstore.SponsoredGroupRole;
         oprot.writeI32(this.sponsoredGroupRole);
         oprot.writeFieldEnd();
       }
-      if (this.businessName != null) {
-        if (isSetBusinessName()) {
-          oprot.writeFieldBegin(BUSINESS_NAME_FIELD_DESC);
-          oprot.writeString(this.businessName);
-          oprot.writeFieldEnd();
-        }
-      }
-      if (isSetBusinessAdmin()) {
-        oprot.writeFieldBegin(BUSINESS_ADMIN_FIELD_DESC);
-        oprot.writeBool(this.businessAdmin);
-        oprot.writeFieldEnd();
-      }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -792,22 +687,6 @@ import com.evernote.edam.userstore.SponsoredGroupRole;
         if (sponsoredGroupRole_name != null) {
           ret += ")";
         }
-        first = false;
-      }
-      if (isSetBusinessName()) {
-        if (!first) ret +=  ", ";
-        ret += "businessName:";
-        if (this.businessName == null) {
-          ret += "null";
-        } else {
-          ret += this.businessName;
-        }
-        first = false;
-      }
-      if (isSetBusinessAdmin()) {
-        if (!first) ret +=  ", ";
-        ret += "businessAdmin:";
-        ret += this.businessAdmin;
         first = false;
       }
       ret += ")";

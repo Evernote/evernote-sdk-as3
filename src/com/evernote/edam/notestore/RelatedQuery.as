@@ -14,10 +14,14 @@ import org.apache.thrift.*;
 import org.apache.thrift.meta_data.*;
 import org.apache.thrift.protocol.*;
 
+import com.evernote.edam.notestore.NoteFilter;
 
   /**
    * A description of the thing for which we are searching for related
-   * entities.  You must choose exactly one field.
+   * entities.
+   * 
+   * You must specify either <em>noteGuid</em> or <em>plainText</em>, but
+   * not both. <em>filter</em> is optional.
    * 
    * <dl>
    * <dt>noteGuid</dt>
@@ -29,17 +33,27 @@ import org.apache.thrift.protocol.*;
    *     You should provide a text block with a number of characters between
    *     EDAM_RELATED_PLAINTEXT_LEN_MIN and EDAM_RELATED_PLAINTEXT_LEN_MAX.
    *     </dd>
+   * 
+   * <dt>filter</dt>
+   * <dd>The list of criteria that will constrain the notes being considered
+   *     related.
+   *     Please note that some of the parameters may be ignored, such as
+   *     <em>order</em> and <em>ascending</em>.
+   * </dd>
    * </dl>
    */
   public class RelatedQuery implements TBase   {
     private static const STRUCT_DESC:TStruct = new TStruct("RelatedQuery");
     private static const NOTE_GUID_FIELD_DESC:TField = new TField("noteGuid", TType.STRING, 1);
     private static const PLAIN_TEXT_FIELD_DESC:TField = new TField("plainText", TType.STRING, 2);
+    private static const FILTER_FIELD_DESC:TField = new TField("filter", TType.STRUCT, 3);
 
     private var _noteGuid:String;
     public static const NOTEGUID:int = 1;
     private var _plainText:String;
     public static const PLAINTEXT:int = 2;
+    private var _filter:NoteFilter;
+    public static const FILTER:int = 3;
 
 
     public static const metaDataMap:Dictionary = new Dictionary();
@@ -48,6 +62,8 @@ import org.apache.thrift.protocol.*;
           new FieldValueMetaData(TType.STRING));
       metaDataMap[PLAINTEXT] = new FieldMetaData("plainText", TFieldRequirementType.OPTIONAL, 
           new FieldValueMetaData(TType.STRING));
+      metaDataMap[FILTER] = new FieldMetaData("filter", TFieldRequirementType.OPTIONAL, 
+          new StructMetaData(TType.STRUCT, NoteFilter));
     }
     {
       FieldMetaData.addStructMetaDataMap(RelatedQuery, metaDataMap);
@@ -90,6 +106,23 @@ import org.apache.thrift.protocol.*;
       return this.plainText != null;
     }
 
+    public function get filter():NoteFilter {
+      return this._filter;
+    }
+
+    public function set filter(filter:NoteFilter):void {
+      this._filter = filter;
+    }
+
+    public function unsetFilter():void {
+      this.filter = null;
+    }
+
+    // Returns true if field filter is set (has been assigned a value) and false otherwise
+    public function isSetFilter():Boolean {
+      return this.filter != null;
+    }
+
     public function setFieldValue(fieldID:int, value:*):void {
       switch (fieldID) {
       case NOTEGUID:
@@ -108,6 +141,14 @@ import org.apache.thrift.protocol.*;
         }
         break;
 
+      case FILTER:
+        if (value == null) {
+          unsetFilter();
+        } else {
+          this.filter = value;
+        }
+        break;
+
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -119,6 +160,8 @@ import org.apache.thrift.protocol.*;
         return this.noteGuid;
       case PLAINTEXT:
         return this.plainText;
+      case FILTER:
+        return this.filter;
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -131,6 +174,8 @@ import org.apache.thrift.protocol.*;
         return isSetNoteGuid();
       case PLAINTEXT:
         return isSetPlainText();
+      case FILTER:
+        return isSetFilter();
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -157,6 +202,14 @@ import org.apache.thrift.protocol.*;
           case PLAINTEXT:
             if (field.type == TType.STRING) {
               this.plainText = iprot.readString();
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case FILTER:
+            if (field.type == TType.STRUCT) {
+              this.filter = new NoteFilter();
+              this.filter.read(iprot);
             } else { 
               TProtocolUtil.skip(iprot, field.type);
             }
@@ -192,6 +245,13 @@ import org.apache.thrift.protocol.*;
           oprot.writeFieldEnd();
         }
       }
+      if (this.filter != null) {
+        if (isSetFilter()) {
+          oprot.writeFieldBegin(FILTER_FIELD_DESC);
+          this.filter.write(oprot);
+          oprot.writeFieldEnd();
+        }
+      }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -216,6 +276,16 @@ import org.apache.thrift.protocol.*;
           ret += "null";
         } else {
           ret += this.plainText;
+        }
+        first = false;
+      }
+      if (isSetFilter()) {
+        if (!first) ret +=  ", ";
+        ret += "filter:";
+        if (this.filter == null) {
+          ret += "null";
+        } else {
+          ret += this.filter;
         }
         first = false;
       }

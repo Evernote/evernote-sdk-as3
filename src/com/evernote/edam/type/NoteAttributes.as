@@ -131,6 +131,11 @@ import com.evernote.edam.type.LazyMap;
    * it will be left unset.  This field is read-only by clients.  The server
    * will ignore all values set by clients into this field.</dd>
    * 
+   * <dt>classifications</dt>
+   * <dd>A map of classifications applied to the note by clients or by the
+   * Evernote service. The key is the string name of the classification type,
+   * and the value is a constant that begins with CLASSIFICATION_.</dd>
+   * 
    * </dl>
    */
   public class NoteAttributes implements TBase   {
@@ -148,6 +153,7 @@ import com.evernote.edam.type.LazyMap;
     private static const CONTENT_CLASS_FIELD_DESC:TField = new TField("contentClass", TType.STRING, 22);
     private static const APPLICATION_DATA_FIELD_DESC:TField = new TField("applicationData", TType.STRUCT, 23);
     private static const LAST_EDITED_BY_FIELD_DESC:TField = new TField("lastEditedBy", TType.STRING, 24);
+    private static const CLASSIFICATIONS_FIELD_DESC:TField = new TField("classifications", TType.MAP, 26);
 
     private var _subjectDate:BigInteger;
     public static const SUBJECTDATE:int = 1;
@@ -175,6 +181,8 @@ import com.evernote.edam.type.LazyMap;
     public static const APPLICATIONDATA:int = 23;
     private var _lastEditedBy:String;
     public static const LASTEDITEDBY:int = 24;
+    private var _classifications:Dictionary;
+    public static const CLASSIFICATIONS:int = 26;
 
     private var __isset_subjectDate:Boolean = false;
     private var __isset_latitude:Boolean = false;
@@ -210,6 +218,10 @@ import com.evernote.edam.type.LazyMap;
           new StructMetaData(TType.STRUCT, LazyMap));
       metaDataMap[LASTEDITEDBY] = new FieldMetaData("lastEditedBy", TFieldRequirementType.OPTIONAL, 
           new FieldValueMetaData(TType.STRING));
+      metaDataMap[CLASSIFICATIONS] = new FieldMetaData("classifications", TFieldRequirementType.OPTIONAL, 
+          new MapMetaData(TType.MAP, 
+              new FieldValueMetaData(TType.STRING), 
+              new FieldValueMetaData(TType.STRING)));
     }
     {
       FieldMetaData.addStructMetaDataMap(NoteAttributes, metaDataMap);
@@ -444,6 +456,23 @@ import com.evernote.edam.type.LazyMap;
       return this.lastEditedBy != null;
     }
 
+    public function get classifications():Dictionary {
+      return this._classifications;
+    }
+
+    public function set classifications(classifications:Dictionary):void {
+      this._classifications = classifications;
+    }
+
+    public function unsetClassifications():void {
+      this.classifications = null;
+    }
+
+    // Returns true if field classifications is set (has been assigned a value) and false otherwise
+    public function isSetClassifications():Boolean {
+      return this.classifications != null;
+    }
+
     public function setFieldValue(fieldID:int, value:*):void {
       switch (fieldID) {
       case SUBJECTDATE:
@@ -550,6 +579,14 @@ import com.evernote.edam.type.LazyMap;
         }
         break;
 
+      case CLASSIFICATIONS:
+        if (value == null) {
+          unsetClassifications();
+        } else {
+          this.classifications = value;
+        }
+        break;
+
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -583,6 +620,8 @@ import com.evernote.edam.type.LazyMap;
         return this.applicationData;
       case LASTEDITEDBY:
         return this.lastEditedBy;
+      case CLASSIFICATIONS:
+        return this.classifications;
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -617,6 +656,8 @@ import com.evernote.edam.type.LazyMap;
         return isSetApplicationData();
       case LASTEDITEDBY:
         return isSetLastEditedBy();
+      case CLASSIFICATIONS:
+        return isSetClassifications();
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -730,6 +771,25 @@ import com.evernote.edam.type.LazyMap;
               TProtocolUtil.skip(iprot, field.type);
             }
             break;
+          case CLASSIFICATIONS:
+            if (field.type == TType.MAP) {
+              {
+                var _map141:TMap = iprot.readMapBegin();
+                this.classifications = new Dictionary();
+                for (var _i142:int = 0; _i142 < _map141.size; ++_i142)
+                {
+                  var _key143:String;
+                  var _val144:String;
+                  _key143 = iprot.readString();
+                  _val144 = iprot.readString();
+                  this.classifications[_key143] = _val144;
+                }
+                iprot.readMapEnd();
+              }
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
           default:
             TProtocolUtil.skip(iprot, field.type);
             break;
@@ -825,6 +885,24 @@ import com.evernote.edam.type.LazyMap;
         if (isSetLastEditedBy()) {
           oprot.writeFieldBegin(LAST_EDITED_BY_FIELD_DESC);
           oprot.writeString(this.lastEditedBy);
+          oprot.writeFieldEnd();
+        }
+      }
+      if (this.classifications != null) {
+        if (isSetClassifications()) {
+          oprot.writeFieldBegin(CLASSIFICATIONS_FIELD_DESC);
+          {
+            var _sizeCounter146:int = 0;
+            for (var _key145:* in this.classifications) {
+              _sizeCounter146++;
+            }
+            oprot.writeMapBegin(new TMap(TType.STRING, TType.STRING, _sizeCounter146));
+            for (var elem147:* in this.classifications)            {
+              oprot.writeString(elem147);
+              oprot.writeString(this.classifications[elem147]);
+            }
+            oprot.writeMapEnd();
+          }
           oprot.writeFieldEnd();
         }
       }
@@ -942,6 +1020,16 @@ import com.evernote.edam.type.LazyMap;
           ret += "null";
         } else {
           ret += this.lastEditedBy;
+        }
+        first = false;
+      }
+      if (isSetClassifications()) {
+        if (!first) ret +=  ", ";
+        ret += "classifications:";
+        if (this.classifications == null) {
+          ret += "null";
+        } else {
+          ret += this.classifications;
         }
         first = false;
       }

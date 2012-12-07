@@ -17,14 +17,16 @@ import org.apache.thrift.protocol.*;
 
   /**
    * This exception is thrown by EDAM procedures when a caller asks to perform
-   * an operation that does not exist.  This may be thrown based on an invalid
+   * an operation on an object that does not exist.  This may be thrown based on an invalid
    * primary identifier (e.g. a bad GUID), or when the caller refers to an object
    * by another unique identifier (e.g. a User's email address).
    * 
-   * identifier:  the object identifier that was not found on the server.
+   * identifier:  A description of the object that was not found on the server.
+   *   For example, "Note.notebookGuid" when a caller attempts to create a note in a
+   *   notebook that does not exist in the user's account.
    * 
-   * key:  the value passed from the client in the identifier, which was not
-   *   found.  E.g. the GUID of an object that was not found.
+   * key:  The value passed from the client in the identifier, which was not
+   *   found. For example, the GUID that was not found.
    */
   public class EDAMNotFoundException implements TBase   {
     private static const STRUCT_DESC:TStruct = new TStruct("EDAMNotFoundException");

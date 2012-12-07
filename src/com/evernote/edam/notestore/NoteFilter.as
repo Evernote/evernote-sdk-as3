@@ -68,6 +68,14 @@ import org.apache.thrift.protocol.*;
    *    the Trash) will be returned. Otherwise, only active notes will be returned.
    *    There is no way to find both active and inactive notes in a single query.
    *    </dd>
+   * 
+   *  <dt>emphasized</dt>
+   *    <dd>
+   *    If present, a search query string that may or may not influence the notes
+   *    to be returned, both in terms of coverage as well as of order. Think of it
+   *    as a wish list, not a requirement.
+   *    Accepts the full search grammar documented in the Evernote API Overview.
+   *    </dd>
    *  </dl>
    */
   public class NoteFilter implements TBase   {
@@ -79,6 +87,7 @@ import org.apache.thrift.protocol.*;
     private static const TAG_GUIDS_FIELD_DESC:TField = new TField("tagGuids", TType.LIST, 5);
     private static const TIME_ZONE_FIELD_DESC:TField = new TField("timeZone", TType.STRING, 6);
     private static const INACTIVE_FIELD_DESC:TField = new TField("inactive", TType.BOOL, 7);
+    private static const EMPHASIZED_FIELD_DESC:TField = new TField("emphasized", TType.STRING, 8);
 
     private var _order:int;
     public static const ORDER:int = 1;
@@ -94,6 +103,8 @@ import org.apache.thrift.protocol.*;
     public static const TIMEZONE:int = 6;
     private var _inactive:Boolean;
     public static const INACTIVE:int = 7;
+    private var _emphasized:String;
+    public static const EMPHASIZED:int = 8;
 
     private var __isset_order:Boolean = false;
     private var __isset_ascending:Boolean = false;
@@ -116,6 +127,8 @@ import org.apache.thrift.protocol.*;
           new FieldValueMetaData(TType.STRING));
       metaDataMap[INACTIVE] = new FieldMetaData("inactive", TFieldRequirementType.OPTIONAL, 
           new FieldValueMetaData(TType.BOOL));
+      metaDataMap[EMPHASIZED] = new FieldMetaData("emphasized", TFieldRequirementType.OPTIONAL, 
+          new FieldValueMetaData(TType.STRING));
     }
     {
       FieldMetaData.addStructMetaDataMap(NoteFilter, metaDataMap);
@@ -246,6 +259,23 @@ import org.apache.thrift.protocol.*;
       return this.__isset_inactive;
     }
 
+    public function get emphasized():String {
+      return this._emphasized;
+    }
+
+    public function set emphasized(emphasized:String):void {
+      this._emphasized = emphasized;
+    }
+
+    public function unsetEmphasized():void {
+      this.emphasized = null;
+    }
+
+    // Returns true if field emphasized is set (has been assigned a value) and false otherwise
+    public function isSetEmphasized():Boolean {
+      return this.emphasized != null;
+    }
+
     public function setFieldValue(fieldID:int, value:*):void {
       switch (fieldID) {
       case ORDER:
@@ -304,6 +334,14 @@ import org.apache.thrift.protocol.*;
         }
         break;
 
+      case EMPHASIZED:
+        if (value == null) {
+          unsetEmphasized();
+        } else {
+          this.emphasized = value;
+        }
+        break;
+
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -325,6 +363,8 @@ import org.apache.thrift.protocol.*;
         return this.timeZone;
       case INACTIVE:
         return this.inactive;
+      case EMPHASIZED:
+        return this.emphasized;
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -347,6 +387,8 @@ import org.apache.thrift.protocol.*;
         return isSetTimeZone();
       case INACTIVE:
         return isSetInactive();
+      case EMPHASIZED:
+        return isSetEmphasized();
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -396,13 +438,13 @@ import org.apache.thrift.protocol.*;
           case TAGGUIDS:
             if (field.type == TType.LIST) {
               {
-                var _list82:TList = iprot.readListBegin();
+                var _list83:TList = iprot.readListBegin();
                 this.tagGuids = new Array();
-                for (var _i83:int = 0; _i83 < _list82.size; ++_i83)
+                for (var _i84:int = 0; _i84 < _list83.size; ++_i84)
                 {
-                  var _elem84:String;
-                  _elem84 = iprot.readString();
-                  this.tagGuids.push(_elem84);
+                  var _elem85:String;
+                  _elem85 = iprot.readString();
+                  this.tagGuids.push(_elem85);
                 }
                 iprot.readListEnd();
               }
@@ -421,6 +463,13 @@ import org.apache.thrift.protocol.*;
             if (field.type == TType.BOOL) {
               this.inactive = iprot.readBool();
               this.__isset_inactive = true;
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case EMPHASIZED:
+            if (field.type == TType.STRING) {
+              this.emphasized = iprot.readString();
             } else { 
               TProtocolUtil.skip(iprot, field.type);
             }
@@ -471,8 +520,8 @@ import org.apache.thrift.protocol.*;
           oprot.writeFieldBegin(TAG_GUIDS_FIELD_DESC);
           {
             oprot.writeListBegin(new TList(TType.STRING, this.tagGuids.length));
-            for each (var elem85:* in this.tagGuids)            {
-              oprot.writeString(elem85);
+            for each (var elem86:* in this.tagGuids)            {
+              oprot.writeString(elem86);
             }
             oprot.writeListEnd();
           }
@@ -490,6 +539,13 @@ import org.apache.thrift.protocol.*;
         oprot.writeFieldBegin(INACTIVE_FIELD_DESC);
         oprot.writeBool(this.inactive);
         oprot.writeFieldEnd();
+      }
+      if (this.emphasized != null) {
+        if (isSetEmphasized()) {
+          oprot.writeFieldBegin(EMPHASIZED_FIELD_DESC);
+          oprot.writeString(this.emphasized);
+          oprot.writeFieldEnd();
+        }
       }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
@@ -554,6 +610,16 @@ import org.apache.thrift.protocol.*;
         if (!first) ret +=  ", ";
         ret += "inactive:";
         ret += this.inactive;
+        first = false;
+      }
+      if (isSetEmphasized()) {
+        if (!first) ret +=  ", ";
+        ret += "emphasized:";
+        if (this.emphasized == null) {
+          ret += "null";
+        } else {
+          ret += this.emphasized;
+        }
         first = false;
       }
       ret += ")";

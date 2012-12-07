@@ -528,13 +528,13 @@ import com.evernote.edam.type.NoteAttributes;
           case TAGGUIDS:
             if (field.type == TType.LIST) {
               {
-                var _list115:TList = iprot.readListBegin();
+                var _list116:TList = iprot.readListBegin();
                 this.tagGuids = new Array();
-                for (var _i116:int = 0; _i116 < _list115.size; ++_i116)
+                for (var _i117:int = 0; _i117 < _list116.size; ++_i117)
                 {
-                  var _elem117:String;
-                  _elem117 = iprot.readString();
-                  this.tagGuids.push(_elem117);
+                  var _elem118:String;
+                  _elem118 = iprot.readString();
+                  this.tagGuids.push(_elem118);
                 }
                 iprot.readListEnd();
               }
@@ -626,8 +626,8 @@ import com.evernote.edam.type.NoteAttributes;
           oprot.writeFieldBegin(TAG_GUIDS_FIELD_DESC);
           {
             oprot.writeListBegin(new TList(TType.STRING, this.tagGuids.length));
-            for each (var elem118:* in this.tagGuids)            {
-              oprot.writeString(elem118);
+            for each (var elem119:* in this.tagGuids)            {
+              oprot.writeString(elem119);
             }
             oprot.writeListEnd();
           }

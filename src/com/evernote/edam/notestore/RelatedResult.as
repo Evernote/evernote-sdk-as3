@@ -17,6 +17,7 @@ import org.apache.thrift.protocol.*;
 import com.evernote.edam.type.Note;
 import com.evernote.edam.type.Notebook;
 import com.evernote.edam.type.Tag;
+import com.evernote.edam.type.NotebookDescriptor;
 
   /**
    * The result of calling findRelated().  The contents of the notes,
@@ -38,12 +39,29 @@ import com.evernote.edam.type.Tag;
    * <dd>If tags have been requested to be included, this will be the list
    *     of tags.</dd>
    * </dl>
+   * 
+   * <dt>containingNotebooks</dt>
+   * <dd>If <code>includeContainingNotebooks</code> is set to <code>true</code>
+   *     in the RelatedResultSpec, return the list of notebooks to
+   *     to which the returned related notes belong. The notebooks in this
+   *     list will occur once per notebook GUID and are represented as
+   *     NotebookDescriptor objects.</dd>
+   * </dl>
+   * 
+   * <dt>debugInfo</dt>
+   * <dd>NOTE: This should be excluded from the public API.<br /><br />
+   *     If <code>includeDebugInfo</code> in RelatedResultSpec is set to
+   *     <code>true</code>, this field may contain debug information
+   *     if the service decides to do so.</dd>
+   * </dl>
    */
   public class RelatedResult implements TBase   {
     private static const STRUCT_DESC:TStruct = new TStruct("RelatedResult");
     private static const NOTES_FIELD_DESC:TField = new TField("notes", TType.LIST, 1);
     private static const NOTEBOOKS_FIELD_DESC:TField = new TField("notebooks", TType.LIST, 2);
     private static const TAGS_FIELD_DESC:TField = new TField("tags", TType.LIST, 3);
+    private static const CONTAINING_NOTEBOOKS_FIELD_DESC:TField = new TField("containingNotebooks", TType.LIST, 4);
+    private static const DEBUG_INFO_FIELD_DESC:TField = new TField("debugInfo", TType.STRING, 5);
 
     private var _notes:Array;
     public static const NOTES:int = 1;
@@ -51,6 +69,10 @@ import com.evernote.edam.type.Tag;
     public static const NOTEBOOKS:int = 2;
     private var _tags:Array;
     public static const TAGS:int = 3;
+    private var _containingNotebooks:Array;
+    public static const CONTAININGNOTEBOOKS:int = 4;
+    private var _debugInfo:String;
+    public static const DEBUGINFO:int = 5;
 
 
     public static const metaDataMap:Dictionary = new Dictionary();
@@ -64,6 +86,11 @@ import com.evernote.edam.type.Tag;
       metaDataMap[TAGS] = new FieldMetaData("tags", TFieldRequirementType.OPTIONAL, 
           new ListMetaData(TType.LIST, 
               new StructMetaData(TType.STRUCT, Tag)));
+      metaDataMap[CONTAININGNOTEBOOKS] = new FieldMetaData("containingNotebooks", TFieldRequirementType.OPTIONAL, 
+          new ListMetaData(TType.LIST, 
+              new StructMetaData(TType.STRUCT, NotebookDescriptor)));
+      metaDataMap[DEBUGINFO] = new FieldMetaData("debugInfo", TFieldRequirementType.OPTIONAL, 
+          new FieldValueMetaData(TType.STRING));
     }
     {
       FieldMetaData.addStructMetaDataMap(RelatedResult, metaDataMap);
@@ -123,6 +150,40 @@ import com.evernote.edam.type.Tag;
       return this.tags != null;
     }
 
+    public function get containingNotebooks():Array {
+      return this._containingNotebooks;
+    }
+
+    public function set containingNotebooks(containingNotebooks:Array):void {
+      this._containingNotebooks = containingNotebooks;
+    }
+
+    public function unsetContainingNotebooks():void {
+      this.containingNotebooks = null;
+    }
+
+    // Returns true if field containingNotebooks is set (has been assigned a value) and false otherwise
+    public function isSetContainingNotebooks():Boolean {
+      return this.containingNotebooks != null;
+    }
+
+    public function get debugInfo():String {
+      return this._debugInfo;
+    }
+
+    public function set debugInfo(debugInfo:String):void {
+      this._debugInfo = debugInfo;
+    }
+
+    public function unsetDebugInfo():void {
+      this.debugInfo = null;
+    }
+
+    // Returns true if field debugInfo is set (has been assigned a value) and false otherwise
+    public function isSetDebugInfo():Boolean {
+      return this.debugInfo != null;
+    }
+
     public function setFieldValue(fieldID:int, value:*):void {
       switch (fieldID) {
       case NOTES:
@@ -149,6 +210,22 @@ import com.evernote.edam.type.Tag;
         }
         break;
 
+      case CONTAININGNOTEBOOKS:
+        if (value == null) {
+          unsetContainingNotebooks();
+        } else {
+          this.containingNotebooks = value;
+        }
+        break;
+
+      case DEBUGINFO:
+        if (value == null) {
+          unsetDebugInfo();
+        } else {
+          this.debugInfo = value;
+        }
+        break;
+
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -162,6 +239,10 @@ import com.evernote.edam.type.Tag;
         return this.notebooks;
       case TAGS:
         return this.tags;
+      case CONTAININGNOTEBOOKS:
+        return this.containingNotebooks;
+      case DEBUGINFO:
+        return this.debugInfo;
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -176,6 +257,10 @@ import com.evernote.edam.type.Tag;
         return isSetNotebooks();
       case TAGS:
         return isSetTags();
+      case CONTAININGNOTEBOOKS:
+        return isSetContainingNotebooks();
+      case DEBUGINFO:
+        return isSetDebugInfo();
       default:
         throw new ArgumentError("Field " + fieldID + " doesn't exist!");
       }
@@ -195,14 +280,14 @@ import com.evernote.edam.type.Tag;
           case NOTES:
             if (field.type == TType.LIST) {
               {
-                var _list206:TList = iprot.readListBegin();
+                var _list192:TList = iprot.readListBegin();
                 this.notes = new Array();
-                for (var _i207:int = 0; _i207 < _list206.size; ++_i207)
+                for (var _i193:int = 0; _i193 < _list192.size; ++_i193)
                 {
-                  var _elem208:Note;
-                  _elem208 = new Note();
-                  _elem208.read(iprot);
-                  this.notes.push(_elem208);
+                  var _elem194:Note;
+                  _elem194 = new Note();
+                  _elem194.read(iprot);
+                  this.notes.push(_elem194);
                 }
                 iprot.readListEnd();
               }
@@ -213,14 +298,14 @@ import com.evernote.edam.type.Tag;
           case NOTEBOOKS:
             if (field.type == TType.LIST) {
               {
-                var _list209:TList = iprot.readListBegin();
+                var _list195:TList = iprot.readListBegin();
                 this.notebooks = new Array();
-                for (var _i210:int = 0; _i210 < _list209.size; ++_i210)
+                for (var _i196:int = 0; _i196 < _list195.size; ++_i196)
                 {
-                  var _elem211:Notebook;
-                  _elem211 = new Notebook();
-                  _elem211.read(iprot);
-                  this.notebooks.push(_elem211);
+                  var _elem197:Notebook;
+                  _elem197 = new Notebook();
+                  _elem197.read(iprot);
+                  this.notebooks.push(_elem197);
                 }
                 iprot.readListEnd();
               }
@@ -231,17 +316,42 @@ import com.evernote.edam.type.Tag;
           case TAGS:
             if (field.type == TType.LIST) {
               {
-                var _list212:TList = iprot.readListBegin();
+                var _list198:TList = iprot.readListBegin();
                 this.tags = new Array();
-                for (var _i213:int = 0; _i213 < _list212.size; ++_i213)
+                for (var _i199:int = 0; _i199 < _list198.size; ++_i199)
                 {
-                  var _elem214:Tag;
-                  _elem214 = new Tag();
-                  _elem214.read(iprot);
-                  this.tags.push(_elem214);
+                  var _elem200:Tag;
+                  _elem200 = new Tag();
+                  _elem200.read(iprot);
+                  this.tags.push(_elem200);
                 }
                 iprot.readListEnd();
               }
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case CONTAININGNOTEBOOKS:
+            if (field.type == TType.LIST) {
+              {
+                var _list201:TList = iprot.readListBegin();
+                this.containingNotebooks = new Array();
+                for (var _i202:int = 0; _i202 < _list201.size; ++_i202)
+                {
+                  var _elem203:NotebookDescriptor;
+                  _elem203 = new NotebookDescriptor();
+                  _elem203.read(iprot);
+                  this.containingNotebooks.push(_elem203);
+                }
+                iprot.readListEnd();
+              }
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case DEBUGINFO:
+            if (field.type == TType.STRING) {
+              this.debugInfo = iprot.readString();
             } else { 
               TProtocolUtil.skip(iprot, field.type);
             }
@@ -268,8 +378,8 @@ import com.evernote.edam.type.Tag;
           oprot.writeFieldBegin(NOTES_FIELD_DESC);
           {
             oprot.writeListBegin(new TList(TType.STRUCT, this.notes.length));
-            for each (var elem215:* in this.notes)            {
-              elem215.write(oprot);
+            for each (var elem204:* in this.notes)            {
+              elem204.write(oprot);
             }
             oprot.writeListEnd();
           }
@@ -281,8 +391,8 @@ import com.evernote.edam.type.Tag;
           oprot.writeFieldBegin(NOTEBOOKS_FIELD_DESC);
           {
             oprot.writeListBegin(new TList(TType.STRUCT, this.notebooks.length));
-            for each (var elem216:* in this.notebooks)            {
-              elem216.write(oprot);
+            for each (var elem205:* in this.notebooks)            {
+              elem205.write(oprot);
             }
             oprot.writeListEnd();
           }
@@ -294,11 +404,31 @@ import com.evernote.edam.type.Tag;
           oprot.writeFieldBegin(TAGS_FIELD_DESC);
           {
             oprot.writeListBegin(new TList(TType.STRUCT, this.tags.length));
-            for each (var elem217:* in this.tags)            {
-              elem217.write(oprot);
+            for each (var elem206:* in this.tags)            {
+              elem206.write(oprot);
             }
             oprot.writeListEnd();
           }
+          oprot.writeFieldEnd();
+        }
+      }
+      if (this.containingNotebooks != null) {
+        if (isSetContainingNotebooks()) {
+          oprot.writeFieldBegin(CONTAINING_NOTEBOOKS_FIELD_DESC);
+          {
+            oprot.writeListBegin(new TList(TType.STRUCT, this.containingNotebooks.length));
+            for each (var elem207:* in this.containingNotebooks)            {
+              elem207.write(oprot);
+            }
+            oprot.writeListEnd();
+          }
+          oprot.writeFieldEnd();
+        }
+      }
+      if (this.debugInfo != null) {
+        if (isSetDebugInfo()) {
+          oprot.writeFieldBegin(DEBUG_INFO_FIELD_DESC);
+          oprot.writeString(this.debugInfo);
           oprot.writeFieldEnd();
         }
       }
@@ -336,6 +466,26 @@ import com.evernote.edam.type.Tag;
           ret += "null";
         } else {
           ret += this.tags;
+        }
+        first = false;
+      }
+      if (isSetContainingNotebooks()) {
+        if (!first) ret +=  ", ";
+        ret += "containingNotebooks:";
+        if (this.containingNotebooks == null) {
+          ret += "null";
+        } else {
+          ret += this.containingNotebooks;
+        }
+        first = false;
+      }
+      if (isSetDebugInfo()) {
+        if (!first) ret +=  ", ";
+        ret += "debugInfo:";
+        if (this.debugInfo == null) {
+          ret += "null";
+        } else {
+          ret += this.debugInfo;
         }
         first = false;
       }

@@ -12,6 +12,12 @@ import flash.utils.Dictionary;
 
   public class Constants {
 
+    public static const CLASSIFICATION_RECIPE_USER_NON_RECIPE:String = "000";
+
+    public static const CLASSIFICATION_RECIPE_USER_RECIPE:String = "001";
+
+    public static const CLASSIFICATION_RECIPE_SERVICE_RECIPE:String = "002";
+
     public static const EDAM_NOTE_SOURCE_WEB_CLIP:String = "web.clip";
 
     public static const EDAM_NOTE_SOURCE_MAIL_CLIP:String = "mail.clip";
