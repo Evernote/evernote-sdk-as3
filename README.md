@@ -1,6 +1,9 @@
+# Deprecated
+This SDK is no longer supported and will not receive any further updates or maintenance.
+
+---
 Evernote SDK for ActionScript 
 ==================================================
-
 Evernote API version 1.22
 
 Overview
